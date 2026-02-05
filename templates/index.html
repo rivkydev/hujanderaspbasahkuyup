@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HUJAN DERAS - Premium Rapid Click Tool</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: #0a0a0f;
+            font-family: 'Inter', sans-serif;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        .orbitron {
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        /* Rain Effect */
+        .rain-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 5;
+            overflow: hidden;
+        }
+
+        .rain {
+            position: absolute;
+            width: 2px;
+            height: 50px;
+            background: linear-gradient(to bottom, rgba(56, 189, 248, 0) 0%, rgba(56, 189, 248, 0.5) 50%, rgba(56, 189, 248, 0) 100%);
+            animation: rainfall linear infinite;
+            opacity: 0.6;
+        }
+
+        @keyframes rainfall {
+            0% {
+                transform: translateY(-100px);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(100vh);
+                opacity: 0;
+            }
+        }
+
+        /* Lightning Effect */
+        .lightning {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 4;
+            opacity: 0;
+        }
+
+        .lightning.flash {
+            animation: lightning-flash 0.4s ease-in-out;
+        }
+
+        @keyframes lightning-flash {
+            0% {
+                opacity: 0;
+                background: transparent;
+            }
+            10% {
+                opacity: 1;
+                background: radial-gradient(ellipse at center, rgba(56, 189, 248, 0.3) 0%, transparent 70%);
+            }
+            20% {
+                opacity: 0;
+            }
+            30% {
+                opacity: 0.8;
+                background: radial-gradient(ellipse at center, rgba(56, 189, 248, 0.2) 0%, transparent 70%);
+            }
+            40% {
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+                background: radial-gradient(ellipse at center, rgba(56, 189, 248, 0.4) 0%, transparent 70%);
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+
+        /* Animated Background */
+        .bg-animated {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            background: 
+                radial-gradient(ellipse at 20% 30%, rgba(14, 165, 233, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 70%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(6, 182, 212, 0.08) 0%, transparent 50%);
+        }
+
+        .grid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            background-image: 
+                linear-gradient(rgba(14, 165, 233, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(14, 165, 233, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(50px); }
+        }
+
+        /* Logo Animation */
+        .logo-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .logo-drop {
+            filter: drop-shadow(0 0 30px rgba(56, 189, 248, 1)) drop-shadow(0 0 60px rgba(56, 189, 248, 0.6));
+            animation: logoPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes logoPulse {
+            0%, 100% {
+                filter: drop-shadow(0 0 30px rgba(56, 189, 248, 1)) drop-shadow(0 0 60px rgba(56, 189, 248, 0.6));
+                transform: translateY(0) scale(1);
+            }
+            50% {
+                filter: drop-shadow(0 0 40px rgba(56, 189, 248, 1)) drop-shadow(0 0 80px rgba(56, 189, 248, 0.8));
+                transform: translateY(-8px) scale(1.02);
+            }
+        }
+
+        /* Glass Morphism */
+        .glass {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            box-shadow: 
+                0 8px 32px 0 rgba(0, 0, 0, 0.37),
+                inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+        }
+
+        /* Neon Glow */
+        .neon-title {
+            text-shadow: 
+                0 0 10px rgba(56, 189, 248, 0.8),
+                0 0 20px rgba(56, 189, 248, 0.6),
+                0 0 40px rgba(56, 189, 248, 0.4);
+            animation: pulseGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { text-shadow: 0 0 10px rgba(56, 189, 248, 0.8), 0 0 20px rgba(56, 189, 248, 0.6), 0 0 40px rgba(56, 189, 248, 0.4); }
+            50% { text-shadow: 0 0 20px rgba(56, 189, 248, 1), 0 0 30px rgba(56, 189, 248, 0.8), 0 0 60px rgba(56, 189, 248, 0.6); }
+        }
+
+        /* Gradient Button */
+        .btn-primary {
+            background: linear-gradient(135deg, #0ea5e9 0%, #2563eb 50%, #7c3aed 100%);
+            background-size: 200% 100%;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary:hover {
+            background-position: 100% 0;
+            transform: translateY(-3px);
+            box-shadow: 
+                0 0 30px rgba(14, 165, 233, 0.6),
+                0 10px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Feature Cards */
+        .feature-card {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.4) 0%, rgba(15, 23, 42, 0.6) 100%);
+            border-left: 3px solid transparent;
+            border-image: linear-gradient(to bottom, #0ea5e9, #2563eb) 1;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(14, 165, 233, 0.1), transparent);
+            transition: left 0.6s;
+        }
+
+        .feature-card:hover::before {
+            left: 100%;
+        }
+
+        .feature-card:hover {
+            transform: translateX(8px);
+            border-left-width: 5px;
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.6) 0%, rgba(15, 23, 42, 0.8) 100%);
+        }
+
+        /* Stats Counter */
+        .stat-item {
+            background: rgba(14, 165, 233, 0.1);
+            border: 1px solid rgba(14, 165, 233, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .stat-item:hover {
+            background: rgba(14, 165, 233, 0.2);
+            transform: scale(1.05);
+        }
+
+        /* Pricing Cards */
+        .pricing-card {
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.8) 0%, rgba(30, 41, 59, 0.6) 100%);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(56, 189, 248, 0.5);
+            box-shadow: 0 20px 60px rgba(14, 165, 233, 0.3);
+        }
+
+        .pricing-card.featured {
+            border: 2px solid #0ea5e9;
+            background: linear-gradient(135deg, rgba(14, 165, 233, 0.15) 0%, rgba(30, 41, 59, 0.8) 100%);
+        }
+
+        /* Badge */
+        .badge {
+            background: linear-gradient(135deg, #0ea5e9, #2563eb);
+            animation: badgePulse 2s ease-in-out infinite;
+        }
+
+        @keyframes badgePulse {
+            0%, 100% { box-shadow: 0 0 10px rgba(14, 165, 233, 0.5); }
+            50% { box-shadow: 0 0 20px rgba(14, 165, 233, 0.8); }
+        }
+
+        /* Demo License Hover */
+        .demo-license {
+            background: rgba(15, 23, 42, 0.4);
+            border: 1px solid rgba(14, 165, 233, 0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .demo-license:hover {
+            background: rgba(14, 165, 233, 0.1);
+            border-color: #0ea5e9;
+            transform: scale(1.02);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .neon-title {
+                font-size: 2.5rem !important;
+            }
+            .rain {
+                width: 1px;
+                height: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Rain Effect -->
+    <div class="rain-container" id="rainContainer"></div>
+    
+    <!-- Lightning Effect -->
+    <div class="lightning" id="lightning"></div>
+
+    <!-- Animated Background -->
+    <div class="bg-animated"></div>
+    <div class="grid-bg"></div>
+
+    <!-- Main Container -->
+    <div class="relative z-10 min-h-screen flex flex-col items-center justify-center px-4 py-12">
+        
+        <!-- Header Section -->
+        <div class="max-w-6xl w-full mb-12 text-center">
+            <!-- BRUTAL Logo SVG -->
+            <div class="logo-container mb-8">
+    <svg width="260" height="260" viewBox="0 0 260 260" class="logo-drop">
+        <image href="C:\Users\ikky\Desktop\DERAS ONLY\web\templates\logo.png" x="0" y="0" width="260" height="260" />
+    </svg>
+</div>
+
+            <!-- Badge -->
+            <div class="inline-flex items-center space-x-2 badge text-white text-xs font-bold px-4 py-2 rounded-full mb-6">
+                <span class="w-2 h-2 bg-white rounded-full animate-pulse"></span>
+                <span class="orbitron">STABLE v1.0 RELEASE</span>
+            </div>
+
+            <!-- Main Title -->
+            <h1 class="orbitron text-6xl md:text-7xl lg:text-8xl font-black tracking-tighter mb-6 neon-title">
+                HUJAN <span class="text-cyan-400">DERAS</span>
+            </h1>
+            <p class="text-slate-300 text-xl md:text-2xl mb-4 max-w-3xl mx-auto font-light">
+                Script <span class="text-cyan-400 font-semibold">C++ Native</span> untuk performa klik maksimal
+            </p>
+            <p class="text-slate-500 text-sm md:text-base max-w-2xl mx-auto">
+                Tanpa delay • Tanpa beban CPU • Input lebih direct dan minim latency
+            </p>
+        </div>
+
+        <!-- Main Content Glass Card -->
+        <div class="max-w-6xl w-full glass rounded-3xl p-8 md:p-12 mb-8">
+            
+            <!-- Features Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                <div class="feature-card p-6 rounded-2xl">
+                    <div class="text-cyan-400 mb-3">
+                        <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                    </div>
+                    <p class="text-xs font-bold text-cyan-400 uppercase tracking-widest mb-2 orbitron">Engine</p>
+                    <p class="text-lg font-bold mb-1">C++ Native</p>
+                    <p class="text-xs text-slate-400">Fastest Performance</p>
+                </div>
+
+                <div class="feature-card p-6 rounded-2xl">
+                    <div class="text-blue-400 mb-3">
+                        <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
+                        </svg>
+                    </div>
+                    <p class="text-xs font-bold text-blue-400 uppercase tracking-widest mb-2 orbitron">Control</p>
+                    <p class="text-lg font-bold mb-1">Custom Delay</p>
+                    <p class="text-xs text-slate-400">Your Rules, Your Speed</p>
+                </div>
+
+                <div class="feature-card p-6 rounded-2xl">
+                    <div class="text-purple-400 mb-3">
+                        <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                        </svg>
+                    </div>
+                    <p class="text-xs font-bold text-purple-400 uppercase tracking-widest mb-2 orbitron">Security</p>
+                    <p class="text-lg font-bold mb-1">HWID Lock</p>
+                    <p class="text-xs text-slate-400">1 License 1 Device</p>
+                </div>
+
+                <div class="feature-card p-6 rounded-2xl">
+                    <div class="text-pink-400 mb-3">
+                        <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                        </svg>
+                    </div>
+                    <p class="text-xs font-bold text-pink-400 uppercase tracking-widest mb-2 orbitron">UI/UX</p>
+                    <p class="text-lg font-bold mb-1">Modern Loader</p>
+                    <p class="text-xs text-slate-400">Simple & Clean</p>
+                </div>
+            </div>
+
+            <!-- Stats Section -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
+                <div class="stat-item p-4 rounded-xl text-center">
+                    <p class="text-3xl font-bold text-cyan-400 orbitron mb-1">986 KB</p>
+                    <p class="text-xs text-slate-400">File Size</p>
+                </div>
+                <div class="stat-item p-4 rounded-xl text-center">
+                    <p class="text-3xl font-bold text-blue-400 orbitron mb-1">0ms</p>
+                    <p class="text-xs text-slate-400">Input Latency</p>
+                </div>
+                <div class="stat-item p-4 rounded-xl text-center">
+                    <p class="text-3xl font-bold text-purple-400 orbitron mb-1">60Hz+</p>
+                    <p class="text-xs text-slate-400">Refresh Rate</p>
+                </div>
+                <div class="stat-item p-4 rounded-xl text-center">
+                    <p class="text-3xl font-bold text-pink-400 orbitron mb-1">100%</p>
+                    <p class="text-xs text-slate-400">Stability</p>
+                </div>
+            </div>
+
+            <!-- CTA Button -->
+            <div class="text-center mb-8">
+                <a href="/download" class="btn-primary inline-flex items-center justify-center px-12 py-6 rounded-2xl font-bold text-lg text-white orbitron group shadow-2xl">
+                    <svg class="w-6 h-6 mr-3 group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                    </svg>
+                    <span>DOWNLOAD LOADER</span>
+                    <svg class="w-6 h-6 ml-3 group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                    </svg>
+                </a>
+                <div class="flex flex-wrap items-center justify-center gap-4 mt-6 text-xs text-slate-500">
+                    <span class="flex items-center">
+                        <span class="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></span>
+                        Windows 10/11
+                    </span>
+                    <span>•</span>
+                    <span>Auto-Login Enabled</span>
+                    <span>•</span>
+                    <span>Free Updates</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- How to Use Section -->
+        <div class="max-w-6xl w-full glass rounded-3xl p-8 md:p-12 mb-8">
+            <h2 class="orbitron text-3xl md:text-4xl font-bold text-center mb-8 text-cyan-400">Cara Penggunaan</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="text-center p-6 rounded-2xl bg-gradient-to-br from-cyan-900/20 to-transparent border border-cyan-500/20">
+                    <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-cyan-500/20 flex items-center justify-center">
+                        <span class="text-3xl font-bold orbitron text-cyan-400">F1</span>
+                    </div>
+                    <p class="font-bold mb-2">Hotkey Toggle</p>
+                    <p class="text-sm text-slate-400">Tekan F1 untuk ON/OFF macro</p>
+                </div>
+                <div class="text-center p-6 rounded-2xl bg-gradient-to-br from-blue-900/20 to-transparent border border-blue-500/20">
+                    <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-blue-500/20 flex items-center justify-center">
+                        <span class="text-2xl font-bold orbitron text-blue-400">1-3</span>
+                    </div>
+                    <p class="font-bold mb-2">Weapon Mode</p>
+                    <p class="text-sm text-slate-400">1: Main, 2: Pistol, 3: Melee</p>
+                </div>
+                <div class="text-center p-6 rounded-2xl bg-gradient-to-br from-purple-900/20 to-transparent border border-purple-500/20">
+                    <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-purple-500/20 flex items-center justify-center">
+                        <span class="text-2xl font-bold orbitron text-purple-400">4-6</span>
+                    </div>
+                    <p class="font-bold mb-2">Auto Stop</p>
+                    <p class="text-sm text-slate-400">Macro berhenti saat Bom/C-4</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Demo Licenses -->
+        <div class="max-w-6xl w-full glass rounded-3xl p-8 md:p-12 mb-8">
+            <h2 class="orbitron text-3xl md:text-4xl font-bold text-center mb-4 text-cyan-400">Demo Gratis 6 Jam</h2>
+            <p class="text-center text-slate-400 mb-8">Silakan gunakan salah satu lisensi demo di bawah ini</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+                <div class="demo-license p-4 rounded-xl">
+                    <p class="text-xs text-slate-500 mb-1">Demo License #1</p>
+                    <p class="font-mono text-sm text-cyan-400 font-semibold">DTC_Amarula_9641ad3e44dc</p>
+                </div>
+                <div class="demo-license p-4 rounded-xl">
+                    <p class="text-xs text-slate-500 mb-1">Demo License #2</p>
+                    <p class="font-mono text-sm text-cyan-400 font-semibold">DTC_CaptainMorgan_9867ad8db125</p>
+                </div>
+                <div class="demo-license p-4 rounded-xl">
+                    <p class="text-xs text-slate-500 mb-1">Demo License #3</p>
+                    <p class="font-mono text-sm text-cyan-400 font-semibold">DTC_Zubrowka_92310182c7cf</p>
+                </div>
+                <div class="demo-license p-4 rounded-xl">
+                    <p class="text-xs text-slate-500 mb-1">Demo License #4</p>
+                    <p class="font-mono text-sm text-cyan-400 font-semibold">DTC_Malibu_3c674942274f</p>
+                </div>
+                <div class="demo-license p-4 rounded-xl">
+                    <p class="text-xs text-slate-500 mb-1">Demo License #5</p>
+                    <p class="font-mono text-sm text-cyan-400 font-semibold">DTC_GrandMarnier_4713e42874a5</p>
+                </div>
+                <div class="demo-license p-4 rounded-xl flex items-center justify-center border-2 border-dashed border-cyan-500/50">
+                    <div class="text-center">
+                        <p class="text-sm text-cyan-400 font-bold mb-1">Habis?</p>
+                        <p class="text-xs text-slate-400">Klik "REQ DEMO" di loader</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pricing Section -->
+        <div class="max-w-6xl w-full glass rounded-3xl p-8 md:p-12 mb-8">
+            <h2 class="orbitron text-3xl md:text-4xl font-bold text-center mb-4">List Harga Lisensi</h2>
+            <div class="flex items-center justify-center gap-2 mb-12">
+                <span class="inline-block px-4 py-2 bg-red-500/20 border border-red-500/50 rounded-full text-red-400 text-sm font-bold animate-pulse">
+                    🔥 PROMO EARLY BIRD
+                </span>
+                <span class="text-slate-400 text-sm">10 Pembeli Pertama Diskon!</span>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- 2 Weeks -->
+                <div class="pricing-card p-8 rounded-2xl text-center">
+                    <p class="text-sm text-slate-400 mb-2 uppercase tracking-widest">Starter</p>
+                    <p class="text-5xl font-black orbitron text-white mb-2">30K</p>
+                    <p class="text-slate-500 text-sm mb-6">2 Minggu</p>
+                    <ul class="text-left space-y-3 mb-8 text-sm">
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 text-green-400 mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span class="text-slate-300">Akses penuh semua fitur</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 text-green-400 mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span class="text-slate-300">Custom delay control</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 text-green-400 mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span class="text-slate-300">HWID protection</span>
+                        </li>
+                    </ul>
+                    <button class="w-full py-3 rounded-xl font-bold bg-slate-700 hover:bg-slate-600 transition-colors">
+                        Pilih Paket
+                    </button>
+                </div>
+
+                <!-- 1 Month - Featured -->
+                <div class="pricing-card featured p-8 rounded-2xl text-center relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-gradient-to-br from-cyan-500 to-blue-600 text-white text-xs font-bold px-4 py-1 rounded-bl-xl orbitron">
+                        PROMO
+                    </div>
+                    <p class="text-sm text-cyan-400 mb-2 uppercase tracking-widest font-bold">Most Popular</p>
+                    <div class="mb-2">
+                        <span class="text-2xl font-black orbitron text-slate-500 line-through mr-2">50K</span>
+                        <span class="text-5xl font-black orbitron text-cyan-400">40K</span>
+                    </div>
+                    <p class="text-slate-400 text-sm mb-6">1 Bulan</p>
+                    <ul class="text-left space-y-3 mb-8 text-sm">
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 text-cyan-400 mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span class="text-white font-semibold">Semua fitur Starter</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 text-cyan-400 mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span class="text-white font-semibold">Priority support</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 text-cyan-400 mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span class="text-white font-semibold">Bug fix updates</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 text-cyan-400 mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span class="text-cyan-400 font-bold">Hemat 20% 🎉</span>
+                        </li>
+                    </ul>
+                    <button class="w-full py-3 rounded-xl font-bold bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 transition-all transform hover:scale-105 shadow-lg">
+                        Pilih Paket
+                    </button>
+                </div>
+
+                <!-- Lifetime -->
+                <div class="pricing-card p-8 rounded-2xl text-center">
+                    <p class="text-sm text-purple-400 mb-2 uppercase tracking-widest font-bold">Best Value</p>
+                    <p class="text-5xl font-black orbitron text-white mb-2">200K</p>
+                    <p class="text-slate-500 text-sm mb-6">Lifetime</p>
+                    <ul class="text-left space-y-3 mb-8 text-sm">
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 text-purple-400 mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span class="text-slate-300">Semua fitur Premium</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 text-purple-400 mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span class="text-slate-300 font-bold">Free update selamanya</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 text-purple-400 mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span class="text-purple-400 font-bold">Termasuk Drag Down System</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 text-purple-400 mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span class="text-purple-400 font-bold">VIP support</span>
+                        </li>
+                    </ul>
+                    <button class="w-full py-3 rounded-xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 transition-all transform hover:scale-105">
+                        Pilih Paket
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Coming Soon Section -->
+        <div class="max-w-6xl w-full glass rounded-3xl p-8 md:p-12 mb-8 relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-500"></div>
+            <div class="text-center mb-8">
+                <span class="inline-block px-4 py-2 bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border border-cyan-500/50 rounded-full text-cyan-400 text-sm font-bold orbitron mb-4">
+                    🚀 COMING SOON
+                </span>
+                <h2 class="orbitron text-3xl md:text-4xl font-bold mb-4">MEGA UPDATE: Drag Down System</h2>
+                <p class="text-slate-400 max-w-2xl mx-auto">
+                    Update besar dengan fitur Smart Drag Down yang akan merevolusi cara kamu bermain Point Blank
+                </p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="p-6 rounded-2xl bg-gradient-to-br from-cyan-900/20 to-transparent border border-cyan-500/20 text-center">
+                    <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-cyan-500/10 flex items-center justify-center">
+                        <svg class="w-8 h-8 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                        </svg>
+                    </div>
+                    <p class="font-bold mb-2">Crosshair Preview</p>
+                    <p class="text-sm text-slate-400">Overlay real-time sesuai resolusi game</p>
+                </div>
+                <div class="p-6 rounded-2xl bg-gradient-to-br from-blue-900/20 to-transparent border border-blue-500/20 text-center">
+                    <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-blue-500/10 flex items-center justify-center">
+                        <svg class="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"></path>
+                        </svg>
+                    </div>
+                    <p class="font-bold mb-2">Auto-Generate</p>
+                    <p class="text-sm text-slate-400">Hitung parameter drag down otomatis</p>
+                </div>
+                <div class="p-6 rounded-2xl bg-gradient-to-br from-purple-900/20 to-transparent border border-purple-500/20 text-center">
+                    <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-purple-500/10 flex items-center justify-center">
+                        <svg class="w-8 h-8 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path>
+                        </svg>
+                    </div>
+                    <p class="font-bold mb-2">Save/Load Profile</p>
+                    <p class="text-sm text-slate-400">Setting berbeda tiap senjata favorit</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- System Requirements -->
+        <div class="max-w-6xl w-full glass rounded-3xl p-8 md:p-12 mb-8">
+            <h3 class="orbitron text-2xl font-bold text-center mb-6 text-cyan-400">Tested Specifications</h3>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center text-sm">
+                <div class="p-4 rounded-xl bg-slate-800/50">
+                    <p class="text-slate-500 text-xs mb-1">CPU</p>
+                    <p class="font-bold">Intel i3-1115G4</p>
+                </div>
+                <div class="p-4 rounded-xl bg-slate-800/50">
+                    <p class="text-slate-500 text-xs mb-1">RAM</p>
+                    <p class="font-bold">8GB</p>
+                </div>
+                <div class="p-4 rounded-xl bg-slate-800/50">
+                    <p class="text-slate-500 text-xs mb-1">GPU</p>
+                    <p class="font-bold">Intel UHD (iGPU)</p>
+                </div>
+                <div class="p-4 rounded-xl bg-slate-800/50">
+                    <p class="text-slate-500 text-xs mb-1">Refresh Rate</p>
+                    <p class="font-bold">60Hz</p>
+                </div>
+            </div>
+            <p class="text-center text-xs text-slate-500 mt-6">
+                ✓ Bisa jalan lancar di spek standar/laptop • Smooth & Deras
+            </p>
+        </div>
+
+        <!-- Footer -->
+        <div class="text-center text-slate-600 text-sm space-y-2">
+            <p class="font-semibold text-slate-400">Siap merasakan hujan deras yang sesungguhnya?</p>
+            <p>Klik tombol <span class="text-cyan-400 font-bold">"ORDER WA"</span> di loader atau PM sekarang!</p>
+            <div class="flex items-center justify-center gap-3 mt-4 text-xs">
+                <span class="px-3 py-1 bg-slate-800/50 rounded-full">Made with 💙</span>
+                <span class="px-3 py-1 bg-slate-800/50 rounded-full">C++ Native</span>
+                <span class="px-3 py-1 bg-slate-800/50 rounded-full">Premium Quality</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Rain Effect Generator
+        const rainContainer = document.getElementById('rainContainer');
+        const numberOfDrops = 100;
+
+        function createRain() {
+            for (let i = 0; i < numberOfDrops; i++) {
+                const drop = document.createElement('div');
+                drop.className = 'rain';
+                drop.style.left = Math.random() * 100 + '%';
+                drop.style.animationDuration = (Math.random() * 0.5 + 0.5) + 's';
+                drop.style.animationDelay = Math.random() * 2 + 's';
+                rainContainer.appendChild(drop);
+            }
+        }
+
+        // Lightning Effect
+        const lightning = document.getElementById('lightning');
+        
+        function triggerLightning() {
+            lightning.classList.add('flash');
+            setTimeout(() => {
+                lightning.classList.remove('flash');
+            }, 400);
+        }
+
+        // Random lightning every 5-10 seconds
+        function scheduleLightning() {
+            const delay = (Math.random() * 5000) + 5000;
+            setTimeout(() => {
+                triggerLightning();
+                scheduleLightning();
+            }, delay);
+        }
+
+        // Initialize effects
+        createRain();
+        scheduleLightning();
+
+        // Easter egg - press 'L' for lightning
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'l' || e.key === 'L') {
+                triggerLightning();
+            }
+        });
+    </script>
+
+</body>
+</html>
