@@ -16,7 +16,7 @@ def download_file():
     filename = "PBMacro.exe"
     return send_from_directory(app.config['DOWNLOAD_FOLDER'], filename)
 
-if __name__ == '__main__':
-    if not os.path.exists(DOWNLOAD_FOLDER):
-        os.makedirs(DOWNLOAD_FOLDER)
-    app.run(debug=True)
+# Vercel serverless function handler
+if __name__ != '__main__':
+    # This is for Vercel
+    application = app
