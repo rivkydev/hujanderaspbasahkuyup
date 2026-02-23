@@ -14,21 +14,129 @@ CORS(app)
 # ==========================================
 # KONFIGURASI
 # ==========================================
-TIMEZONE   = pytz.UTC
+TIMEZONE        = pytz.UTC
 DOWNLOAD_FOLDER = 'downloads'
 app.config['DOWNLOAD_FOLDER'] = DOWNLOAD_FOLDER
 
-# Admin credentials — set via environment variable sebelum deploy!
-ADMIN_USER = os.environ.get('ADMIN_USER')
-ADMIN_PASS = os.environ.get('ADMIN_PASS')
-
-# API Key rahasia untuk generate key dari luar (opsional, bisa dikosongkan)
-# Jika diset, endpoint /api/generate-key membutuhkan header X-API-Key: <nilai ini>
+ADMIN_USER       = os.environ.get('ADMIN_USER')
+ADMIN_PASS       = os.environ.get('ADMIN_PASS')
 GENERATE_API_KEY = os.environ.get('GENERATE_API_KEY')
 
-# Path JSON
+# MongoDB URI — set di Vercel env: MONGO_URI
+# Format: mongodb+srv://<user>:<pass>@cluster.mongodb.net/<dbname>?retryWrites=true&w=majority
+MONGO_URI = os.environ.get('MONGO_URI')
+
+# ==========================================
+# DATABASE LAYER — MongoDB atau JSON fallback
+# ==========================================
+_mongo_client = None
+_mongo_db     = None
+
+def _get_mongo():
+    global _mongo_client, _mongo_db
+    if not MONGO_URI:
+        return None, None
+    try:
+        if _mongo_client is None:
+            from pymongo import MongoClient
+            _mongo_client = MongoClient(MONGO_URI, serverSelectionTimeoutMS=5000)
+            _mongo_db     = _mongo_client.get_default_database()
+        return _mongo_db["licenses"], _mongo_db["banned_hwids"]
+    except Exception as e:
+        print(f"[MongoDB] Connection error: {e}")
+        return None, None
+
+# --- JSON fallback (lokal dev) ---
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DB_PATH  = '/tmp/licenses.json' if os.environ.get('VERCEL') else os.path.join(BASE_DIR, 'licenses.json')
+DB_PATH  = os.path.join(BASE_DIR, 'licenses.json')
+
+def _load_json() -> dict:
+    if not os.path.exists(DB_PATH):
+        return {"licenses": {}, "banned_hwids": {}}
+    try:
+        with open(DB_PATH, 'r') as f:
+            data = json.load(f)
+            if "banned_hwids" not in data:
+                data["banned_hwids"] = {}
+            return data
+    except Exception:
+        return {"licenses": {}, "banned_hwids": {}}
+
+def _save_json(data: dict):
+    with open(DB_PATH, 'w') as f:
+        json.dump(data, f, indent=2)
+
+# ==========================================
+# PUBLIC DB API
+# ==========================================
+
+def get_license(key: str):
+    col, _ = _get_mongo()
+    if col is not None:
+        doc = col.find_one({"license_key": {"$regex": f"^{key}$", "$options": "i"}})
+        if doc:
+            doc.pop("_id", None)
+        return doc
+    db = _load_json()
+    matched = next((k for k in db["licenses"] if k.lower() == key.lower()), None)
+    return db["licenses"].get(matched) if matched else None
+
+def get_all_licenses() -> list:
+    col, _ = _get_mongo()
+    if col is not None:
+        return list(col.find({}, {"_id": 0}))
+    return list(_load_json()["licenses"].values())
+
+def save_license(lic: dict):
+    col, _ = _get_mongo()
+    if col is not None:
+        col.replace_one({"license_key": lic["license_key"]}, lic, upsert=True)
+        return
+    db = _load_json()
+    db["licenses"][lic["license_key"]] = lic
+    _save_json(db)
+
+def delete_license(key: str):
+    col, _ = _get_mongo()
+    if col is not None:
+        col.delete_one({"license_key": {"$regex": f"^{key}$", "$options": "i"}})
+        return
+    db = _load_json()
+    matched = next((k for k in db["licenses"] if k.lower() == key.lower()), None)
+    if matched:
+        del db["licenses"][matched]
+        _save_json(db)
+
+def get_banned_hwid(hwid_hash: str):
+    _, col = _get_mongo()
+    if col is not None:
+        doc = col.find_one({"hwid_hash": hwid_hash}, {"_id": 0})
+        return doc
+    return _load_json()["banned_hwids"].get(hwid_hash)
+
+def get_all_banned_hwids() -> list:
+    _, col = _get_mongo()
+    if col is not None:
+        return list(col.find({}, {"_id": 0}))
+    return list(_load_json()["banned_hwids"].values())
+
+def save_banned_hwid(entry: dict):
+    _, col = _get_mongo()
+    if col is not None:
+        col.replace_one({"hwid_hash": entry["hwid_hash"]}, entry, upsert=True)
+        return
+    db = _load_json()
+    db["banned_hwids"][entry["hwid_hash"]] = entry
+    _save_json(db)
+
+def delete_banned_hwid(hwid_hash: str):
+    _, col = _get_mongo()
+    if col is not None:
+        col.delete_one({"hwid_hash": hwid_hash})
+        return
+    db = _load_json()
+    db["banned_hwids"].pop(hwid_hash, None)
+    _save_json(db)
 
 # ==========================================
 # ALCOHOL BRANDS
@@ -67,29 +175,6 @@ ALCOHOL_BRANDS = [
 ]
 
 # ==========================================
-# JSON DB HELPERS
-# ==========================================
-
-def load_db() -> dict:
-    if not os.path.exists(DB_PATH):
-        return {"licenses": {}, "banned_hwids": {}}
-    try:
-        with open(DB_PATH, 'r') as f:
-            data = json.load(f)
-            if "banned_hwids" not in data:
-                data["banned_hwids"] = {}
-            return data
-    except (json.JSONDecodeError, IOError):
-        return {"licenses": {}, "banned_hwids": {}}
-
-def save_db(data: dict):
-    dir_ = os.path.dirname(DB_PATH)
-    if dir_:
-        os.makedirs(dir_, exist_ok=True)
-    with open(DB_PATH, 'w') as f:
-        json.dump(data, f, indent=2)
-
-# ==========================================
 # HELPERS
 # ==========================================
 
@@ -97,8 +182,7 @@ def hash_hwid(hwid: str) -> str:
     return hashlib.sha256(hwid.encode('utf-8')).hexdigest()
 
 def generate_license_key() -> str:
-    db = load_db()
-    existing = set(db["licenses"].keys())
+    existing = {l["license_key"] for l in get_all_licenses()}
     while True:
         brand      = secrets.choice(ALCOHOL_BRANDS)
         random_hex = secrets.token_hex(6)
@@ -131,22 +215,14 @@ def parse_dt(iso_str: str) -> datetime:
 def now_iso() -> str:
     return datetime.now(TIMEZONE).isoformat()
 
-def log_event(db: dict, license_key: str, event: str, detail: str = ""):
-    """Tambah log aktivitas ke lisensi."""
-    if license_key not in db["licenses"]:
-        return
-    if "logs" not in db["licenses"][license_key]:
-        db["licenses"][license_key]["logs"] = []
-    db["licenses"][license_key]["logs"].append({
-        "time": now_iso(),
-        "event": event,
-        "detail": detail
-    })
-    # Simpan max 50 log per lisensi
-    db["licenses"][license_key]["logs"] = db["licenses"][license_key]["logs"][-50:]
+def log_event(lic: dict, event: str, detail: str = ""):
+    if "logs" not in lic:
+        lic["logs"] = []
+    lic["logs"].append({"time": now_iso(), "event": event, "detail": detail})
+    lic["logs"] = lic["logs"][-50:]
 
 # ==========================================
-# ADMIN AUTH (HTTP Basic)
+# AUTH
 # ==========================================
 
 def check_auth(username, password):
@@ -159,38 +235,21 @@ def requires_auth(f):
     def decorated(*args, **kwargs):
         auth = request.authorization
         if not auth or not check_auth(auth.username, auth.password):
-            return Response(
-                'Akses ditolak. Login required.',
-                401,
-                {'WWW-Authenticate': 'Basic realm="Admin Area"'}
-            )
+            return Response('Akses ditolak.', 401, {'WWW-Authenticate': 'Basic realm="Admin"'})
         return f(*args, **kwargs)
     return decorated
 
 def requires_generate_auth(f):
-    """
-    Decorator untuk endpoint generate-key.
-    Bisa diakses via:
-      1. Admin Basic Auth (HTTP Basic), ATAU
-      2. Header X-API-Key jika GENERATE_API_KEY di-set
-    Jika tidak ada keduanya → 401.
-    """
     @functools.wraps(f)
     def decorated(*args, **kwargs):
-        # Cek Basic Auth admin
         auth = request.authorization
         if auth and check_auth(auth.username, auth.password):
             return f(*args, **kwargs)
-        # Cek X-API-Key header
         if GENERATE_API_KEY:
             api_key = request.headers.get('X-API-Key', '')
             if secrets.compare_digest(api_key, GENERATE_API_KEY):
                 return f(*args, **kwargs)
-        return Response(
-            'Akses ditolak. Admin auth atau X-API-Key required.',
-            401,
-            {'WWW-Authenticate': 'Basic realm="Admin Area"'}
-        )
+        return Response('Akses ditolak.', 401, {'WWW-Authenticate': 'Basic realm="Admin"'})
     return decorated
 
 # ==========================================
@@ -209,7 +268,7 @@ def download_file():
     return send_from_directory(app.config['DOWNLOAD_FOLDER'], "PBMacro.exe")
 
 # ==========================================
-# ROUTES — ADMIN DASHBOARD
+# ROUTES — ADMIN
 # ==========================================
 
 @app.route('/admin')
@@ -217,65 +276,51 @@ def download_file():
 def admin_dashboard():
     return render_template('admin.html')
 
-@app.route('/admin/api/stats', methods=['GET'])
+@app.route('/admin/api/stats')
 @requires_auth
 def admin_stats():
-    """Statistik ringkas untuk dashboard."""
-    db = load_db()
-    licenses = db["licenses"]
-    now = datetime.now(TIMEZONE)
+    licenses = get_all_licenses()
+    now      = datetime.now(TIMEZONE)
+    today    = now.strftime('%Y-%m-%d')
 
-    total      = len(licenses)
-    active     = sum(1 for l in licenses.values() if l["is_active"] and not l.get("is_banned"))
-    expired    = sum(1 for l in licenses.values() if not l["is_active"] and not l.get("is_banned"))
-    banned     = sum(1 for l in licenses.values() if l.get("is_banned"))
-    unbound    = sum(1 for l in licenses.values() if l["hwid"] is None and l["is_active"])
-    lifetime   = sum(1 for l in licenses.values() if l["duration_type"] == "lifetime")
-    banned_hwids = len(db.get("banned_hwids", {}))
-
-    today_str  = now.strftime('%Y-%m-%d')
-    activated_today = sum(
-        1 for l in licenses.values()
-        if l.get("last_used") and l["last_used"].startswith(today_str)
-    )
+    total    = len(licenses)
+    active   = sum(1 for l in licenses if l["is_active"] and not l.get("is_banned"))
+    expired  = sum(1 for l in licenses if not l["is_active"] and not l.get("is_banned"))
+    banned   = sum(1 for l in licenses if l.get("is_banned"))
+    unbound  = sum(1 for l in licenses if l.get("hwid") is None and l["is_active"])
+    lifetime = sum(1 for l in licenses if l["duration_type"] == "lifetime")
+    banned_hwids    = len(get_all_banned_hwids())
+    activated_today = sum(1 for l in licenses if (l.get("last_used") or "").startswith(today))
 
     return jsonify({
-        "total": total,
-        "active": active,
-        "expired": expired,
-        "banned": banned,
-        "unbound": unbound,
-        "lifetime": lifetime,
-        "banned_hwids": banned_hwids,
+        "total": total, "active": active, "expired": expired, "banned": banned,
+        "unbound": unbound, "lifetime": lifetime, "banned_hwids": banned_hwids,
         "activated_today": activated_today
     })
 
-@app.route('/admin/api/licenses', methods=['GET'])
+@app.route('/admin/api/licenses')
 @requires_auth
 def admin_list_licenses():
-    """List semua lisensi dengan filter & search."""
-    db       = load_db()
     search   = request.args.get('search', '').lower()
     status   = request.args.get('status', 'all')
     duration = request.args.get('duration', 'all')
     page     = int(request.args.get('page', 1))
     per_page = int(request.args.get('per_page', 20))
+    now      = datetime.now(TIMEZONE)
+    result   = []
 
-    now = datetime.now(TIMEZONE)
-    result = []
-
-    for key, lic in db["licenses"].items():
-        if search and search not in key.lower():
+    for lic in get_all_licenses():
+        if search and search not in lic["license_key"].lower():
             continue
 
-        is_banned   = lic.get("is_banned", False)
-        is_active   = lic["is_active"] and not is_banned
-        is_unbound  = lic["hwid"] is None and lic["is_active"] and not is_banned
-        is_expired  = not lic["is_active"] and not is_banned
+        is_banned  = lic.get("is_banned", False)
+        is_active  = lic["is_active"] and not is_banned
+        is_unbound = lic.get("hwid") is None and lic["is_active"] and not is_banned
+        is_expired = not lic["is_active"] and not is_banned
 
         time_left = None
-        if lic["expires_at"] and is_active:
-            exp = parse_dt(lic["expires_at"])
+        if lic.get("expires_at") and is_active:
+            exp   = parse_dt(lic["expires_at"])
             delta = exp - now
             if delta.total_seconds() > 0:
                 hours = int(delta.total_seconds() // 3600)
@@ -284,19 +329,19 @@ def admin_list_licenses():
             else:
                 time_left = "Expired"
 
-        if status == 'active'  and not is_active:   continue
-        if status == 'expired' and not is_expired:  continue
-        if status == 'banned'  and not is_banned:   continue
-        if status == 'unbound' and not is_unbound:  continue
+        if status == 'active'  and not is_active:  continue
+        if status == 'expired' and not is_expired: continue
+        if status == 'banned'  and not is_banned:  continue
+        if status == 'unbound' and not is_unbound: continue
         if duration != 'all'   and lic["duration_type"] != duration: continue
 
         result.append({
             "license_key":   lic["license_key"],
-            "hwid_short":    (lic["hwid"][:12] + "...") if lic["hwid"] else None,
-            "hwid_full":     lic["hwid"],
+            "hwid_short":    (lic["hwid"][:12] + "...") if lic.get("hwid") else None,
+            "hwid_full":     lic.get("hwid"),
             "duration_type": lic["duration_type"],
             "created_at":    lic["created_at"],
-            "expires_at":    lic["expires_at"],
+            "expires_at":    lic.get("expires_at"),
             "last_used":     lic.get("last_used"),
             "is_active":     is_active,
             "is_banned":     is_banned,
@@ -308,125 +353,109 @@ def admin_list_licenses():
         })
 
     result.sort(key=lambda x: x["created_at"], reverse=True)
-
     total_filtered = len(result)
     start = (page - 1) * per_page
-    end   = start + per_page
 
     return jsonify({
-        "licenses": result[start:end],
+        "licenses": result[start:start + per_page],
         "total":    total_filtered,
         "page":     page,
         "per_page": per_page,
         "pages":    max(1, (total_filtered + per_page - 1) // per_page)
     })
 
-@app.route('/admin/api/licenses/<license_key>/logs', methods=['GET'])
+@app.route('/admin/api/licenses/<license_key>/logs')
 @requires_auth
 def admin_get_logs(license_key):
-    db = load_db()
-    matched = next((k for k in db["licenses"] if k.lower() == license_key.lower()), None)
-    if not matched:
+    lic = get_license(license_key)
+    if not lic:
         return jsonify({"error": "Not found"}), 404
-    return jsonify({"logs": db["licenses"][matched].get("logs", [])})
+    return jsonify({"logs": lic.get("logs", [])})
 
 @app.route('/admin/api/licenses/<license_key>/note', methods=['POST'])
 @requires_auth
 def admin_set_note(license_key):
-    data = request.get_json()
-    db   = load_db()
-    matched = next((k for k in db["licenses"] if k.lower() == license_key.lower()), None)
-    if not matched:
+    lic = get_license(license_key)
+    if not lic:
         return jsonify({"success": False, "message": "Not found"}), 404
-    db["licenses"][matched]["note"] = data.get("note", "")
-    log_event(db, matched, "NOTE_UPDATED", data.get("note", ""))
-    save_db(db)
+    lic["note"] = (request.get_json() or {}).get("note", "")
+    log_event(lic, "NOTE_UPDATED", lic["note"])
+    save_license(lic)
     return jsonify({"success": True})
 
 @app.route('/admin/api/licenses/<license_key>/reset-hwid', methods=['POST'])
 @requires_auth
 def admin_reset_hwid(license_key):
-    db = load_db()
-    matched = next((k for k in db["licenses"] if k.lower() == license_key.lower()), None)
-    if not matched:
+    lic = get_license(license_key)
+    if not lic:
         return jsonify({"success": False, "message": "Not found"}), 404
-    old_hwid = db["licenses"][matched].get("hwid", "none")
-    db["licenses"][matched]["hwid"] = None
-    log_event(db, matched, "HWID_RESET", f"Old: {old_hwid[:12] if old_hwid and old_hwid != 'none' else 'none'}")
-    save_db(db)
+    old = (lic.get("hwid") or "none")
+    lic["hwid"] = None
+    log_event(lic, "HWID_RESET", f"Old: {old[:12]}")
+    save_license(lic)
     return jsonify({"success": True, "message": "HWID reset berhasil"})
 
 @app.route('/admin/api/licenses/<license_key>/ban', methods=['POST'])
 @requires_auth
 def admin_ban_license(license_key):
-    data      = request.get_json() or {}
-    reason    = data.get("reason", "Tidak ada alasan")
-    ban_hwid  = data.get("ban_hwid", False)
+    data     = request.get_json() or {}
+    reason   = data.get("reason", "Tidak ada alasan")
+    ban_hwid = data.get("ban_hwid", False)
 
-    db = load_db()
-    matched = next((k for k in db["licenses"] if k.lower() == license_key.lower()), None)
-    if not matched:
+    lic = get_license(license_key)
+    if not lic:
         return jsonify({"success": False, "message": "Not found"}), 404
 
-    lic = db["licenses"][matched]
-    lic["is_banned"]   = True
-    lic["is_active"]   = False
-    lic["ban_reason"]  = reason
-    lic["banned_at"]   = now_iso()
-    log_event(db, matched, "BANNED", reason)
+    lic["is_banned"]  = True
+    lic["is_active"]  = False
+    lic["ban_reason"] = reason
+    lic["banned_at"]  = now_iso()
+    log_event(lic, "BANNED", reason)
 
     if ban_hwid and lic.get("hwid"):
         hwid_hash = lic["hwid"]
-        db["banned_hwids"][hwid_hash] = {
-            "hwid_hash":  hwid_hash,
-            "reason":     reason,
-            "banned_at":  now_iso(),
-            "license_key": matched
-        }
-        log_event(db, matched, "HWID_BANNED", hwid_hash[:12])
+        save_banned_hwid({"hwid_hash": hwid_hash, "reason": reason,
+                          "banned_at": now_iso(), "license_key": lic["license_key"]})
+        log_event(lic, "HWID_BANNED", hwid_hash[:12])
 
-    save_db(db)
+    save_license(lic)
     return jsonify({"success": True, "message": "Lisensi berhasil di-ban"})
 
 @app.route('/admin/api/licenses/<license_key>/unban', methods=['POST'])
 @requires_auth
 def admin_unban_license(license_key):
-    db = load_db()
-    matched = next((k for k in db["licenses"] if k.lower() == license_key.lower()), None)
-    if not matched:
+    lic = get_license(license_key)
+    if not lic:
         return jsonify({"success": False, "message": "Not found"}), 404
-
-    db["licenses"][matched]["is_banned"]  = False
-    db["licenses"][matched]["is_active"]  = True
-    db["licenses"][matched]["ban_reason"] = ""
-    log_event(db, matched, "UNBANNED")
-    save_db(db)
+    lic["is_banned"]  = False
+    lic["is_active"]  = True
+    lic["ban_reason"] = ""
+    log_event(lic, "UNBANNED")
+    save_license(lic)
     return jsonify({"success": True, "message": "Lisensi berhasil di-unban"})
 
 @app.route('/admin/api/licenses/<license_key>/deactivate', methods=['POST'])
 @requires_auth
 def admin_deactivate(license_key):
-    db = load_db()
-    matched = next((k for k in db["licenses"] if k.lower() == license_key.lower()), None)
-    if not matched:
+    lic = get_license(license_key)
+    if not lic:
         return jsonify({"success": False, "message": "Not found"}), 404
-    db["licenses"][matched]["is_active"] = False
-    log_event(db, matched, "DEACTIVATED", "Manual by admin")
-    save_db(db)
+    lic["is_active"] = False
+    log_event(lic, "DEACTIVATED", "Manual by admin")
+    save_license(lic)
     return jsonify({"success": True})
 
 @app.route('/admin/api/licenses/<license_key>/reactivate', methods=['POST'])
 @requires_auth
 def admin_reactivate(license_key):
-    db = load_db()
-    matched = next((k for k in db["licenses"] if k.lower() == license_key.lower()), None)
-    if not matched:
+    lic = get_license(license_key)
+    if not lic:
         return jsonify({"success": False, "message": "Not found"}), 404
-    if db["licenses"][matched].get("is_banned"):
+    if lic.get("is_banned"):
         return jsonify({"success": False, "message": "Lisensi di-ban, unban dulu"}), 400
-    db["licenses"][matched]["is_active"] = True
-    log_event(db, matched, "REACTIVATED", "Manual by admin")
-    save_db(db)
+    lic["is_active"] = True
+    log_event(lic, "REACTIVATED", "Manual by admin")
+    save_license(lic)
     return jsonify({"success": True})
 
 @app.route('/admin/api/licenses/<license_key>/extend', methods=['POST'])
@@ -434,55 +463,40 @@ def admin_reactivate(license_key):
 def admin_extend(license_key):
     data = request.get_json() or {}
     days = int(data.get("days", 7))
-
-    db = load_db()
-    matched = next((k for k in db["licenses"] if k.lower() == license_key.lower()), None)
-    if not matched:
+    lic  = get_license(license_key)
+    if not lic:
         return jsonify({"success": False, "message": "Not found"}), 404
-
-    lic = db["licenses"][matched]
     if lic["duration_type"] == "lifetime":
         return jsonify({"success": False, "message": "Lisensi lifetime tidak perlu di-extend"}), 400
 
-    now = datetime.now(TIMEZONE)
-    if lic["expires_at"]:
-        current_exp = parse_dt(lic["expires_at"])
-        base = max(current_exp, now)
-    else:
-        base = now
-
+    now  = datetime.now(TIMEZONE)
+    base = max(parse_dt(lic["expires_at"]), now) if lic.get("expires_at") else now
     new_exp = (base + timedelta(days=days)).isoformat()
     lic["expires_at"] = new_exp
     lic["is_active"]  = True
-    log_event(db, matched, "EXTENDED", f"+{days} hari → {new_exp[:10]}")
-    save_db(db)
+    log_event(lic, "EXTENDED", f"+{days} hari → {new_exp[:10]}")
+    save_license(lic)
     return jsonify({"success": True, "new_expires": new_exp})
 
 @app.route('/admin/api/licenses/<license_key>/delete', methods=['DELETE'])
 @requires_auth
 def admin_delete(license_key):
-    db = load_db()
-    matched = next((k for k in db["licenses"] if k.lower() == license_key.lower()), None)
-    if not matched:
+    if not get_license(license_key):
         return jsonify({"success": False, "message": "Not found"}), 404
-    del db["licenses"][matched]
-    save_db(db)
+    delete_license(license_key)
     return jsonify({"success": True})
 
-@app.route('/admin/api/banned-hwids', methods=['GET'])
+@app.route('/admin/api/banned-hwids')
 @requires_auth
 def admin_banned_hwids():
-    db = load_db()
-    return jsonify({"banned_hwids": list(db.get("banned_hwids", {}).values())})
+    return jsonify({"banned_hwids": get_all_banned_hwids()})
 
 @app.route('/admin/api/banned-hwids/<hwid_hash>/unban', methods=['POST'])
 @requires_auth
 def admin_unban_hwid(hwid_hash):
-    db = load_db()
-    if hwid_hash not in db.get("banned_hwids", {}):
+    if not get_banned_hwid(hwid_hash):
         return jsonify({"success": False, "message": "HWID tidak ditemukan"}), 404
-    del db["banned_hwids"][hwid_hash]
-    save_db(db)
+    delete_banned_hwid(hwid_hash)
     return jsonify({"success": True})
 
 # ==========================================
@@ -490,21 +504,8 @@ def admin_unban_hwid(hwid_hash):
 # ==========================================
 
 @app.route('/api/generate-key', methods=['POST'])
-@requires_generate_auth   # <-- SEKARANG TERPROTEKSI: butuh admin auth atau X-API-Key
+@requires_generate_auth
 def generate_key():
-    """
-    Generate license key baru.
-
-    Autentikasi (salah satu):
-      - HTTP Basic Auth dengan kredensial admin
-      - Header: X-API-Key: <nilai GENERATE_API_KEY>
-
-    Body JSON:
-      {
-        "duration_type": "lifetime" | "2weeks" | "1month" | "demo_1min" | "trial_6hours",
-        "note": "Nama buyer (opsional)"
-      }
-    """
     try:
         data = request.get_json()
         if not data or 'duration_type' not in data:
@@ -516,25 +517,21 @@ def generate_key():
             return jsonify({"success": False, "message": f"Invalid. Valid: {valid_types}"}), 400
 
         license_key = generate_license_key()
-        created_at  = now_iso()
-        note        = data.get("note", "")
-
-        db = load_db()
-        db["licenses"][license_key] = {
+        lic = {
             "license_key":   license_key,
             "hwid":          None,
             "duration_type": duration_type,
-            "created_at":    created_at,
+            "created_at":    now_iso(),
             "expires_at":    None,
             "is_active":     True,
             "is_banned":     False,
             "ban_reason":    "",
             "last_used":     None,
-            "note":          note,
+            "note":          data.get("note", ""),
             "logs":          []
         }
-        log_event(db, license_key, "GENERATED", f"Type: {duration_type}")
-        save_db(db)
+        log_event(lic, "GENERATED", f"Type: {duration_type}")
+        save_license(lic)
 
         return jsonify({
             "success":       True,
@@ -549,99 +546,68 @@ def generate_key():
 
 @app.route('/api/validate', methods=['POST'])
 def validate_license():
-    """
-    Validasi license key dari klien .exe.
-
-    Body JSON:
-      {
-        "license_key": "DTC_Brand_xxxxxx",
-        "hwid": "string-hardware-id"
-      }
-
-    Response sukses:
-      {
-        "success": true,
-        "message": "Valid",
-        "duration": "1month",
-        "expires_at": "2025-12-31T00:00:00+00:00"  // atau "Never" untuk lifetime
-      }
-
-    Response gagal:
-      {
-        "success": false,
-        "message": "BANNED: <alasan>" | "EXPIRED: Duration Ended" | "Invalid Key" | "HWID Mismatch"
-      }
-    """
     try:
         data = request.get_json()
         if not data or 'license_key' not in data or 'hwid' not in data:
             return jsonify({"success": False, "message": "Missing Data"}), 400
 
-        license_key  = data['license_key'].strip()
-        hwid         = data['hwid'].strip()
+        license_key = data['license_key'].strip()
+        hwid        = data['hwid'].strip()
 
-        # Validasi input dasar
         if not license_key or not hwid:
             return jsonify({"success": False, "message": "license_key dan hwid tidak boleh kosong"}), 400
 
         hwid_hash    = hash_hwid(hwid)
         current_time = datetime.now(TIMEZONE)
 
-        db = load_db()
-
         # ── 1. Cek HWID banned ───────────────────────────────────────────────
-        if hwid_hash in db.get("banned_hwids", {}):
+        if get_banned_hwid(hwid_hash):
             return jsonify({"success": False, "message": "BANNED: Hardware ID anda telah diblokir"}), 403
 
-        # ── 2. Cari license key (case-insensitive) ───────────────────────────
-        matched = next((k for k in db["licenses"] if k.lower() == license_key.lower()), None)
-        if not matched:
+        # ── 2. Cari license key ──────────────────────────────────────────────
+        lic = get_license(license_key)
+        if not lic:
             return jsonify({"success": False, "message": "Invalid Key"}), 404
-
-        lic = db["licenses"][matched]
 
         # ── 3. Cek ban ───────────────────────────────────────────────────────
         if lic.get("is_banned"):
-            reason = lic.get("ban_reason", "Tidak ada alasan")
-            return jsonify({"success": False, "message": f"BANNED: {reason}"}), 403
+            return jsonify({"success": False,
+                            "message": f"BANNED: {lic.get('ban_reason', 'Tidak ada alasan')}"}), 403
 
         # ── 4. Cek aktif ─────────────────────────────────────────────────────
         if not lic["is_active"]:
             return jsonify({"success": False, "message": "EXPIRED: License Inactive"}), 403
 
-        stored_hwid    = lic["hwid"]
-        expires_at_str = lic["expires_at"]
+        stored_hwid    = lic.get("hwid")
+        expires_at_str = lic.get("expires_at")
 
-        # ── 5. Aktivasi pertama (HWID belum terikat) ─────────────────────────
+        # ── 5. Aktivasi pertama ──────────────────────────────────────────────
         if stored_hwid is None:
-            new_expires = calculate_expires_at(lic["duration_type"], current_time)
+            new_expires    = calculate_expires_at(lic["duration_type"], current_time)
             lic["hwid"]       = hwid_hash
             lic["expires_at"] = new_expires
             lic["last_used"]  = current_time.isoformat()
             expires_at_str    = new_expires
-            log_event(db, matched, "FIRST_ACTIVATION", f"HWID: {hwid_hash[:12]}")
+            log_event(lic, "FIRST_ACTIVATION", f"HWID: {hwid_hash[:12]}")
 
         # ── 6. Cek HWID mismatch ─────────────────────────────────────────────
         elif stored_hwid != hwid_hash:
-            log_event(db, matched, "HWID_MISMATCH", f"Got: {hwid_hash[:12]}")
-            save_db(db)
+            log_event(lic, "HWID_MISMATCH", f"Got: {hwid_hash[:12]}")
+            save_license(lic)
             return jsonify({"success": False, "message": "HWID Mismatch"}), 403
 
         # ── 7. Cek expiry ────────────────────────────────────────────────────
         if expires_at_str and expires_at_str not in ("Never", "null", None):
-            expires_at = parse_dt(expires_at_str)
-            if current_time > expires_at:
+            if current_time > parse_dt(expires_at_str):
                 lic["is_active"] = False
-                log_event(db, matched, "AUTO_EXPIRED")
-                db["licenses"][matched] = lic
-                save_db(db)
+                log_event(lic, "AUTO_EXPIRED")
+                save_license(lic)
                 return jsonify({"success": False, "message": "EXPIRED: Duration Ended"}), 403
 
         # ── 8. Update last_used & simpan ─────────────────────────────────────
         lic["last_used"] = current_time.isoformat()
-        log_event(db, matched, "VALIDATED", f"HWID: {hwid_hash[:12]}")
-        db["licenses"][matched] = lic
-        save_db(db)
+        log_event(lic, "VALIDATED", f"HWID: {hwid_hash[:12]}")
+        save_license(lic)
 
         return jsonify({
             "success":    True,
