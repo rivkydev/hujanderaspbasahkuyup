@@ -18,6 +18,7 @@
   --red:      #ff4466;
   --orange:   #ffaa00;
   --purple:   #aa66ff;
+  --teal:     #00e5cc;
   --text:     #e8edf5;
   --muted:    #5a6a82;
   --mono:     'JetBrains Mono', monospace;
@@ -69,6 +70,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
 .stat-card.c-red::before{background:var(--red)}
 .stat-card.c-orange::before{background:var(--orange)}
 .stat-card.c-purple::before{background:var(--purple)}
+.stat-card.c-teal::before{background:var(--teal)}
 .stat-label{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px}
 .stat-value{font-size:32px;font-weight:800;line-height:1}
 .stat-sub{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:6px}
@@ -96,11 +98,13 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
 .btn-success:hover{background:rgba(0,255,136,.22)}
 .btn-purple{background:rgba(170,102,255,.15);color:var(--purple);border:1px solid rgba(170,102,255,.3)}
 .btn-purple:hover{background:rgba(170,102,255,.25)}
+.btn-teal{background:rgba(0,229,204,.12);color:var(--teal);border:1px solid rgba(0,229,204,.3)}
+.btn-teal:hover{background:rgba(0,229,204,.22)}
 
 /* TABLE */
 .table-wrap{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden}
-.table-header{display:grid;grid-template-columns:2.5fr 1fr 1.2fr 1fr 1fr 130px;padding:12px 20px;background:var(--surface);border-bottom:1px solid var(--border);font-family:var(--mono);font-size:10px;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase}
-.table-row{display:grid;grid-template-columns:2.5fr 1fr 1.2fr 1fr 1fr 130px;padding:13px 20px;border-bottom:1px solid var(--border);align-items:center;transition:background .15s}
+.table-header{display:grid;grid-template-columns:2.5fr 1fr 1.2fr 1fr 1fr 150px;padding:12px 20px;background:var(--surface);border-bottom:1px solid var(--border);font-family:var(--mono);font-size:10px;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase}
+.table-row{display:grid;grid-template-columns:2.5fr 1fr 1.2fr 1fr 1fr 150px;padding:13px 20px;border-bottom:1px solid var(--border);align-items:center;transition:background .15s}
 .table-row:last-child{border-bottom:none}
 .table-row:hover{background:rgba(0,212,255,.025)}
 .table-row.is-banned{opacity:.6}
@@ -115,6 +119,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
 .badge-banned{background:rgba(255,68,102,.2);color:var(--red);border:1px solid rgba(255,68,102,.4)}
 .badge-unbound{background:rgba(255,170,0,.1);color:var(--orange);border:1px solid rgba(255,170,0,.2)}
 .badge-lifetime{background:rgba(170,102,255,.12);color:var(--purple);border:1px solid rgba(170,102,255,.25)}
+.badge-warnet{background:rgba(0,229,204,.12);color:var(--teal);border:1px solid rgba(0,229,204,.3)}
+.badge-warnet-busy{background:rgba(255,170,0,.18);color:var(--orange);border:1px solid rgba(255,170,0,.4)}
 .badge-dot{width:5px;height:5px;border-radius:50%;background:currentColor;flex-shrink:0}
 .dur-tag{font-family:var(--mono);font-size:11px;color:var(--muted);background:var(--surface);border:1px solid var(--border);padding:2px 8px;border-radius:4px;white-space:nowrap}
 
@@ -125,6 +131,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
 .icon-btn.danger:hover{color:var(--red);border-color:var(--red);background:rgba(255,68,102,.1)}
 .icon-btn.warn:hover{color:var(--orange);border-color:var(--orange);background:rgba(255,170,0,.1)}
 .icon-btn.success:hover{color:var(--green);border-color:var(--green);background:rgba(0,255,136,.1)}
+.icon-btn.teal:hover{color:var(--teal);border-color:var(--teal);background:rgba(0,229,204,.1)}
 .icon-btn svg{width:13px;height:13px}
 
 /* PAGINATION */
@@ -163,21 +170,28 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
 
 /* LOG VIEWER */
 .log-list{max-height:360px;overflow-y:auto;border:1px solid var(--border);border-radius:8px;background:var(--surface)}
-.log-item{padding:10px 14px;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:11px;display:grid;grid-template-columns:140px 130px 1fr;gap:8px;align-items:start}
+.log-item{padding:10px 14px;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:11px;display:grid;grid-template-columns:140px 160px 1fr;gap:8px;align-items:start}
 .log-item:last-child{border-bottom:none}
 .log-time{color:var(--muted)}
 .log-event{color:var(--accent);font-weight:700}
-.log-event.ev-banned,.log-event.ev-banned_hwid,.log-event.ev-hwid_mismatch{color:var(--red)}
-.log-event.ev-unbanned,.log-event.ev-reactivated,.log-event.ev-validated,.log-event.ev-first_activation{color:var(--green)}
-.log-event.ev-extended,.log-event.ev-hwid_reset{color:var(--orange)}
+.log-event.ev-banned,.log-event.ev-banned_hwid,.log-event.ev-hwid_mismatch,.log-event.ev-warnet_locked{color:var(--red)}
+.log-event.ev-unbanned,.log-event.ev-reactivated,.log-event.ev-validated,.log-event.ev-first_activation,.log-event.ev-warnet_first_activation,.log-event.ev-warnet_session_start{color:var(--green)}
+.log-event.ev-extended,.log-event.ev-hwid_reset,.log-event.ev-hwid_rebound{color:var(--orange)}
 .log-event.ev-auto_expired,.log-event.ev-deactivated,.log-event.ev-expired{color:var(--red)}
-.log-detail{color:var(--text)}
+.log-event.ev-warnet_logout,.log-event.ev-warnet_force_logout{color:var(--teal)}
+.log-event.ev-warnet_enabled,.log-event.ev-warnet_disabled,.log-event.ev-warnet_revalidated{color:var(--teal)}
 
 /* BANNED HWID */
 .hwid-list{display:flex;flex-direction:column;gap:10px}
 .hwid-item{background:var(--surface);border:1px solid rgba(255,68,102,.2);border-radius:10px;padding:16px;display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
 .hwid-hash{font-family:var(--mono);font-size:11px;color:var(--text);word-break:break-all}
 .hwid-meta{font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:4px}
+
+/* WARNET SESSION CARD */
+.warnet-session-box{background:rgba(0,229,204,.05);border:1px solid rgba(0,229,204,.2);border-radius:8px;padding:12px 14px;margin-bottom:12px}
+.warnet-session-title{font-family:var(--mono);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal);margin-bottom:8px}
+.warnet-session-hwid{font-family:var(--mono);font-size:11px;color:var(--text);word-break:break-all}
+.warnet-session-meta{font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:4px}
 
 /* GENERATE FORM */
 .gen-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:28px;max-width:500px}
@@ -204,10 +218,11 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
 .spinner{display:inline-block;width:18px;height:18px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-right:8px}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-/* INFO BOX */
+/* INFO / WARN / DANGER BOX */
 .info-box{background:rgba(0,212,255,.05);border:1px solid rgba(0,212,255,.2);border-radius:8px;padding:12px 14px;font-family:var(--mono);font-size:11px;color:var(--muted);margin-bottom:16px}
 .warn-box{background:rgba(255,170,0,.07);border:1px solid rgba(255,170,0,.25);border-radius:8px;padding:12px 14px;font-family:var(--mono);font-size:11px;color:var(--orange)}
 .danger-box{background:rgba(255,68,102,.07);border:1px solid rgba(255,68,102,.25);border-radius:8px;padding:12px 14px;font-family:var(--mono);font-size:11px;color:var(--red)}
+.teal-box{background:rgba(0,229,204,.06);border:1px solid rgba(0,229,204,.25);border-radius:8px;padding:12px 14px;font-family:var(--mono);font-size:11px;color:var(--teal)}
 
 /* ACTION SECTION in modal */
 .action-section{margin-bottom:10px}
@@ -235,7 +250,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
 <aside class="sidebar">
   <div class="logo">
     <div class="logo-title">⚡ DERAS</div>
-    <div class="logo-sub">ADMIN PANEL v3.0</div>
+    <div class="logo-sub">ADMIN PANEL v3.1</div>
   </div>
   <nav>
     <div class="nav-section">Menu</div>
@@ -286,6 +301,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
       <div class="stat-card c-red"><div class="stat-label">Expired</div><div class="stat-value" id="s-expired">—</div><div class="stat-sub">Habis masa</div></div>
       <div class="stat-card c-red"><div class="stat-label">Banned Key</div><div class="stat-value" id="s-banned">—</div><div class="stat-sub">Diblokir admin</div></div>
       <div class="stat-card c-purple"><div class="stat-label">Lifetime</div><div class="stat-value" id="s-lifetime">—</div><div class="stat-sub">Akses permanen</div></div>
+      <div class="stat-card c-teal"><div class="stat-label">Warnet Aktif</div><div class="stat-value" id="s-warnet">—</div><div class="stat-sub">Mode multi-device</div></div>
       <div class="stat-card c-blue"><div class="stat-label">HWID Banned</div><div class="stat-value" id="s-bannedHwid">—</div><div class="stat-sub">Device diblokir</div></div>
       <div class="stat-card c-green"><div class="stat-label">Aktif Hari Ini</div><div class="stat-value" id="s-today">—</div><div class="stat-sub">Last used hari ini</div></div>
     </div>
@@ -320,6 +336,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
         <option value="expired">Expired</option>
         <option value="banned">Banned</option>
         <option value="unbound">Belum Aktif</option>
+        <option value="warnet">⚡ Warnet</option>
       </select>
       <select class="filter-select" id="filterDuration" onchange="resetAndLoad()">
         <option value="all">Semua Durasi</option>
@@ -374,6 +391,15 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
         <label class="form-label">Catatan / Nama Buyer (Opsional)</label>
         <input class="form-input" id="genNote" placeholder="contoh: Budi - WA 0812xxx - @telegram">
       </div>
+      <div class="form-group">
+        <label class="checkbox-label">
+          <input type="checkbox" id="genWarnet">
+          <span>⚡ Mode Warnet (multi-device, sesi-based)</span>
+        </label>
+        <div class="teal-box" style="margin-top:8px">
+          ⚡ Warnet Mode: Siapapun bisa pakai key ini asalkan tidak ada yang sedang aktif. Timer berjalan terus, tapi HWID tidak terkunci permanen. Saat program ditutup → sesi dilepas → user lain bisa masuk.
+        </div>
+      </div>
       <div class="info-box">
         ℹ️ Durasi dihitung MULAI saat pertama kali key divalidasi oleh user — bukan saat di-generate.
       </div>
@@ -426,7 +452,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
 let currentPage  = 1;
 let totalPages   = 1;
 let searchTimer  = null;
-let _activeKey   = null;  // license key currently being actioned
+let _activeKey   = null;
 
 // ==========================================
 // NAVIGATION
@@ -472,7 +498,7 @@ async function apiDelete(url) {
 }
 
 // ==========================================
-// STATS  →  GET /admin/api/stats
+// STATS
 // ==========================================
 async function refreshStats() {
   try {
@@ -485,13 +511,12 @@ async function refreshStats() {
     document.getElementById('s-lifetime').textContent   = data.lifetime       ?? '—';
     document.getElementById('s-bannedHwid').textContent = data.banned_hwids   ?? '—';
     document.getElementById('s-today').textContent      = data.activated_today ?? '—';
-  } catch(e) {
-    console.error(e);
-  }
+    document.getElementById('s-warnet').textContent     = data.warnet         ?? '—';
+  } catch(e) { console.error(e); }
 }
 
 // ==========================================
-// LICENSES TABLE  →  GET /admin/api/licenses
+// LICENSES TABLE
 // ==========================================
 function debounceSearch() {
   clearTimeout(searchTimer);
@@ -542,6 +567,10 @@ function buildRow(l) {
     statusBadge = `<span class="badge badge-expired"><span class="badge-dot"></span>EXPIRED</span>`;
   } else if (l.is_unbound) {
     statusBadge = `<span class="badge badge-unbound"><span class="badge-dot"></span>UNBOUND</span>`;
+  } else if (l.is_warnet && l.warnet_active_hwid) {
+    statusBadge = `<span class="badge badge-warnet-busy"><span class="badge-dot"></span>WARNET BUSY</span>`;
+  } else if (l.is_warnet) {
+    statusBadge = `<span class="badge badge-warnet"><span class="badge-dot"></span>WARNET FREE</span>`;
   } else {
     statusBadge = `<span class="badge badge-active"><span class="badge-dot"></span>AKTIF</span>`;
   }
@@ -560,18 +589,25 @@ function buildRow(l) {
     else { timeLeft = l.time_left || '—'; timeColor = 'var(--text)'; }
   }
 
-  const shortKey = l.license_key.length > 26 ? l.license_key.substring(0, 26) + '…' : l.license_key;
+  const shortKey   = l.license_key.length > 26 ? l.license_key.substring(0, 26) + '…' : l.license_key;
   const escapedKey = l.license_key.replace(/'/g, "\\'");
-  const isBanned  = l.is_banned  ? 'true' : 'false';
-  const isActive  = l.is_active  ? 'true' : 'false';
-  const isUnbound = l.is_unbound ? 'true' : 'false';
-  const hasHwid   = l.hwid_full  ? 'true' : 'false';
+  const isBanned   = l.is_banned  ? 'true' : 'false';
+  const isActive   = l.is_active  ? 'true' : 'false';
+  const isWarnet   = l.is_warnet  ? 'true' : 'false';
+  const hasHwid    = l.hwid_full  ? 'true' : 'false';
+  const durType    = l.duration_type;
+
+  // Warnet indicator in key meta
+  const warnetTag = l.is_warnet
+    ? `<span style="color:var(--teal);font-size:9px;background:rgba(0,229,204,.1);border:1px solid rgba(0,229,204,.2);padding:1px 5px;border-radius:3px;margin-left:4px">⚡WARNET</span>`
+    : '';
 
   return `<div class="table-row ${l.is_banned ? 'is-banned' : ''}">
     <div>
-      <div class="key-text" title="${l.license_key}" onclick="showDetail('${escapedKey}')">${shortKey}</div>
+      <div class="key-text" title="${l.license_key}" onclick="showDetail('${escapedKey}')">${shortKey}${warnetTag}</div>
       ${l.note ? `<div class="key-meta">📝 ${escHtml(l.note)}</div>` : ''}
       ${l.last_used ? `<div class="key-meta">🕐 ${l.last_used.substring(0,16).replace('T',' ')}</div>` : ''}
+      ${l.is_warnet && l.warnet_active_hwid ? `<div class="key-meta" style="color:var(--orange)">🔒 Sesi aktif</div>` : ''}
     </div>
     <div>${statusBadge}</div>
     <div class="col-hwid" style="font-family:var(--mono);font-size:11px;color:var(--muted)">
@@ -586,7 +622,11 @@ function buildRow(l) {
       <button class="icon-btn" title="Activity Logs" onclick="showLogs('${escapedKey}')">
         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
       </button>
-      <button class="icon-btn" title="Aksi" onclick="showActions('${escapedKey}',${isBanned},${isActive},'${l.duration_type}',${hasHwid})">
+      ${l.is_warnet && l.warnet_active_hwid ? `
+      <button class="icon-btn teal" title="Force Logout Warnet" onclick="doWarnetForceLogout('${escapedKey}')">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+      </button>` : ''}
+      <button class="icon-btn" title="Aksi" onclick="showActions('${escapedKey}',${isBanned},${isActive},'${durType}',${hasHwid},${isWarnet})">
         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"/></svg>
       </button>
     </div>
@@ -618,7 +658,7 @@ function gotoPage(p) {
 }
 
 // ==========================================
-// DETAIL MODAL  →  GET /admin/api/licenses (data from row)
+// DETAIL MODAL
 // ==========================================
 async function showDetail(key) {
   _activeKey = key;
@@ -629,16 +669,39 @@ async function showDetail(key) {
 
   const statusText = l.is_banned ? 'BANNED' : !l.is_active ? 'EXPIRED/INACTIVE' : l.is_unbound ? 'UNBOUND' : 'AKTIF';
 
+  // Warnet session info block
+  let warnetBlock = '';
+  if (l.is_warnet) {
+    if (l.warnet_active_hwid) {
+      warnetBlock = `
+        <div class="warnet-session-box">
+          <div class="warnet-session-title">⚡ Sesi Warnet Aktif</div>
+          <div class="warnet-session-hwid">${escHtml(l.warnet_active_hwid)}</div>
+          <div class="warnet-session-meta">Mulai: ${(l.warnet_session_start||'—').substring(0,19).replace('T',' ')}</div>
+          <button class="btn btn-teal" style="margin-top:8px;width:100%;justify-content:center" onclick="doWarnetForceLogout('${escHtml(key)}')">
+            🔌 Force Logout Sesi Ini
+          </button>
+        </div>`;
+    } else {
+      warnetBlock = `
+        <div class="teal-box" style="margin-bottom:12px">
+          ⚡ Mode Warnet — Tidak ada sesi aktif. Device mana saja bisa login sekarang.
+        </div>`;
+    }
+  }
+
   openModal(`
     <div class="modal-title">
       <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/></svg>
-      Detail Lisensi
+      Detail Lisensi ${l.is_warnet ? '<span class="badge badge-warnet" style="margin-left:8px">⚡ WARNET</span>' : ''}
     </div>
+    ${warnetBlock}
     <div class="detail-row"><span class="detail-key">Key</span><span class="detail-val" style="font-size:10px">${escHtml(l.license_key)}</span></div>
     <div class="detail-row"><span class="detail-key">Status</span><span class="detail-val">${statusText}</span></div>
+    <div class="detail-row"><span class="detail-key">Mode</span><span class="detail-val" style="color:${l.is_warnet?'var(--teal)':'var(--muted)'}">${l.is_warnet ? '⚡ Warnet' : '🔒 Normal'}</span></div>
     <div class="detail-row"><span class="detail-key">Durasi</span><span class="detail-val">${l.duration_type}</span></div>
     <div class="detail-row"><span class="detail-key">Created</span><span class="detail-val">${(l.created_at||'—').substring(0,19).replace('T',' ')}</span></div>
-    <div class="detail-row"><span class="detail-key">Expires</span><span class="detail-val">${l.expires_at ? l.expires_at.substring(0,19).replace('T',' ') : 'Never'}</span></div>
+    <div class="detail-row"><span class="detail-key">Expires</span><span class="detail-val">${l.expires_at ? l.expires_at.substring(0,19).replace('T',' ') : l.is_unbound ? '<span style="color:var(--orange)">Belum dimulai</span>' : 'Never'}</span></div>
     <div class="detail-row"><span class="detail-key">Last Used</span><span class="detail-val">${l.last_used ? l.last_used.substring(0,19).replace('T',' ') : '—'}</span></div>
     <div class="detail-row"><span class="detail-key">HWID Hash</span><span class="detail-val" style="font-size:10px">${l.hwid_full || '—'}</span></div>
     <div class="detail-row"><span class="detail-key">Catatan</span><span class="detail-val">${escHtml(l.note || '—')}</span></div>
@@ -647,12 +710,12 @@ async function showDetail(key) {
     <div class="modal-actions">
       <button class="btn btn-ghost" onclick="closeModal()">Tutup</button>
       <button class="btn btn-ghost" onclick="showLogs('${escHtml(key)}')">📋 Lihat Log</button>
-      <button class="btn btn-accent" onclick="showActions('${escHtml(key)}',${l.is_banned},${l.is_active},'${l.duration_type}',${!!l.hwid_full})">⚙️ Aksi</button>
+      <button class="btn btn-accent" onclick="showActions('${escHtml(key)}',${l.is_banned},${l.is_active},'${l.duration_type}',${!!l.hwid_full},${!!l.is_warnet})">⚙️ Aksi</button>
     </div>`);
 }
 
 // ==========================================
-// LOGS MODAL  →  GET /admin/api/licenses/:key/logs
+// LOGS MODAL
 // ==========================================
 async function showLogs(key) {
   _activeKey = key;
@@ -665,7 +728,6 @@ async function showLogs(key) {
     <div class="log-list" id="logListInner"><div class="loading"><span class="spinner"></span>Memuat log...</div></div>
     <div class="modal-actions">
       <button class="btn btn-ghost" onclick="closeModal()">Tutup</button>
-      <button class="btn btn-ghost" onclick="showActions('${escHtml(key)}',false,true,'',false)">⚙️ Aksi</button>
     </div>`);
 
   const data = await api('GET', `/admin/api/licenses/${encodeURIComponent(key)}/logs`);
@@ -689,9 +751,9 @@ async function showLogs(key) {
 }
 
 // ==========================================
-// ACTIONS MODAL  (semua endpoint aksi)
+// ACTIONS MODAL
 // ==========================================
-function showActions(key, isBanned, isActive, durationType, hasHwid) {
+function showActions(key, isBanned, isActive, durationType, hasHwid, isWarnet) {
   _activeKey = key;
   const short = key.length > 32 ? key.substring(0, 32) + '…' : key;
 
@@ -706,22 +768,42 @@ function showActions(key, isBanned, isActive, durationType, hasHwid) {
         </button>
       </div>`;
   } else {
-    // HWID actions
-    if (hasHwid) {
+
+    // ── WARNET SECTION ──────────────────────────────────────────────────
+    sections += `
+      <div class="action-section">
+        <div class="action-section-title">⚡ Mode Warnet</div>
+        ${isWarnet
+          ? `<div class="teal-box" style="margin-bottom:8px;font-size:10px">Mode warnet sedang AKTIF. HWID tidak terkunci permanen.</div>
+             <button class="btn btn-ghost" style="width:100%;justify-content:center;margin-bottom:6px" onclick="doSetWarnet(false)">
+               🔒 Nonaktifkan Warnet → Mode Normal
+             </button>
+             <button class="btn btn-teal" style="width:100%;justify-content:center;margin-bottom:8px" onclick="doWarnetForceLogout('${escHtml(key)}')">
+               🔌 Force Logout Sesi Aktif
+             </button>`
+          : `<div class="info-box" style="margin-bottom:8px;font-size:10px">Mode normal: HWID terikat permanen ke satu device.</div>
+             <button class="btn btn-teal" style="width:100%;justify-content:center;margin-bottom:8px" onclick="doSetWarnet(true)">
+               ⚡ Aktifkan Mode Warnet
+             </button>`
+        }
+      </div>`;
+
+    // ── HWID ───────────────────────────────────────────────────────────
+    if (hasHwid || isWarnet) {
       sections += `
         <div class="action-section">
           <div class="action-section-title">🔧 HWID</div>
           <button class="btn btn-warn" style="width:100%;justify-content:center;margin-bottom:8px" onclick="doAction('reset-hwid')">
-            🔄 Reset HWID (ganti device)
+            🔄 Reset HWID${!isWarnet ? ' (sisa waktu tetap lanjut)' : ''}
           </button>
         </div>`;
     }
 
-    // Duration / active management
+    // ── DURASI / AKTIF ─────────────────────────────────────────────────
     if (isActive) {
       sections += `
         <div class="action-section">
-          <div class="action-section-title">📅 Durasi</div>
+          <div class="action-section-title">📅 Durasi & Kelola</div>
           ${durationType !== 'lifetime' ? `<button class="btn btn-warn" style="width:100%;justify-content:center;margin-bottom:8px" onclick="showExtendModal()">📅 Extend / Perpanjang Durasi</button>` : ''}
           <button class="btn btn-ghost" style="width:100%;justify-content:center;margin-bottom:8px" onclick="showNoteModal()">📝 Edit Catatan</button>
           <button class="btn btn-ghost" style="width:100%;justify-content:center;margin-bottom:8px" onclick="doAction('deactivate')">⏸ Nonaktifkan Sementara</button>
@@ -743,7 +825,6 @@ function showActions(key, isBanned, isActive, durationType, hasHwid) {
         </div>`;
     }
 
-    // Delete — always shown
     sections += `
       <div class="action-section">
         <div class="action-section-title">🗑 Hapus</div>
@@ -754,7 +835,7 @@ function showActions(key, isBanned, isActive, durationType, hasHwid) {
   openModal(`
     <div class="modal-title">
       <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-      Aksi Lisensi
+      Aksi Lisensi ${isWarnet ? '<span class="badge badge-warnet" style="margin-left:8px">⚡ WARNET</span>' : ''}
     </div>
     <div class="modal-sub">${escHtml(short)}</div>
     ${sections}
@@ -764,17 +845,12 @@ function showActions(key, isBanned, isActive, durationType, hasHwid) {
 // ==========================================
 // INDIVIDUAL ACTIONS
 // ==========================================
-
-// POST /admin/api/licenses/:key/reset-hwid
-// POST /admin/api/licenses/:key/deactivate
-// POST /admin/api/licenses/:key/reactivate
-// POST /admin/api/licenses/:key/unban
 async function doAction(action) {
   const key = _activeKey;
   if (!key) return;
 
   const labelMap = {
-    'reset-hwid': 'Reset HWID berhasil',
+    'reset-hwid':  'HWID di-reset. Sisa waktu dipertahankan ✓',
     'deactivate':  'Lisensi dinonaktifkan',
     'reactivate':  'Lisensi diaktifkan kembali',
     'unban':       'Lisensi berhasil di-unban',
@@ -782,28 +858,45 @@ async function doAction(action) {
 
   const data = await api('POST', `/admin/api/licenses/${encodeURIComponent(key)}/${action}`);
   toast(data.message || (data.success ? (labelMap[action]||'Berhasil') : 'Gagal'), data.success ? 'success' : 'error');
-  if (data.success) {
-    closeModal();
-    loadLicenses();
-    refreshStats();
-  }
+  if (data.success) { closeModal(); loadLicenses(); refreshStats(); }
 }
 
-// DELETE /admin/api/licenses/:key/delete
+// Toggle warnet mode: POST /admin/api/licenses/:key/set-warnet
+async function doSetWarnet(enable) {
+  const key = _activeKey;
+  if (!key) return;
+  const confirmMsg = enable
+    ? `Aktifkan Mode Warnet untuk key ini?\n\nHWID lock akan dihapus. Timer berjalan terus tapi siapapun bisa memakai key ini (satu per satu).\n\nKey: ${key}`
+    : `Nonaktifkan Mode Warnet?\n\nKey akan kembali ke mode normal (HWID terkunci saat login berikutnya).\n\nKey: ${key}`;
+  if (!confirm(confirmMsg)) return;
+
+  const data = await api('POST', `/admin/api/licenses/${encodeURIComponent(key)}/set-warnet`, { is_warnet: enable });
+  toast(data.message || (data.success ? 'Berhasil' : 'Gagal'), data.success ? 'success' : 'error');
+  if (data.success) { closeModal(); loadLicenses(); refreshStats(); }
+}
+
+// Force logout warnet session: POST /admin/api/licenses/:key/warnet-logout
+async function doWarnetForceLogout(key) {
+  if (!key) key = _activeKey;
+  if (!key) return;
+  if (!confirm(`Force logout sesi warnet untuk key:\n${key}\n\nDevice yang sedang aktif akan di-kick saat revalidasi berikutnya.`)) return;
+
+  const data = await api('POST', `/admin/api/licenses/${encodeURIComponent(key)}/warnet-logout`);
+  toast(data.message || (data.success ? 'Sesi warnet di-clear' : 'Gagal'), data.success ? 'success' : 'error');
+  if (data.success) { closeModal(); loadLicenses(); }
+}
+
+// DELETE
 async function confirmDelete() {
   const key = _activeKey;
   if (!key) return;
   if (!confirm(`Hapus permanen lisensi ini?\n\n${key}\n\nTindakan ini tidak bisa dibatalkan!`)) return;
   const data = await apiDelete(`/admin/api/licenses/${encodeURIComponent(key)}/delete`);
   toast(data.success ? 'Lisensi dihapus permanen' : (data.message || 'Gagal'), data.success ? 'success' : 'error');
-  if (data.success) {
-    closeModal();
-    loadLicenses();
-    refreshStats();
-  }
+  if (data.success) { closeModal(); loadLicenses(); refreshStats(); }
 }
 
-// POST /admin/api/licenses/:key/ban
+// BAN
 function showBanModal() {
   document.getElementById('modalContent').innerHTML = `
     <div class="modal-title" style="color:var(--red)">
@@ -839,7 +932,7 @@ async function submitBan() {
   if (data.success) { closeModal(); loadLicenses(); refreshStats(); }
 }
 
-// POST /admin/api/licenses/:key/extend
+// EXTEND
 function showExtendModal() {
   document.getElementById('modalContent').innerHTML = `
     <div class="modal-title">
@@ -873,7 +966,7 @@ async function submitExtend() {
   }
 }
 
-// POST /admin/api/licenses/:key/note
+// NOTE
 function showNoteModal() {
   document.getElementById('modalContent').innerHTML = `
     <div class="modal-title">
@@ -899,16 +992,17 @@ async function submitNote() {
 }
 
 // ==========================================
-// GENERATE KEY  →  POST /api/generate-key
+// GENERATE KEY
 // ==========================================
 async function generateKey() {
-  const duration = document.getElementById('genDuration').value;
-  const note     = document.getElementById('genNote').value;
+  const duration  = document.getElementById('genDuration').value;
+  const note      = document.getElementById('genNote').value;
+  const is_warnet = document.getElementById('genWarnet').checked;
 
   const btn = document.querySelector('#page-generate .btn-accent');
   if (btn) { btn.disabled = true; btn.textContent = 'Generating...'; }
 
-  const data = await api('POST', '/api/generate-key', { duration_type: duration, note });
+  const data = await api('POST', '/api/generate-key', { duration_type: duration, note, is_warnet });
 
   if (btn) { btn.disabled = false; btn.innerHTML = `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:14px;height:14px"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg> GENERATE KEY`; }
 
@@ -916,7 +1010,7 @@ async function generateKey() {
     document.getElementById('genResult').style.display = 'block';
     document.getElementById('genResultKey').textContent = data.license_key;
     document.getElementById('genResultMeta').innerHTML =
-      `Durasi: <strong>${data.duration_type}</strong>  ·  Aktif saat pertama kali divalidasi user`;
+      `Durasi: <strong>${data.duration_type}</strong>  ·  Mode: <strong>${data.is_warnet ? '⚡ Warnet' : '🔒 Normal'}</strong>  ·  Aktif saat pertama kali divalidasi user`;
     toast('Key berhasil dibuat! Klik key untuk menyalin.', 'success');
     refreshStats();
   } else {
@@ -931,7 +1025,7 @@ function copyKey(el) {
 }
 
 // ==========================================
-// BANNED HWID  →  GET/POST /admin/api/banned-hwids
+// BANNED HWID
 // ==========================================
 async function loadBannedHwids() {
   const c = document.getElementById('bannedHwidList');
@@ -961,7 +1055,6 @@ async function loadBannedHwids() {
     </div>`).join('');
 }
 
-// POST /admin/api/banned-hwids/:hwid_hash/unban
 async function unbanHwid(hash) {
   if (!confirm('Unban HWID ini?\nDevice bisa dipakai kembali dengan key yang valid.')) return;
   const data = await api('POST', `/admin/api/banned-hwids/${encodeURIComponent(hash)}/unban`);
@@ -979,7 +1072,6 @@ function openModal(html) {
 
 function closeModal() {
   document.getElementById('modalOverlay').classList.remove('open');
-  // Don't reset _activeKey here — some flows re-open modal with same key
 }
 
 document.getElementById('modalOverlay').addEventListener('click', e => {

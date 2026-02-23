@@ -287,13 +287,14 @@ def admin_stats():
         banned   = sum(1 for l in licenses if l.get("is_banned"))
         unbound  = sum(1 for l in licenses if l.get("hwid") is None and l.get("is_active"))
         lifetime = sum(1 for l in licenses if l.get("duration_type") == "lifetime")
+        warnet   = sum(1 for l in licenses if l.get("is_warnet") and l.get("is_active") and not l.get("is_banned"))
         banned_hwids    = len(get_all_banned_hwids())
         activated_today = sum(1 for l in licenses if (l.get("last_used") or "").startswith(today))
 
         return jsonify({
             "total": total, "active": active, "expired": expired, "banned": banned,
             "unbound": unbound, "lifetime": lifetime, "banned_hwids": banned_hwids,
-            "activated_today": activated_today
+            "activated_today": activated_today, "warnet": warnet
         })
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -319,8 +320,9 @@ def admin_list_licenses():
                 hwid          = lic.get("hwid")
                 expires_at    = lic.get("expires_at")
                 last_used     = lic.get("last_used")
+                is_warnet     = bool(lic.get("is_warnet", False))
+                warnet_active_hwid = lic.get("warnet_active_hwid")  # HWID yang sedang aktif sesi warnet
 
-                # Search filter — matches key OR note
                 if search:
                     note = (lic.get("note") or "").lower()
                     if search not in license_key.lower() and search not in note:
@@ -329,7 +331,6 @@ def admin_list_licenses():
                 is_unbound = (hwid is None) and is_active and not is_banned
                 is_expired_flag = not is_active and not is_banned
 
-                # Calculate time_left
                 time_left = None
                 if expires_at and is_active and not is_unbound:
                     try:
@@ -344,34 +345,35 @@ def admin_list_licenses():
                     except Exception:
                         time_left = None
 
-                # Status filter
                 if status == 'active'  and not (is_active and not is_banned):  continue
                 if status == 'expired' and not is_expired_flag:                continue
                 if status == 'banned'  and not is_banned:                      continue
                 if status == 'unbound' and not is_unbound:                     continue
+                if status == 'warnet'  and not (is_warnet and is_active and not is_banned): continue
 
-                # Duration filter
                 if duration != 'all' and duration_type != duration:
                     continue
 
                 result.append({
-                    "license_key":   license_key,
-                    "hwid_short":    (hwid[:12] + "...") if hwid else None,
-                    "hwid_full":     hwid,
-                    "duration_type": duration_type,
-                    "created_at":    lic.get("created_at", ""),
-                    "expires_at":    expires_at,
-                    "last_used":     last_used,
-                    "is_active":     is_active and not is_banned,
-                    "is_banned":     is_banned,
-                    "is_unbound":    is_unbound,
-                    "time_left":     time_left,
-                    "ban_reason":    lic.get("ban_reason", ""),
-                    "note":          lic.get("note", ""),
-                    "log_count":     len(lic.get("logs", [])),
+                    "license_key":         license_key,
+                    "hwid_short":          (hwid[:12] + "...") if hwid else None,
+                    "hwid_full":           hwid,
+                    "duration_type":       duration_type,
+                    "created_at":          lic.get("created_at", ""),
+                    "expires_at":          expires_at,
+                    "last_used":           last_used,
+                    "is_active":           is_active and not is_banned,
+                    "is_banned":           is_banned,
+                    "is_unbound":          is_unbound,
+                    "is_warnet":           is_warnet,
+                    "warnet_active_hwid":  warnet_active_hwid,
+                    "warnet_session_start": lic.get("warnet_session_start"),
+                    "time_left":           time_left,
+                    "ban_reason":          lic.get("ban_reason", ""),
+                    "note":                lic.get("note", ""),
+                    "log_count":           len(lic.get("logs", [])),
                 })
             except Exception as row_err:
-                # Skip malformed documents instead of crashing entire request
                 print(f"[admin_list] Skipping bad doc: {row_err}")
                 continue
 
@@ -418,9 +420,21 @@ def admin_reset_hwid(license_key):
         return jsonify({"success": False, "message": "Not found"}), 404
     old = (lic.get("hwid") or "none")
     lic["hwid"] = None
-    log_event(lic, "HWID_RESET", f"Old: {old[:12]}")
+    # ──────────────────────────────────────────────────────────────────────
+    # FIX: Untuk mode NORMAL — pertahankan expires_at agar sisa waktu tidak
+    # direset. Timer akan DILANJUTKAN saat HWID baru pertama kali login.
+    #
+    # Untuk mode WARNET — hapus juga warnet_active_hwid agar sesi bersih.
+    # ──────────────────────────────────────────────────────────────────────
+    if lic.get("is_warnet"):
+        lic["warnet_active_hwid"]    = None
+        lic["warnet_session_start"]  = None
+        log_event(lic, "HWID_RESET", f"Old: {old[:12]} | Warnet sesi dibersihkan")
+    else:
+        # expires_at TIDAK disentuh — sisa waktu tetap lanjut
+        log_event(lic, "HWID_RESET", f"Old: {old[:12]} | Sisa waktu dipertahankan")
     save_license(lic)
-    return jsonify({"success": True, "message": "HWID reset berhasil"})
+    return jsonify({"success": True, "message": "HWID reset berhasil. Sisa waktu dipertahankan."})
 
 @app.route('/admin/api/licenses/<license_key>/ban', methods=['POST'])
 @requires_auth
@@ -437,6 +451,9 @@ def admin_ban_license(license_key):
     lic["is_active"]  = False
     lic["ban_reason"] = reason
     lic["banned_at"]  = now_iso()
+    # Bersihkan sesi warnet juga saat ban
+    lic["warnet_active_hwid"]   = None
+    lic["warnet_session_start"] = None
     log_event(lic, "BANNED", reason)
 
     if ban_hwid and lic.get("hwid"):
@@ -468,6 +485,8 @@ def admin_deactivate(license_key):
     if not lic:
         return jsonify({"success": False, "message": "Not found"}), 404
     lic["is_active"] = False
+    lic["warnet_active_hwid"]   = None
+    lic["warnet_session_start"] = None
     log_event(lic, "DEACTIVATED", "Manual by admin")
     save_license(lic)
     return jsonify({"success": True, "message": "Lisensi dinonaktifkan"})
@@ -513,6 +532,60 @@ def admin_delete(license_key):
     delete_license(license_key)
     return jsonify({"success": True, "message": "Lisensi dihapus"})
 
+# ──────────────────────────────────────────────────────────────────────────
+# ADMIN: SET / UNSET WARNET MODE
+# ──────────────────────────────────────────────────────────────────────────
+@app.route('/admin/api/licenses/<license_key>/set-warnet', methods=['POST'])
+@requires_auth
+def admin_set_warnet(license_key):
+    """
+    Toggle mode warnet ON/OFF untuk sebuah lisensi.
+    Warnet mode = HWID tidak di-lock permanen; siapapun bisa pakai
+    asalkan tidak ada sesi aktif. Saat close program → logout → sesi bebas.
+    """
+    data      = request.get_json() or {}
+    is_warnet = bool(data.get("is_warnet", True))
+
+    lic = get_license(license_key)
+    if not lic:
+        return jsonify({"success": False, "message": "Not found"}), 404
+
+    lic["is_warnet"] = is_warnet
+    if is_warnet:
+        # Reset lock HWID lama agar warnet bisa multi-device
+        lic["hwid"]                 = None
+        lic["warnet_active_hwid"]   = None
+        lic["warnet_session_start"] = None
+        log_event(lic, "WARNET_ENABLED", "Mode warnet diaktifkan, HWID lock dihapus")
+    else:
+        # Kembali ke mode normal — HWID akan terikat saat login berikutnya
+        lic["warnet_active_hwid"]   = None
+        lic["warnet_session_start"] = None
+        log_event(lic, "WARNET_DISABLED", "Mode warnet dinonaktifkan")
+
+    save_license(lic)
+    return jsonify({"success": True, "is_warnet": is_warnet,
+                    "message": f"Mode warnet {'diaktifkan' if is_warnet else 'dinonaktifkan'}"})
+
+# ──────────────────────────────────────────────────────────────────────────
+# ADMIN: FORCE LOGOUT WARNET (untuk admin clear sesi yang hang)
+# ──────────────────────────────────────────────────────────────────────────
+@app.route('/admin/api/licenses/<license_key>/warnet-logout', methods=['POST'])
+@requires_auth
+def admin_warnet_logout(license_key):
+    lic = get_license(license_key)
+    if not lic:
+        return jsonify({"success": False, "message": "Not found"}), 404
+    if not lic.get("is_warnet"):
+        return jsonify({"success": False, "message": "Bukan lisensi warnet"}), 400
+
+    old_hwid = lic.get("warnet_active_hwid") or "none"
+    lic["warnet_active_hwid"]   = None
+    lic["warnet_session_start"] = None
+    log_event(lic, "WARNET_FORCE_LOGOUT", f"Admin clear sesi. Was: {str(old_hwid)[:12]}")
+    save_license(lic)
+    return jsonify({"success": True, "message": "Sesi warnet berhasil di-clear"})
+
 @app.route('/admin/api/banned-hwids')
 @requires_auth
 def admin_banned_hwids():
@@ -543,27 +616,32 @@ def generate_key():
         if duration_type not in valid_types:
             return jsonify({"success": False, "message": f"Invalid. Valid: {valid_types}"}), 400
 
+        is_warnet   = bool(data.get("is_warnet", False))
         license_key = generate_license_key()
         lic = {
-            "license_key":   license_key,
-            "hwid":          None,
-            "duration_type": duration_type,
-            "created_at":    now_iso(),
-            "expires_at":    None,
-            "is_active":     True,
-            "is_banned":     False,
-            "ban_reason":    "",
-            "last_used":     None,
-            "note":          data.get("note", ""),
-            "logs":          []
+            "license_key":          license_key,
+            "hwid":                 None,
+            "duration_type":        duration_type,
+            "created_at":           now_iso(),
+            "expires_at":           None,
+            "is_active":            True,
+            "is_banned":            False,
+            "ban_reason":           "",
+            "last_used":            None,
+            "note":                 data.get("note", ""),
+            "is_warnet":            is_warnet,
+            "warnet_active_hwid":   None,
+            "warnet_session_start": None,
+            "logs":                 []
         }
-        log_event(lic, "GENERATED", f"Type: {duration_type}")
+        log_event(lic, "GENERATED", f"Type: {duration_type} | Warnet: {is_warnet}")
         save_license(lic)
 
         return jsonify({
             "success":       True,
             "license_key":   license_key,
             "duration_type": duration_type,
+            "is_warnet":     is_warnet,
             "message":       "License generated. Duration starts upon first activation."
         }), 201
 
@@ -571,6 +649,20 @@ def generate_key():
         return jsonify({"success": False, "message": str(e)}), 500
 
 
+# ──────────────────────────────────────────────────────────────────────────
+# /api/validate  — endpoint utama yang dipakai klien .exe
+#
+# Logika baru:
+#   MODE NORMAL  → HWID terikat permanen saat pertama aktifasi.
+#                  Reset HWID oleh admin mempertahankan expires_at.
+#                  Saat HWID kosong + expires_at sudah ada → lanjutkan sisa waktu.
+#
+#   MODE WARNET  → Tidak ada HWID lock permanen.
+#                  warnet_active_hwid = HWID device yang sedang aktif sesi.
+#                  Jika warnet_active_hwid terisi oleh HWID lain → WARNET_LOCKED.
+#                  Saat pertama kali (warnet_active_hwid kosong) → set sesi + 
+#                  mulai timer jika belum ada expires_at.
+# ──────────────────────────────────────────────────────────────────────────
 @app.route('/api/validate', methods=['POST'])
 def validate_license():
     try:
@@ -587,6 +679,7 @@ def validate_license():
         hwid_hash    = hash_hwid(hwid)
         current_time = datetime.now(TIMEZONE)
 
+        # Cek HWID ban global
         if get_banned_hwid(hwid_hash):
             return jsonify({"success": False, "message": "BANNED: Hardware ID anda telah diblokir"}), 403
 
@@ -601,25 +694,74 @@ def validate_license():
         if not lic.get("is_active"):
             return jsonify({"success": False, "message": "EXPIRED: License Inactive"}), 403
 
+        is_warnet      = bool(lic.get("is_warnet", False))
         stored_hwid    = lic.get("hwid")
         expires_at_str = lic.get("expires_at")
 
-        if stored_hwid is None:
-            new_expires    = calculate_expires_at(lic["duration_type"], current_time)
-            lic["hwid"]       = hwid_hash
-            lic["expires_at"] = new_expires
-            lic["last_used"]  = current_time.isoformat()
-            expires_at_str    = new_expires
-            log_event(lic, "FIRST_ACTIVATION", f"HWID: {hwid_hash[:12]}")
+        # ──────────────────────────────────────────────────────────────────
+        # MODE WARNET
+        # ──────────────────────────────────────────────────────────────────
+        if is_warnet:
+            warnet_active = lic.get("warnet_active_hwid")
 
-        elif stored_hwid != hwid_hash:
-            log_event(lic, "HWID_MISMATCH", f"Got: {hwid_hash[:12]}")
-            save_license(lic)
-            return jsonify({"success": False, "message": "HWID Mismatch"}), 403
+            # Ada sesi aktif dari HWID lain → tolak
+            if warnet_active and warnet_active != hwid_hash:
+                log_event(lic, "WARNET_LOCKED", f"Active: {str(warnet_active)[:12]} | Blocked: {hwid_hash[:12]}")
+                save_license(lic)
+                return jsonify({
+                    "success": False,
+                    "message": "WARNET_LOCKED: Lisensi sedang digunakan di device lain"
+                }), 403
 
+            # Tidak ada sesi aktif, atau sesi kita sendiri → izinkan
+            if not warnet_active:
+                # Mulai sesi baru
+                lic["warnet_active_hwid"]   = hwid_hash
+                lic["warnet_session_start"] = current_time.isoformat()
+
+                # Mulai timer jika belum pernah dipakai (warnet pertama kali)
+                if not expires_at_str and lic.get("duration_type") != "lifetime":
+                    expires_at_str           = calculate_expires_at(lic["duration_type"], current_time)
+                    lic["expires_at"]        = expires_at_str
+                    log_event(lic, "WARNET_FIRST_ACTIVATION", f"HWID: {hwid_hash[:12]} | Expires: {(expires_at_str or 'Never')[:19]}")
+                else:
+                    log_event(lic, "WARNET_SESSION_START", f"HWID: {hwid_hash[:12]}")
+            else:
+                # Sesi kita sendiri (reconnect / revalidate)
+                log_event(lic, "WARNET_REVALIDATED", f"HWID: {hwid_hash[:12]}")
+
+        # ──────────────────────────────────────────────────────────────────
+        # MODE NORMAL
+        # ──────────────────────────────────────────────────────────────────
+        else:
+            if stored_hwid is None:
+                # ── HWID kosong = bisa karena:
+                #    a) Pertama kali aktivasi (expires_at juga kosong)
+                #    b) Admin reset HWID → expires_at sudah ada → LANJUTKAN timer
+                lic["hwid"] = hwid_hash
+
+                if not expires_at_str and lic.get("duration_type") != "lifetime":
+                    # (a) Pertama kali aktivasi — mulai timer baru
+                    expires_at_str    = calculate_expires_at(lic["duration_type"], current_time)
+                    lic["expires_at"] = expires_at_str
+                    log_event(lic, "FIRST_ACTIVATION", f"HWID: {hwid_hash[:12]}")
+                else:
+                    # (b) HWID baru setelah reset admin — timer dilanjutkan
+                    log_event(lic, "HWID_REBOUND", f"HWID: {hwid_hash[:12]} | Timer lanjut, Expires: {(expires_at_str or 'Never')[:19]}")
+
+            elif stored_hwid != hwid_hash:
+                log_event(lic, "HWID_MISMATCH", f"Got: {hwid_hash[:12]}")
+                save_license(lic)
+                return jsonify({"success": False, "message": "HWID Mismatch"}), 403
+
+        # ── Cek expired ─────────────────────────────────────────────────
+        expires_at_str = lic.get("expires_at")  # bisa sudah diupdate di atas
         if expires_at_str and expires_at_str not in ("Never", "null", None):
             if current_time > parse_dt(expires_at_str):
                 lic["is_active"] = False
+                if is_warnet:
+                    lic["warnet_active_hwid"]   = None
+                    lic["warnet_session_start"] = None
                 log_event(lic, "AUTO_EXPIRED")
                 save_license(lic)
                 return jsonify({"success": False, "message": "EXPIRED: Duration Ended"}), 403
@@ -632,8 +774,47 @@ def validate_license():
             "success":    True,
             "message":    "Valid",
             "duration":   lic["duration_type"],
-            "expires_at": expires_at_str if expires_at_str else "Never"
+            "expires_at": expires_at_str if expires_at_str else "Never",
+            "mode":       "warnet" if is_warnet else "normal"
         }), 200
+
+    except Exception as e:
+        return jsonify({"success": False, "message": f"Server Error: {str(e)}"}), 500
+
+
+# ──────────────────────────────────────────────────────────────────────────
+# /api/logout  — dipanggil klien saat program ditutup (mode warnet)
+#
+# Membebaskan warnet_active_hwid sehingga device lain bisa pakai key ini.
+# expires_at TIDAK diubah — timer tetap berjalan.
+# ──────────────────────────────────────────────────────────────────────────
+@app.route('/api/logout', methods=['POST'])
+def logout_license():
+    try:
+        data = request.get_json()
+        if not data or 'license_key' not in data or 'hwid' not in data:
+            return jsonify({"success": False, "message": "Missing Data"}), 400
+
+        license_key = data['license_key'].strip()
+        hwid        = data['hwid'].strip()
+        hwid_hash   = hash_hwid(hwid)
+
+        lic = get_license(license_key)
+        if not lic:
+            return jsonify({"success": False, "message": "Invalid Key"}), 404
+
+        if not lic.get("is_warnet"):
+            # Mode normal: logout tidak relevan, abaikan saja
+            return jsonify({"success": True, "message": "OK"}), 200
+
+        # Hanya clear jika HWID yang logout memang yang sedang aktif
+        if lic.get("warnet_active_hwid") == hwid_hash:
+            lic["warnet_active_hwid"]   = None
+            lic["warnet_session_start"] = None
+            log_event(lic, "WARNET_LOGOUT", f"HWID: {hwid_hash[:12]}")
+            save_license(lic)
+
+        return jsonify({"success": True, "message": "Logged out"}), 200
 
     except Exception as e:
         return jsonify({"success": False, "message": f"Server Error: {str(e)}"}), 500
