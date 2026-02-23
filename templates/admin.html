@@ -27,7 +27,6 @@
 html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;overflow-x:hidden}
 
-/* SCROLLBAR */
 ::-webkit-scrollbar{width:4px;height:4px}
 ::-webkit-scrollbar-track{background:var(--bg)}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
@@ -36,10 +35,11 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
 .layout{display:grid;grid-template-columns:240px 1fr;min-height:100vh}
 
 /* SIDEBAR */
-.sidebar{background:var(--surface);border-right:1px solid var(--border);padding:24px 0;display:flex;flex-direction:column;position:sticky;top:0;height:100vh}
+.sidebar{background:var(--surface);border-right:1px solid var(--border);padding:24px 0;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto}
 .logo{padding:0 24px 28px;border-bottom:1px solid var(--border);margin-bottom:24px}
 .logo-title{font-family:var(--sans);font-size:18px;font-weight:800;letter-spacing:2px;color:var(--accent)}
 .logo-sub{font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:4px;letter-spacing:1px}
+.nav-section{padding:0 24px 8px;font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-top:8px}
 .nav-item{display:flex;align-items:center;gap:10px;padding:10px 24px;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;transition:all .2s;letter-spacing:.5px;border-left:2px solid transparent}
 .nav-item:hover{color:var(--text);background:rgba(0,212,255,.04)}
 .nav-item.active{color:var(--accent);background:rgba(0,212,255,.07);border-left-color:var(--accent)}
@@ -50,18 +50,18 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(.8)}}
 
 /* MAIN */
-.main{padding:32px;overflow-x:hidden}
+.main{padding:32px;overflow-x:hidden;min-height:100vh}
 .page{display:none}
 .page.active{display:block}
 
 /* TOP BAR */
-.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px;flex-wrap:wrap;gap:12px}
 .page-title{font-size:22px;font-weight:800;letter-spacing:1px}
-.topbar-right{display:flex;align-items:center;gap:12px}
+.topbar-right{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 
 /* STATS GRID */
 .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px}
-.stat-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;position:relative;overflow:hidden;transition:border-color .2s}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;position:relative;overflow:hidden;transition:border-color .2s;cursor:default}
 .stat-card:hover{border-color:var(--accent2)}
 .stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
 .stat-card.c-blue::before{background:var(--accent)}
@@ -77,11 +77,15 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
 .toolbar{display:flex;align-items:center;gap:12px;margin-bottom:20px;flex-wrap:wrap}
 .search-box{flex:1;min-width:200px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:9px 14px;color:var(--text);font-family:var(--mono);font-size:13px;outline:none;transition:border-color .2s}
 .search-box:focus{border-color:var(--accent)}
+.search-box::placeholder{color:var(--muted)}
 .filter-select{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:9px 12px;color:var(--text);font-family:var(--mono);font-size:12px;outline:none;cursor:pointer}
-.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 16px;border-radius:8px;font-family:var(--sans);font-size:12px;font-weight:700;letter-spacing:.5px;cursor:pointer;border:none;transition:all .2s;white-space:nowrap}
-.btn svg{width:14px;height:14px}
+.filter-select:focus{border-color:var(--accent)}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 16px;border-radius:8px;font-family:var(--sans);font-size:12px;font-weight:700;letter-spacing:.5px;cursor:pointer;border:none;transition:all .2s;white-space:nowrap;text-decoration:none}
+.btn svg{width:14px;height:14px;flex-shrink:0}
 .btn-accent{background:var(--accent);color:#000}
-.btn-accent:hover{background:#22dfff;transform:translateY(-1px)}
+.btn-accent:hover{background:#22dfff;transform:translateY(-1px);box-shadow:0 4px 15px rgba(0,212,255,.3)}
 .btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border)}
 .btn-ghost:hover{color:var(--text);border-color:var(--accent)}
 .btn-danger{background:rgba(255,68,102,.15);color:var(--red);border:1px solid rgba(255,68,102,.3)}
@@ -90,16 +94,19 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
 .btn-warn:hover{background:rgba(255,170,0,.25)}
 .btn-success{background:rgba(0,255,136,.12);color:var(--green);border:1px solid rgba(0,255,136,.3)}
 .btn-success:hover{background:rgba(0,255,136,.22)}
+.btn-purple{background:rgba(170,102,255,.15);color:var(--purple);border:1px solid rgba(170,102,255,.3)}
+.btn-purple:hover{background:rgba(170,102,255,.25)}
 
 /* TABLE */
 .table-wrap{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden}
-.table-header{display:grid;grid-template-columns:2.5fr 1fr 1.2fr 1fr 1fr 120px;padding:12px 20px;background:var(--surface);border-bottom:1px solid var(--border);font-family:var(--mono);font-size:10px;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase}
-.table-row{display:grid;grid-template-columns:2.5fr 1fr 1.2fr 1fr 1fr 120px;padding:13px 20px;border-bottom:1px solid var(--border);align-items:center;transition:background .15s;cursor:default}
+.table-header{display:grid;grid-template-columns:2.5fr 1fr 1.2fr 1fr 1fr 130px;padding:12px 20px;background:var(--surface);border-bottom:1px solid var(--border);font-family:var(--mono);font-size:10px;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase}
+.table-row{display:grid;grid-template-columns:2.5fr 1fr 1.2fr 1fr 1fr 130px;padding:13px 20px;border-bottom:1px solid var(--border);align-items:center;transition:background .15s}
 .table-row:last-child{border-bottom:none}
 .table-row:hover{background:rgba(0,212,255,.025)}
 .table-row.is-banned{opacity:.6}
-.key-text{font-family:var(--mono);font-size:12px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.key-note{font-size:10px;color:var(--muted);margin-top:2px;font-family:var(--mono)}
+.key-text{font-family:var(--mono);font-size:12px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer}
+.key-text:hover{color:var(--accent)}
+.key-meta{font-size:10px;color:var(--muted);margin-top:2px;font-family:var(--mono)}
 
 /* BADGES */
 .badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.5px}
@@ -108,81 +115,107 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
 .badge-banned{background:rgba(255,68,102,.2);color:var(--red);border:1px solid rgba(255,68,102,.4)}
 .badge-unbound{background:rgba(255,170,0,.1);color:var(--orange);border:1px solid rgba(255,170,0,.2)}
 .badge-lifetime{background:rgba(170,102,255,.12);color:var(--purple);border:1px solid rgba(170,102,255,.25)}
-.badge-dot{width:5px;height:5px;border-radius:50%;background:currentColor}
+.badge-dot{width:5px;height:5px;border-radius:50%;background:currentColor;flex-shrink:0}
+.dur-tag{font-family:var(--mono);font-size:11px;color:var(--muted);background:var(--surface);border:1px solid var(--border);padding:2px 8px;border-radius:4px;white-space:nowrap}
 
-/* DURATION TAGS */
-.dur-tag{font-family:var(--mono);font-size:11px;color:var(--muted);background:var(--surface);border:1px solid var(--border);padding:2px 8px;border-radius:4px}
-
-/* ACTION BUTTONS (in table) */
-.action-group{display:flex;gap:6px;justify-content:flex-end}
-.icon-btn{width:30px;height:30px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
+/* ACTION BUTTONS */
+.action-group{display:flex;gap:4px;justify-content:flex-end;flex-wrap:wrap}
+.icon-btn{width:28px;height:28px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
 .icon-btn:hover{color:var(--text);border-color:var(--accent);background:rgba(0,212,255,.08)}
 .icon-btn.danger:hover{color:var(--red);border-color:var(--red);background:rgba(255,68,102,.1)}
-.icon-btn svg{width:14px;height:14px}
+.icon-btn.warn:hover{color:var(--orange);border-color:var(--orange);background:rgba(255,170,0,.1)}
+.icon-btn.success:hover{color:var(--green);border-color:var(--green);background:rgba(0,255,136,.1)}
+.icon-btn svg{width:13px;height:13px}
 
 /* PAGINATION */
-.pagination{display:flex;align-items:center;justify-content:space-between;margin-top:16px}
+.pagination{display:flex;align-items:center;justify-content:space-between;margin-top:16px;flex-wrap:wrap;gap:8px}
 .page-info{font-family:var(--mono);font-size:12px;color:var(--muted)}
-.page-btns{display:flex;gap:6px}
-.page-btn{width:32px;height:32px;border-radius:6px;border:1px solid var(--border);background:var(--card);color:var(--muted);cursor:pointer;font-family:var(--mono);font-size:12px;transition:all .2s;display:flex;align-items:center;justify-content:center}
+.page-btns{display:flex;gap:4px;flex-wrap:wrap}
+.page-btn{min-width:32px;height:32px;padding:0 8px;border-radius:6px;border:1px solid var(--border);background:var(--card);color:var(--muted);cursor:pointer;font-family:var(--mono);font-size:12px;transition:all .2s;display:flex;align-items:center;justify-content:center}
 .page-btn:hover,.page-btn.active{background:var(--accent);color:#000;border-color:var(--accent)}
 .page-btn:disabled{opacity:.3;cursor:not-allowed}
 
 /* MODAL */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(4px);z-index:100;display:none;align-items:center;justify-content:center}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(4px);z-index:200;display:none;align-items:center;justify-content:center;padding:16px}
 .modal-overlay.open{display:flex}
-.modal{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto}
+.modal{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px;width:100%;max-width:500px;max-height:90vh;overflow-y:auto;position:relative}
 .modal-title{font-size:16px;font-weight:800;letter-spacing:1px;margin-bottom:20px;display:flex;align-items:center;gap:10px}
-.modal-title svg{width:20px;height:20px;color:var(--accent)}
+.modal-title svg{width:20px;height:20px;color:var(--accent);flex-shrink:0}
+.modal-sub{font-family:var(--mono);font-size:11px;color:var(--muted);margin-bottom:20px;word-break:break-all;background:var(--surface);padding:8px 12px;border-radius:6px;border:1px solid var(--border)}
 .form-group{margin-bottom:16px}
 .form-label{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;display:block}
 .form-input{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--text);font-family:var(--mono);font-size:13px;outline:none;transition:border-color .2s}
 .form-input:focus{border-color:var(--accent)}
 .form-select{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--text);font-family:var(--mono);font-size:13px;outline:none;cursor:pointer}
+.form-select:focus{border-color:var(--accent)}
+.form-textarea{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--text);font-family:var(--mono);font-size:12px;outline:none;resize:vertical;min-height:80px}
+.form-textarea:focus{border-color:var(--accent)}
 .checkbox-label{display:flex;align-items:center;gap:10px;cursor:pointer;font-size:13px;color:var(--text)}
-.checkbox-label input{width:15px;height:15px;accent-color:var(--accent);cursor:pointer}
-.modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:24px}
-.modal-close{position:absolute;top:16px;right:16px}
+.checkbox-label input{width:15px;height:15px;accent-color:var(--accent);cursor:pointer;flex-shrink:0}
+.modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:24px;flex-wrap:wrap}
+.divider{height:1px;background:var(--border);margin:16px 0}
+
+/* DETAIL ROW in modal */
+.detail-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)}
+.detail-row:last-child{border-bottom:none}
+.detail-key{font-family:var(--mono);font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.detail-val{font-family:var(--mono);font-size:12px;color:var(--text);text-align:right;max-width:60%;word-break:break-all}
 
 /* LOG VIEWER */
-.log-list{max-height:340px;overflow-y:auto;border:1px solid var(--border);border-radius:8px;background:var(--surface)}
-.log-item{padding:10px 14px;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:11px;display:grid;grid-template-columns:140px 120px 1fr;gap:8px;align-items:start}
+.log-list{max-height:360px;overflow-y:auto;border:1px solid var(--border);border-radius:8px;background:var(--surface)}
+.log-item{padding:10px 14px;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:11px;display:grid;grid-template-columns:140px 130px 1fr;gap:8px;align-items:start}
 .log-item:last-child{border-bottom:none}
 .log-time{color:var(--muted)}
 .log-event{color:var(--accent);font-weight:700}
+.log-event.ev-banned,.log-event.ev-banned_hwid,.log-event.ev-hwid_mismatch{color:var(--red)}
+.log-event.ev-unbanned,.log-event.ev-reactivated,.log-event.ev-validated,.log-event.ev-first_activation{color:var(--green)}
+.log-event.ev-extended,.log-event.ev-hwid_reset{color:var(--orange)}
+.log-event.ev-auto_expired,.log-event.ev-deactivated,.log-event.ev-expired{color:var(--red)}
 .log-detail{color:var(--text)}
 
-/* BANNED HWID LIST */
+/* BANNED HWID */
 .hwid-list{display:flex;flex-direction:column;gap:10px}
-.hwid-item{background:var(--surface);border:1px solid rgba(255,68,102,.2);border-radius:8px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between}
+.hwid-item{background:var(--surface);border:1px solid rgba(255,68,102,.2);border-radius:10px;padding:16px;display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
 .hwid-hash{font-family:var(--mono);font-size:11px;color:var(--text);word-break:break-all}
 .hwid-meta{font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:4px}
 
+/* GENERATE FORM */
+.gen-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:28px;max-width:500px}
+.result-box{background:var(--surface);border:2px solid var(--accent);border-radius:8px;padding:16px;font-family:var(--mono);font-size:14px;color:var(--accent);word-break:break-all;cursor:pointer;position:relative;transition:background .2s}
+.result-box:hover{background:rgba(0,212,255,.05)}
+.result-box::after{content:'CLICK TO COPY';position:absolute;top:8px;right:10px;font-size:9px;color:var(--muted);letter-spacing:1px;font-family:var(--mono)}
+.result-meta{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:10px;padding:10px;background:var(--surface);border-radius:6px;border:1px solid var(--border)}
+
 /* TOAST */
-.toast-container{position:fixed;bottom:24px;right:24px;z-index:999;display:flex;flex-direction:column;gap:8px}
-.toast{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 18px;font-family:var(--mono);font-size:12px;display:flex;align-items:center;gap:10px;animation:slideUp .3s ease;max-width:320px}
+.toast-container{position:fixed;bottom:24px;right:24px;z-index:999;display:flex;flex-direction:column;gap:8px;pointer-events:none}
+.toast{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 18px;font-family:var(--mono);font-size:12px;display:flex;align-items:center;gap:10px;animation:slideUp .3s ease;max-width:340px;pointer-events:auto}
 .toast.success{border-left:3px solid var(--green);color:var(--green)}
 .toast.error{border-left:3px solid var(--red);color:var(--red)}
 .toast.info{border-left:3px solid var(--accent);color:var(--accent)}
+.toast.warn{border-left:3px solid var(--orange);color:var(--orange)}
 @keyframes slideUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
 
 /* EMPTY STATE */
-.empty-state{padding:60px;text-align:center;color:var(--muted);font-family:var(--mono);font-size:13px}
+.empty-state{padding:60px 20px;text-align:center;color:var(--muted);font-family:var(--mono);font-size:13px}
 .empty-state svg{width:40px;height:40px;margin:0 auto 16px;opacity:.3;display:block}
 
 /* LOADING */
 .loading{text-align:center;padding:40px;font-family:var(--mono);font-size:12px;color:var(--muted)}
-.spinner{display:inline-block;width:20px;height:20px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-right:8px}
+.spinner{display:inline-block;width:18px;height:18px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-right:8px}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-/* GENERATE FORM */
-.gen-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px;max-width:460px}
-.result-box{background:var(--surface);border:1px solid var(--accent);border-radius:8px;padding:14px;font-family:var(--mono);font-size:14px;color:var(--accent);word-break:break-all;cursor:pointer;position:relative}
-.result-box::after{content:'CLICK TO COPY';position:absolute;top:8px;right:10px;font-size:9px;color:var(--muted);letter-spacing:1px}
+/* INFO BOX */
+.info-box{background:rgba(0,212,255,.05);border:1px solid rgba(0,212,255,.2);border-radius:8px;padding:12px 14px;font-family:var(--mono);font-size:11px;color:var(--muted);margin-bottom:16px}
+.warn-box{background:rgba(255,170,0,.07);border:1px solid rgba(255,170,0,.25);border-radius:8px;padding:12px 14px;font-family:var(--mono);font-size:11px;color:var(--orange)}
+.danger-box{background:rgba(255,68,102,.07);border:1px solid rgba(255,68,102,.25);border-radius:8px;padding:12px 14px;font-family:var(--mono);font-size:11px;color:var(--red)}
+
+/* ACTION SECTION in modal */
+.action-section{margin-bottom:10px}
+.action-section-title{font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:8px}
 
 @media(max-width:1100px){
   .stats-grid{grid-template-columns:repeat(2,1fr)}
-  .table-header,.table-row{grid-template-columns:2fr 1fr 1fr .8fr 80px}
+  .table-header,.table-row{grid-template-columns:2fr 1fr 1fr .8fr 90px}
   .col-hwid{display:none}
 }
 @media(max-width:768px){
@@ -190,19 +223,22 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
   .sidebar{display:none}
   .main{padding:16px}
   .stats-grid{grid-template-columns:repeat(2,1fr);gap:10px}
+  .table-header,.table-row{grid-template-columns:1.5fr 1fr 1fr 80px}
+  .col-hwid,.col-duration{display:none}
 }
 </style>
 </head>
 <body>
 
 <div class="layout">
-<!-- SIDEBAR -->
+<!-- ========== SIDEBAR ========== -->
 <aside class="sidebar">
   <div class="logo">
     <div class="logo-title">⚡ DERAS</div>
-    <div class="logo-sub">ADMIN PANEL v2.0</div>
+    <div class="logo-sub">ADMIN PANEL v3.0</div>
   </div>
   <nav>
+    <div class="nav-section">Menu</div>
     <div class="nav-item active" onclick="showPage('dashboard')">
       <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h4a1 1 0 011 1v5a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM14 5a1 1 0 011-1h4a1 1 0 011 1v2a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 15a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1v-4zM14 13a1 1 0 011-1h4a1 1 0 011 1v6a1 1 0 01-1 1h-4a1 1 0 01-1-1v-6z"/></svg>
       Dashboard
@@ -229,10 +265,10 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
   </div>
 </aside>
 
-<!-- MAIN -->
+<!-- ========== MAIN ========== -->
 <main class="main">
 
-  <!-- ===== DASHBOARD PAGE ===== -->
+  <!-- ===== PAGE: DASHBOARD ===== -->
   <div class="page active" id="page-dashboard">
     <div class="topbar">
       <div class="page-title">Dashboard</div>
@@ -243,19 +279,29 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
         </button>
       </div>
     </div>
-    <div class="stats-grid" id="statsGrid">
+    <div class="stats-grid">
       <div class="stat-card c-blue"><div class="stat-label">Total Lisensi</div><div class="stat-value" id="s-total">—</div><div class="stat-sub">All time</div></div>
-      <div class="stat-card c-green"><div class="stat-label">Aktif</div><div class="stat-value" id="s-active">—</div><div class="stat-sub">Saat ini valid</div></div>
-      <div class="stat-card c-orange"><div class="stat-label">Menunggu</div><div class="stat-value" id="s-unbound">—</div><div class="stat-sub">Belum diaktifkan</div></div>
+      <div class="stat-card c-green"><div class="stat-label">Aktif</div><div class="stat-value" id="s-active">—</div><div class="stat-sub">Valid & terikat HWID</div></div>
+      <div class="stat-card c-orange"><div class="stat-label">Menunggu Aktivasi</div><div class="stat-value" id="s-unbound">—</div><div class="stat-sub">Belum dipakai</div></div>
       <div class="stat-card c-red"><div class="stat-label">Expired</div><div class="stat-value" id="s-expired">—</div><div class="stat-sub">Habis masa</div></div>
-      <div class="stat-card c-red"><div class="stat-label">Banned Key</div><div class="stat-value" id="s-banned">—</div><div class="stat-sub">Diblokir</div></div>
-      <div class="stat-card c-purple"><div class="stat-label">Lifetime</div><div class="stat-value" id="s-lifetime">—</div><div class="stat-sub">Permanent</div></div>
-      <div class="stat-card c-blue"><div class="stat-label">HWID Banned</div><div class="stat-value" id="s-bannedHwid">—</div><div class="stat-sub">Hardware diblokir</div></div>
-      <div class="stat-card c-green"><div class="stat-label">Aktif Hari Ini</div><div class="stat-value" id="s-today">—</div><div class="stat-sub">Last 24h activity</div></div>
+      <div class="stat-card c-red"><div class="stat-label">Banned Key</div><div class="stat-value" id="s-banned">—</div><div class="stat-sub">Diblokir admin</div></div>
+      <div class="stat-card c-purple"><div class="stat-label">Lifetime</div><div class="stat-value" id="s-lifetime">—</div><div class="stat-sub">Akses permanen</div></div>
+      <div class="stat-card c-blue"><div class="stat-label">HWID Banned</div><div class="stat-value" id="s-bannedHwid">—</div><div class="stat-sub">Device diblokir</div></div>
+      <div class="stat-card c-green"><div class="stat-label">Aktif Hari Ini</div><div class="stat-value" id="s-today">—</div><div class="stat-sub">Last used hari ini</div></div>
+    </div>
+    <div style="display:flex;gap:12px;flex-wrap:wrap">
+      <button class="btn btn-accent" onclick="showPage('generate')">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+        Generate Key Baru
+      </button>
+      <button class="btn btn-ghost" onclick="showPage('licenses')">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
+        Lihat Semua Lisensi
+      </button>
     </div>
   </div>
 
-  <!-- ===== LICENSES PAGE ===== -->
+  <!-- ===== PAGE: LICENSES ===== -->
   <div class="page" id="page-licenses">
     <div class="topbar">
       <div class="page-title">Manajemen Lisensi</div>
@@ -267,15 +313,15 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
       </div>
     </div>
     <div class="toolbar">
-      <input class="search-box" id="searchInput" placeholder="🔍  Cari license key..." oninput="debounceSearch()">
-      <select class="filter-select" id="filterStatus" onchange="loadLicenses()">
+      <input class="search-box" id="searchInput" placeholder="🔍  Cari license key atau catatan..." oninput="debounceSearch()">
+      <select class="filter-select" id="filterStatus" onchange="resetAndLoad()">
         <option value="all">Semua Status</option>
         <option value="active">Aktif</option>
         <option value="expired">Expired</option>
         <option value="banned">Banned</option>
         <option value="unbound">Belum Aktif</option>
       </select>
-      <select class="filter-select" id="filterDuration" onchange="loadLicenses()">
+      <select class="filter-select" id="filterDuration" onchange="resetAndLoad()">
         <option value="all">Semua Durasi</option>
         <option value="lifetime">Lifetime</option>
         <option value="1month">1 Bulan</option>
@@ -283,17 +329,17 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
         <option value="trial_6hours">Trial 6 Jam</option>
         <option value="demo_1min">Demo 1 Menit</option>
       </select>
-      <button class="btn btn-ghost" onclick="loadLicenses()">
+      <button class="btn btn-ghost" onclick="loadLicenses()" title="Refresh">
         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
       </button>
     </div>
 
     <div class="table-wrap">
       <div class="table-header">
-        <div>License Key</div>
+        <div>License Key / Catatan</div>
         <div>Status</div>
         <div class="col-hwid">HWID</div>
-        <div>Durasi</div>
+        <div class="col-duration">Durasi</div>
         <div>Sisa Waktu</div>
         <div style="text-align:right">Aksi</div>
       </div>
@@ -308,7 +354,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
     </div>
   </div>
 
-  <!-- ===== GENERATE PAGE ===== -->
+  <!-- ===== PAGE: GENERATE ===== -->
   <div class="page" id="page-generate">
     <div class="topbar">
       <div class="page-title">Generate License Key</div>
@@ -317,30 +363,33 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
       <div class="form-group">
         <label class="form-label">Durasi Lisensi</label>
         <select class="form-select" id="genDuration">
-          <option value="lifetime">🔮 Lifetime</option>
-          <option value="1month" selected>📅 1 Bulan</option>
-          <option value="2weeks">📅 2 Minggu</option>
+          <option value="lifetime">🔮 Lifetime — Permanent</option>
+          <option value="1month" selected>📅 1 Bulan (30 hari)</option>
+          <option value="2weeks">📅 2 Minggu (14 hari)</option>
           <option value="trial_6hours">⏱ Trial 6 Jam</option>
           <option value="demo_1min">⚡ Demo 1 Menit</option>
         </select>
       </div>
       <div class="form-group">
-        <label class="form-label">Catatan (Nama Buyer / Opsional)</label>
-        <input class="form-input" id="genNote" placeholder="contoh: Budi - WA 0812xxx">
+        <label class="form-label">Catatan / Nama Buyer (Opsional)</label>
+        <input class="form-input" id="genNote" placeholder="contoh: Budi - WA 0812xxx - @telegram">
       </div>
-      <button class="btn btn-accent" style="width:100%;justify-content:center" onclick="generateKey()">
+      <div class="info-box">
+        ℹ️ Durasi dihitung MULAI saat pertama kali key divalidasi oleh user — bukan saat di-generate.
+      </div>
+      <button class="btn btn-accent" style="width:100%;justify-content:center;padding:12px" onclick="generateKey()">
         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
         GENERATE KEY
       </button>
-      <div id="genResult" style="margin-top:16px;display:none">
-        <label class="form-label">Key Berhasil Dibuat</label>
+      <div id="genResult" style="margin-top:20px;display:none">
+        <label class="form-label">✅ Key Berhasil Dibuat</label>
         <div class="result-box" id="genResultKey" onclick="copyKey(this)"></div>
-        <div style="font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:8px" id="genResultMeta"></div>
+        <div class="result-meta" id="genResultMeta"></div>
       </div>
     </div>
   </div>
 
-  <!-- ===== BANNED HWID PAGE ===== -->
+  <!-- ===== PAGE: BANNED HWID ===== -->
   <div class="page" id="page-banned">
     <div class="topbar">
       <div class="page-title">Banned HWID</div>
@@ -351,6 +400,9 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
         </button>
       </div>
     </div>
+    <div class="info-box" style="margin-bottom:20px">
+      ℹ️ HWID yang di-ban tidak bisa digunakan di device manapun, meskipun dengan key yang berbeda.
+    </div>
     <div id="bannedHwidList" class="hwid-list">
       <div class="loading"><span class="spinner"></span>Memuat...</div>
     </div>
@@ -359,22 +411,22 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
 </main>
 </div>
 
-<!-- ===== MODAL: ACTION ===== -->
+<!-- ========== MODAL ========== -->
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal" id="modalContent"></div>
 </div>
 
-<!-- ===== TOAST CONTAINER ===== -->
+<!-- ========== TOAST ========== -->
 <div class="toast-container" id="toastContainer"></div>
 
 <script>
 // ==========================================
 // STATE
 // ==========================================
-let currentPage = 1;
-let totalPages  = 1;
-let searchTimer = null;
-let activeLicenseKey = null;
+let currentPage  = 1;
+let totalPages   = 1;
+let searchTimer  = null;
+let _activeKey   = null;  // license key currently being actioned
 
 // ==========================================
 // NAVIGATION
@@ -382,10 +434,11 @@ let activeLicenseKey = null;
 function showPage(name) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  document.getElementById('page-' + name).classList.add('active');
+  const page = document.getElementById('page-' + name);
+  if (page) page.classList.add('active');
+  const navMap = { dashboard: 0, licenses: 1, generate: 2, banned: 3 };
   const navItems = document.querySelectorAll('.nav-item');
-  const map = { dashboard: 0, licenses: 1, generate: 2, banned: 3 };
-  if (map[name] !== undefined) navItems[map[name]].classList.add('active');
+  if (navMap[name] !== undefined) navItems[navMap[name]]?.classList.add('active');
 
   if (name === 'dashboard') refreshStats();
   if (name === 'licenses')  { currentPage = 1; loadLicenses(); }
@@ -396,37 +449,62 @@ function showPage(name) {
 // API HELPERS
 // ==========================================
 async function api(method, url, body) {
-  const opts = { method, headers: { 'Content-Type': 'application/json' } };
-  if (body) opts.body = JSON.stringify(body);
-  const res = await fetch(url, opts);
-  return res.json();
+  try {
+    const opts = { method, headers: { 'Content-Type': 'application/json' } };
+    if (body !== undefined) opts.body = JSON.stringify(body);
+    const res  = await fetch(url, opts);
+    const data = await res.json();
+    return data;
+  } catch (e) {
+    toast('Network error: ' + e.message, 'error');
+    return { success: false, message: e.message };
+  }
+}
+
+async function apiDelete(url) {
+  try {
+    const res  = await fetch(url, { method: 'DELETE', headers: { 'Content-Type': 'application/json' } });
+    return await res.json();
+  } catch (e) {
+    toast('Network error: ' + e.message, 'error');
+    return { success: false, message: e.message };
+  }
 }
 
 // ==========================================
-// STATS
+// STATS  →  GET /admin/api/stats
 // ==========================================
 async function refreshStats() {
-  const data = await api('GET', '/admin/api/stats');
-  document.getElementById('s-total').textContent   = data.total      ?? '—';
-  document.getElementById('s-active').textContent  = data.active     ?? '—';
-  document.getElementById('s-expired').textContent = data.expired    ?? '—';
-  document.getElementById('s-banned').textContent  = data.banned     ?? '—';
-  document.getElementById('s-unbound').textContent = data.unbound    ?? '—';
-  document.getElementById('s-lifetime').textContent= data.lifetime   ?? '—';
-  document.getElementById('s-bannedHwid').textContent = data.banned_hwids ?? '—';
-  document.getElementById('s-today').textContent   = data.activated_today ?? '—';
+  try {
+    const data = await api('GET', '/admin/api/stats');
+    document.getElementById('s-total').textContent      = data.total          ?? '—';
+    document.getElementById('s-active').textContent     = data.active         ?? '—';
+    document.getElementById('s-expired').textContent    = data.expired        ?? '—';
+    document.getElementById('s-banned').textContent     = data.banned         ?? '—';
+    document.getElementById('s-unbound').textContent    = data.unbound        ?? '—';
+    document.getElementById('s-lifetime').textContent   = data.lifetime       ?? '—';
+    document.getElementById('s-bannedHwid').textContent = data.banned_hwids   ?? '—';
+    document.getElementById('s-today').textContent      = data.activated_today ?? '—';
+  } catch(e) {
+    console.error(e);
+  }
 }
 
 // ==========================================
-// LICENSES TABLE
+// LICENSES TABLE  →  GET /admin/api/licenses
 // ==========================================
 function debounceSearch() {
   clearTimeout(searchTimer);
   searchTimer = setTimeout(() => { currentPage = 1; loadLicenses(); }, 400);
 }
 
+function resetAndLoad() {
+  currentPage = 1;
+  loadLicenses();
+}
+
 async function loadLicenses() {
-  const body = document.getElementById('licenseTableBody');
+  const body     = document.getElementById('licenseTableBody');
   body.innerHTML = '<div class="loading"><span class="spinner"></span>Memuat...</div>';
 
   const search   = document.getElementById('searchInput').value;
@@ -435,68 +513,102 @@ async function loadLicenses() {
   const params   = new URLSearchParams({ search, status, duration, page: currentPage, per_page: 25 });
 
   const data = await api('GET', `/admin/api/licenses?${params}`);
+  if (!data || data.error) {
+    body.innerHTML = '<div class="empty-state">Gagal memuat data</div>';
+    return;
+  }
   totalPages = data.pages || 1;
-
   document.getElementById('pageInfo').textContent =
-    `${data.total} lisensi • halaman ${currentPage}/${totalPages}`;
-
+    `${data.total} lisensi • halaman ${data.page}/${totalPages}`;
   renderPagination();
 
-  if (!data.licenses || data.licenses.length === 0) {
-    body.innerHTML = `<div class="empty-state"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Tidak ada data ditemukan</div>`;
+  if (!data.licenses || !data.licenses.length) {
+    body.innerHTML = `<div class="empty-state">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      Tidak ada lisensi ditemukan
+    </div>`;
     return;
   }
 
-  body.innerHTML = data.licenses.map(l => {
-    const statusBadge = l.is_banned
-      ? `<span class="badge badge-banned"><span class="badge-dot"></span>BANNED</span>`
-      : !l.is_active
-      ? `<span class="badge badge-expired"><span class="badge-dot"></span>EXPIRED</span>`
-      : l.is_unbound
-      ? `<span class="badge badge-unbound"><span class="badge-dot"></span>UNBOUND</span>`
-      : `<span class="badge badge-active"><span class="badge-dot"></span>AKTIF</span>`;
+  body.innerHTML = data.licenses.map(l => buildRow(l)).join('');
+}
 
-    const durBadge = l.duration_type === 'lifetime'
-      ? `<span class="badge badge-lifetime">LIFETIME</span>`
-      : `<span class="dur-tag">${l.duration_type}</span>`;
+function buildRow(l) {
+  // Status badge
+  let statusBadge;
+  if (l.is_banned) {
+    statusBadge = `<span class="badge badge-banned"><span class="badge-dot"></span>BANNED</span>`;
+  } else if (!l.is_active) {
+    statusBadge = `<span class="badge badge-expired"><span class="badge-dot"></span>EXPIRED</span>`;
+  } else if (l.is_unbound) {
+    statusBadge = `<span class="badge badge-unbound"><span class="badge-dot"></span>UNBOUND</span>`;
+  } else {
+    statusBadge = `<span class="badge badge-active"><span class="badge-dot"></span>AKTIF</span>`;
+  }
 
-    const timeLeft = l.is_active && !l.is_unbound
-      ? (l.time_left || (l.duration_type === 'lifetime' ? '∞' : '—'))
-      : '—';
+  // Duration badge
+  const durBadge = l.duration_type === 'lifetime'
+    ? `<span class="badge badge-lifetime">LIFETIME</span>`
+    : `<span class="dur-tag">${l.duration_type}</span>`;
 
-    const shortKey = l.license_key.length > 28 ? l.license_key.substring(0, 28) + '…' : l.license_key;
+  // Time left
+  let timeLeft = '—';
+  let timeColor = 'var(--muted)';
+  if (l.is_active && !l.is_unbound) {
+    if (l.duration_type === 'lifetime') { timeLeft = '∞'; timeColor = 'var(--purple)'; }
+    else if (l.time_left === 'Expired') { timeLeft = 'Expired'; timeColor = 'var(--red)'; }
+    else { timeLeft = l.time_left || '—'; timeColor = 'var(--text)'; }
+  }
 
-    return `<div class="table-row ${l.is_banned ? 'is-banned' : ''}">
-      <div>
-        <div class="key-text" title="${l.license_key}">${shortKey}</div>
-        ${l.note ? `<div class="key-note">📝 ${l.note}</div>` : ''}
-      </div>
-      <div>${statusBadge}</div>
-      <div class="col-hwid" style="font-family:var(--mono);font-size:11px;color:var(--muted)">${l.hwid_short || '<span style="color:var(--muted);opacity:.5">Unbound</span>'}</div>
-      <div>${durBadge}</div>
-      <div style="font-family:var(--mono);font-size:12px;color:${timeLeft==='Expired'?'var(--red)':'var(--text)'}">${timeLeft}</div>
-      <div class="action-group">
-        <button class="icon-btn" title="Logs" onclick="showLogs('${l.license_key}')">
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
-        </button>
-        <button class="icon-btn" title="Aksi" onclick="showActions('${l.license_key}', ${l.is_banned}, ${l.is_active}, '${l.duration_type}', ${!!l.hwid_full})">
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"/></svg>
-        </button>
-      </div>
-    </div>`;
-  }).join('');
+  const shortKey = l.license_key.length > 26 ? l.license_key.substring(0, 26) + '…' : l.license_key;
+  const escapedKey = l.license_key.replace(/'/g, "\\'");
+  const isBanned  = l.is_banned  ? 'true' : 'false';
+  const isActive  = l.is_active  ? 'true' : 'false';
+  const isUnbound = l.is_unbound ? 'true' : 'false';
+  const hasHwid   = l.hwid_full  ? 'true' : 'false';
+
+  return `<div class="table-row ${l.is_banned ? 'is-banned' : ''}">
+    <div>
+      <div class="key-text" title="${l.license_key}" onclick="showDetail('${escapedKey}')">${shortKey}</div>
+      ${l.note ? `<div class="key-meta">📝 ${escHtml(l.note)}</div>` : ''}
+      ${l.last_used ? `<div class="key-meta">🕐 ${l.last_used.substring(0,16).replace('T',' ')}</div>` : ''}
+    </div>
+    <div>${statusBadge}</div>
+    <div class="col-hwid" style="font-family:var(--mono);font-size:11px;color:var(--muted)">
+      ${l.hwid_short ? l.hwid_short : '<span style="opacity:.4">Unbound</span>'}
+    </div>
+    <div class="col-duration">${durBadge}</div>
+    <div style="font-family:var(--mono);font-size:12px;color:${timeColor}">${timeLeft}</div>
+    <div class="action-group">
+      <button class="icon-btn" title="Detail & Log" onclick="showDetail('${escapedKey}')">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+      </button>
+      <button class="icon-btn" title="Activity Logs" onclick="showLogs('${escapedKey}')">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+      </button>
+      <button class="icon-btn" title="Aksi" onclick="showActions('${escapedKey}',${isBanned},${isActive},'${l.duration_type}',${hasHwid})">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"/></svg>
+      </button>
+    </div>
+  </div>`;
+}
+
+function escHtml(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
 function renderPagination() {
-  const container = document.getElementById('pageBtns');
+  const c = document.getElementById('pageBtns');
   let html = `<button class="page-btn" ${currentPage===1?'disabled':''} onclick="gotoPage(${currentPage-1})">‹</button>`;
   const start = Math.max(1, currentPage - 2);
   const end   = Math.min(totalPages, currentPage + 2);
+  if (start > 1) html += `<button class="page-btn" onclick="gotoPage(1)">1</button>${start>2?'<span style="color:var(--muted);padding:0 4px">…</span>':''}`;
   for (let i = start; i <= end; i++) {
     html += `<button class="page-btn ${i===currentPage?'active':''}" onclick="gotoPage(${i})">${i}</button>`;
   }
+  if (end < totalPages) html += `${end<totalPages-1?'<span style="color:var(--muted);padding:0 4px">…</span>':''}<button class="page-btn" onclick="gotoPage(${totalPages})">${totalPages}</button>`;
   html += `<button class="page-btn" ${currentPage===totalPages?'disabled':''} onclick="gotoPage(${currentPage+1})">›</button>`;
-  container.innerHTML = html;
+  c.innerHTML = html;
 }
 
 function gotoPage(p) {
@@ -506,94 +618,211 @@ function gotoPage(p) {
 }
 
 // ==========================================
-// LOGS MODAL
+// DETAIL MODAL  →  GET /admin/api/licenses (data from row)
+// ==========================================
+async function showDetail(key) {
+  _activeKey = key;
+  const params = new URLSearchParams({ search: key, status: 'all', duration: 'all', page: 1, per_page: 1 });
+  const data   = await api('GET', `/admin/api/licenses?${params}`);
+  const l      = data.licenses && data.licenses[0];
+  if (!l) { toast('Data tidak ditemukan', 'error'); return; }
+
+  const statusText = l.is_banned ? 'BANNED' : !l.is_active ? 'EXPIRED/INACTIVE' : l.is_unbound ? 'UNBOUND' : 'AKTIF';
+
+  openModal(`
+    <div class="modal-title">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/></svg>
+      Detail Lisensi
+    </div>
+    <div class="detail-row"><span class="detail-key">Key</span><span class="detail-val" style="font-size:10px">${escHtml(l.license_key)}</span></div>
+    <div class="detail-row"><span class="detail-key">Status</span><span class="detail-val">${statusText}</span></div>
+    <div class="detail-row"><span class="detail-key">Durasi</span><span class="detail-val">${l.duration_type}</span></div>
+    <div class="detail-row"><span class="detail-key">Created</span><span class="detail-val">${(l.created_at||'—').substring(0,19).replace('T',' ')}</span></div>
+    <div class="detail-row"><span class="detail-key">Expires</span><span class="detail-val">${l.expires_at ? l.expires_at.substring(0,19).replace('T',' ') : 'Never'}</span></div>
+    <div class="detail-row"><span class="detail-key">Last Used</span><span class="detail-val">${l.last_used ? l.last_used.substring(0,19).replace('T',' ') : '—'}</span></div>
+    <div class="detail-row"><span class="detail-key">HWID Hash</span><span class="detail-val" style="font-size:10px">${l.hwid_full || '—'}</span></div>
+    <div class="detail-row"><span class="detail-key">Catatan</span><span class="detail-val">${escHtml(l.note || '—')}</span></div>
+    ${l.is_banned ? `<div class="detail-row"><span class="detail-key">Alasan Ban</span><span class="detail-val" style="color:var(--red)">${escHtml(l.ban_reason || '—')}</span></div>` : ''}
+    <div class="detail-row"><span class="detail-key">Logs</span><span class="detail-val">${l.log_count} entri</span></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal()">Tutup</button>
+      <button class="btn btn-ghost" onclick="showLogs('${escHtml(key)}')">📋 Lihat Log</button>
+      <button class="btn btn-accent" onclick="showActions('${escHtml(key)}',${l.is_banned},${l.is_active},'${l.duration_type}',${!!l.hwid_full})">⚙️ Aksi</button>
+    </div>`);
+}
+
+// ==========================================
+// LOGS MODAL  →  GET /admin/api/licenses/:key/logs
 // ==========================================
 async function showLogs(key) {
-  openModal(`<div class="modal-title"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>Activity Logs</div>
-  <div style="font-family:var(--mono);font-size:11px;color:var(--muted);margin-bottom:12px;word-break:break-all">${key}</div>
-  <div class="log-list" id="logListInner"><div class="loading"><span class="spinner"></span></div></div>
-  <div class="modal-actions"><button class="btn btn-ghost" onclick="closeModal()">Tutup</button></div>`);
+  _activeKey = key;
+  openModal(`
+    <div class="modal-title">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+      Activity Logs
+    </div>
+    <div class="modal-sub">${escHtml(key)}</div>
+    <div class="log-list" id="logListInner"><div class="loading"><span class="spinner"></span>Memuat log...</div></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal()">Tutup</button>
+      <button class="btn btn-ghost" onclick="showActions('${escHtml(key)}',false,true,'',false)">⚙️ Aksi</button>
+    </div>`);
 
-  const data = await api('GET', `/admin/api/licenses/${key}/logs`);
+  const data = await api('GET', `/admin/api/licenses/${encodeURIComponent(key)}/logs`);
   const logs = data.logs || [];
   const el   = document.getElementById('logListInner');
+  if (!el) return;
 
   if (!logs.length) {
     el.innerHTML = '<div class="empty-state" style="padding:20px">Belum ada log</div>';
     return;
   }
 
-  el.innerHTML = [...logs].reverse().map(l => `
-    <div class="log-item">
-      <div class="log-time">${l.time.replace('T',' ').substring(0,19)}</div>
-      <div class="log-event">${l.event}</div>
-      <div class="log-detail">${l.detail || ''}</div>
-    </div>`).join('');
+  el.innerHTML = [...logs].reverse().map(l => {
+    const evClass = 'ev-' + (l.event||'').toLowerCase().replace(/[^a-z_]/g,'_');
+    return `<div class="log-item">
+      <div class="log-time">${(l.time||'').replace('T',' ').substring(0,19)}</div>
+      <div class="log-event ${evClass}">${l.event||''}</div>
+      <div class="log-detail">${escHtml(l.detail||'')}</div>
+    </div>`;
+  }).join('');
 }
 
 // ==========================================
-// ACTIONS MODAL
+// ACTIONS MODAL  (semua endpoint aksi)
 // ==========================================
 function showActions(key, isBanned, isActive, durationType, hasHwid) {
-  activeLicenseKey = key;
-  const short = key.length > 30 ? key.substring(0, 30) + '…' : key;
+  _activeKey = key;
+  const short = key.length > 32 ? key.substring(0, 32) + '…' : key;
 
-  let btns = '';
+  let sections = '';
+
   if (isBanned) {
-    btns += `<button class="btn btn-success" style="width:100%;justify-content:center;margin-bottom:8px" onclick="doAction('unban')">✅ Unban Lisensi</button>`;
+    sections += `
+      <div class="action-section">
+        <div class="action-section-title">🔓 Pulihkan</div>
+        <button class="btn btn-success" style="width:100%;justify-content:center;margin-bottom:8px" onclick="doAction('unban')">
+          ✅ Unban Lisensi
+        </button>
+      </div>`;
   } else {
+    // HWID actions
     if (hasHwid) {
-      btns += `<button class="btn btn-warn" style="width:100%;justify-content:center;margin-bottom:8px" onclick="doAction('reset-hwid')">🔄 Reset HWID</button>`;
+      sections += `
+        <div class="action-section">
+          <div class="action-section-title">🔧 HWID</div>
+          <button class="btn btn-warn" style="width:100%;justify-content:center;margin-bottom:8px" onclick="doAction('reset-hwid')">
+            🔄 Reset HWID (ganti device)
+          </button>
+        </div>`;
     }
+
+    // Duration / active management
     if (isActive) {
-      btns += `<button class="btn btn-warn" style="width:100%;justify-content:center;margin-bottom:8px" onclick="showExtendModal()">📅 Extend Durasi</button>`;
-      btns += `<button class="btn btn-ghost" style="width:100%;justify-content:center;margin-bottom:8px" onclick="showNoteModal()">📝 Edit Catatan</button>`;
-      btns += `<button class="btn btn-ghost" style="width:100%;justify-content:center;margin-bottom:8px" onclick="doAction('deactivate')">⏸ Nonaktifkan</button>`;
-      btns += `<button class="btn btn-danger" style="width:100%;justify-content:center;margin-bottom:8px" onclick="showBanModal()">🚫 Ban Lisensi</button>`;
+      sections += `
+        <div class="action-section">
+          <div class="action-section-title">📅 Durasi</div>
+          ${durationType !== 'lifetime' ? `<button class="btn btn-warn" style="width:100%;justify-content:center;margin-bottom:8px" onclick="showExtendModal()">📅 Extend / Perpanjang Durasi</button>` : ''}
+          <button class="btn btn-ghost" style="width:100%;justify-content:center;margin-bottom:8px" onclick="showNoteModal()">📝 Edit Catatan</button>
+          <button class="btn btn-ghost" style="width:100%;justify-content:center;margin-bottom:8px" onclick="doAction('deactivate')">⏸ Nonaktifkan Sementara</button>
+        </div>
+        <div class="action-section">
+          <div class="action-section-title">🚫 Blokir</div>
+          <button class="btn btn-danger" style="width:100%;justify-content:center;margin-bottom:8px" onclick="showBanModal()">🚫 Ban Lisensi</button>
+        </div>`;
     } else {
-      btns += `<button class="btn btn-success" style="width:100%;justify-content:center;margin-bottom:8px" onclick="doAction('reactivate')">▶️ Aktifkan Kembali</button>`;
-      btns += `<button class="btn btn-danger" style="width:100%;justify-content:center;margin-bottom:8px" onclick="showBanModal()">🚫 Ban Lisensi</button>`;
+      sections += `
+        <div class="action-section">
+          <div class="action-section-title">▶️ Aktifkan</div>
+          <button class="btn btn-success" style="width:100%;justify-content:center;margin-bottom:8px" onclick="doAction('reactivate')">▶️ Aktifkan Kembali</button>
+          <button class="btn btn-ghost" style="width:100%;justify-content:center;margin-bottom:8px" onclick="showNoteModal()">📝 Edit Catatan</button>
+        </div>
+        <div class="action-section">
+          <div class="action-section-title">🚫 Blokir</div>
+          <button class="btn btn-danger" style="width:100%;justify-content:center;margin-bottom:8px" onclick="showBanModal()">🚫 Ban Lisensi</button>
+        </div>`;
     }
-    btns += `<button class="btn btn-danger" style="width:100%;justify-content:center;margin-bottom:8px;border-color:var(--red)" onclick="doAction('delete')">🗑 Hapus Permanen</button>`;
+
+    // Delete — always shown
+    sections += `
+      <div class="action-section">
+        <div class="action-section-title">🗑 Hapus</div>
+        <button class="btn btn-danger" style="width:100%;justify-content:center;border-color:var(--red)" onclick="confirmDelete()">🗑 Hapus Permanen</button>
+      </div>`;
   }
 
-  openModal(`<div class="modal-title"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Aksi Lisensi</div>
-  <div style="font-family:var(--mono);font-size:11px;color:var(--muted);margin-bottom:20px;word-break:break-all">${short}</div>
-  ${btns}
-  <button class="btn btn-ghost" style="width:100%;justify-content:center;margin-top:4px" onclick="closeModal()">Batal</button>`);
+  openModal(`
+    <div class="modal-title">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+      Aksi Lisensi
+    </div>
+    <div class="modal-sub">${escHtml(short)}</div>
+    ${sections}
+    <button class="btn btn-ghost" style="width:100%;justify-content:center;margin-top:8px" onclick="closeModal()">Batal</button>`);
 }
 
+// ==========================================
+// INDIVIDUAL ACTIONS
+// ==========================================
+
+// POST /admin/api/licenses/:key/reset-hwid
+// POST /admin/api/licenses/:key/deactivate
+// POST /admin/api/licenses/:key/reactivate
+// POST /admin/api/licenses/:key/unban
 async function doAction(action) {
-  const key = activeLicenseKey;
+  const key = _activeKey;
   if (!key) return;
 
-  if (action === 'delete') {
-    if (!confirm(`Hapus permanen lisensi ini?\n${key}`)) return;
-    const res = await fetch(`/admin/api/licenses/${encodeURIComponent(key)}/delete`, { method: 'DELETE' });
-    const data = await res.json();
-    toast(data.success ? 'Lisensi dihapus' : data.message, data.success ? 'success' : 'error');
-  } else {
-    const data = await api('POST', `/admin/api/licenses/${encodeURIComponent(key)}/${action}`);
-    toast(data.message || (data.success ? 'Berhasil' : 'Gagal'), data.success ? 'success' : 'error');
-  }
+  const labelMap = {
+    'reset-hwid': 'Reset HWID berhasil',
+    'deactivate':  'Lisensi dinonaktifkan',
+    'reactivate':  'Lisensi diaktifkan kembali',
+    'unban':       'Lisensi berhasil di-unban',
+  };
 
-  closeModal();
-  loadLicenses();
-  refreshStats();
+  const data = await api('POST', `/admin/api/licenses/${encodeURIComponent(key)}/${action}`);
+  toast(data.message || (data.success ? (labelMap[action]||'Berhasil') : 'Gagal'), data.success ? 'success' : 'error');
+  if (data.success) {
+    closeModal();
+    loadLicenses();
+    refreshStats();
+  }
 }
 
+// DELETE /admin/api/licenses/:key/delete
+async function confirmDelete() {
+  const key = _activeKey;
+  if (!key) return;
+  if (!confirm(`Hapus permanen lisensi ini?\n\n${key}\n\nTindakan ini tidak bisa dibatalkan!`)) return;
+  const data = await apiDelete(`/admin/api/licenses/${encodeURIComponent(key)}/delete`);
+  toast(data.success ? 'Lisensi dihapus permanen' : (data.message || 'Gagal'), data.success ? 'success' : 'error');
+  if (data.success) {
+    closeModal();
+    loadLicenses();
+    refreshStats();
+  }
+}
+
+// POST /admin/api/licenses/:key/ban
 function showBanModal() {
   document.getElementById('modalContent').innerHTML = `
-    <div class="modal-title" style="color:var(--red)"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/></svg>Ban Lisensi</div>
+    <div class="modal-title" style="color:var(--red)">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/></svg>
+      Ban Lisensi
+    </div>
+    <div class="modal-sub">${escHtml(_activeKey||'')}</div>
     <div class="form-group">
       <label class="form-label">Alasan Ban</label>
-      <input class="form-input" id="banReason" placeholder="Contoh: Cheat detected, share lisensi, dll">
+      <input class="form-input" id="banReason" placeholder="Cheat detected / share lisensi / dll">
     </div>
     <div class="form-group">
       <label class="checkbox-label">
         <input type="checkbox" id="banHwid">
-        Ban HWID device sekaligus (user tidak bisa pakai key lain di device ini)
+        Ban HWID device sekaligus
       </label>
+      <div class="warn-box" style="margin-top:8px">
+        ⚠️ Jika dicentang, device ini tidak bisa dipakai key apapun lagi
+      </div>
     </div>
     <div class="modal-actions">
       <button class="btn btn-ghost" onclick="closeModal()">Batal</button>
@@ -602,21 +831,28 @@ function showBanModal() {
 }
 
 async function submitBan() {
-  const reason  = document.getElementById('banReason').value || 'Tidak ada alasan';
-  const banHwid = document.getElementById('banHwid').checked;
-  const data = await api('POST', `/admin/api/licenses/${encodeURIComponent(activeLicenseKey)}/ban`, { reason, ban_hwid: banHwid });
-  toast(data.message || (data.success ? 'Lisensi di-ban' : 'Gagal'), data.success ? 'success' : 'error');
-  closeModal();
-  loadLicenses();
-  refreshStats();
+  const reason  = (document.getElementById('banReason')?.value || '').trim() || 'Tidak ada alasan';
+  const banHwid = document.getElementById('banHwid')?.checked || false;
+  const data    = await api('POST', `/admin/api/licenses/${encodeURIComponent(_activeKey)}/ban`,
+                            { reason, ban_hwid: banHwid });
+  toast(data.message || (data.success ? 'Lisensi di-ban' : 'Gagal ban'), data.success ? 'success' : 'error');
+  if (data.success) { closeModal(); loadLicenses(); refreshStats(); }
 }
 
+// POST /admin/api/licenses/:key/extend
 function showExtendModal() {
   document.getElementById('modalContent').innerHTML = `
-    <div class="modal-title"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>Extend Durasi</div>
+    <div class="modal-title">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+      Extend Durasi Lisensi
+    </div>
+    <div class="modal-sub">${escHtml(_activeKey||'')}</div>
     <div class="form-group">
       <label class="form-label">Tambah Berapa Hari?</label>
-      <input class="form-input" id="extendDays" type="number" value="7" min="1" max="3650" placeholder="Jumlah hari">
+      <input class="form-input" id="extendDays" type="number" value="30" min="1" max="3650">
+    </div>
+    <div class="info-box">
+      ℹ️ Perpanjangan dihitung dari tanggal <strong>kadaluarsa saat ini</strong> (atau hari ini jika sudah habis).
     </div>
     <div class="modal-actions">
       <button class="btn btn-ghost" onclick="closeModal()">Batal</button>
@@ -625,19 +861,29 @@ function showExtendModal() {
 }
 
 async function submitExtend() {
-  const days = parseInt(document.getElementById('extendDays').value) || 7;
-  const data = await api('POST', `/admin/api/licenses/${encodeURIComponent(activeLicenseKey)}/extend`, { days });
-  toast(data.success ? `Diperpanjang ${days} hari → ${data.new_expires?.substring(0,10)}` : data.message, data.success ? 'success' : 'error');
-  closeModal();
-  loadLicenses();
+  const days = parseInt(document.getElementById('extendDays')?.value) || 30;
+  if (days < 1 || days > 3650) { toast('Jumlah hari tidak valid (1–3650)', 'error'); return; }
+  const data = await api('POST', `/admin/api/licenses/${encodeURIComponent(_activeKey)}/extend`, { days });
+  if (data.success) {
+    const exp = data.new_expires ? data.new_expires.substring(0,10) : '';
+    toast(`Diperpanjang ${days} hari${exp ? ' → ' + exp : ''}`, 'success');
+    closeModal(); loadLicenses();
+  } else {
+    toast(data.message || 'Gagal extend', 'error');
+  }
 }
 
+// POST /admin/api/licenses/:key/note
 function showNoteModal() {
   document.getElementById('modalContent').innerHTML = `
-    <div class="modal-title"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>Edit Catatan</div>
+    <div class="modal-title">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+      Edit Catatan
+    </div>
+    <div class="modal-sub">${escHtml(_activeKey||'')}</div>
     <div class="form-group">
-      <label class="form-label">Catatan (Nama Buyer, dll)</label>
-      <input class="form-input" id="noteInput" placeholder="contoh: Budi - 0812xxx - Telegram @xxx">
+      <label class="form-label">Catatan (Nama Buyer, Kontak, dll)</label>
+      <input class="form-input" id="noteInput" placeholder="contoh: Budi — 0812xxx — @telegram">
     </div>
     <div class="modal-actions">
       <button class="btn btn-ghost" onclick="closeModal()">Batal</button>
@@ -646,26 +892,32 @@ function showNoteModal() {
 }
 
 async function submitNote() {
-  const note = document.getElementById('noteInput').value;
-  const data = await api('POST', `/admin/api/licenses/${encodeURIComponent(activeLicenseKey)}/note`, { note });
-  toast(data.success ? 'Catatan disimpan' : 'Gagal', data.success ? 'success' : 'error');
-  closeModal();
-  loadLicenses();
+  const note = document.getElementById('noteInput')?.value || '';
+  const data = await api('POST', `/admin/api/licenses/${encodeURIComponent(_activeKey)}/note`, { note });
+  toast(data.success ? 'Catatan disimpan' : (data.message || 'Gagal'), data.success ? 'success' : 'error');
+  if (data.success) { closeModal(); loadLicenses(); }
 }
 
 // ==========================================
-// GENERATE KEY
+// GENERATE KEY  →  POST /api/generate-key
 // ==========================================
 async function generateKey() {
   const duration = document.getElementById('genDuration').value;
   const note     = document.getElementById('genNote').value;
-  const data     = await api('POST', '/api/generate-key', { duration_type: duration, note });
+
+  const btn = document.querySelector('#page-generate .btn-accent');
+  if (btn) { btn.disabled = true; btn.textContent = 'Generating...'; }
+
+  const data = await api('POST', '/api/generate-key', { duration_type: duration, note });
+
+  if (btn) { btn.disabled = false; btn.innerHTML = `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:14px;height:14px"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg> GENERATE KEY`; }
 
   if (data.success) {
     document.getElementById('genResult').style.display = 'block';
     document.getElementById('genResultKey').textContent = data.license_key;
-    document.getElementById('genResultMeta').textContent = `Durasi: ${data.duration_type} • Aktif saat pertama digunakan`;
-    toast('Key berhasil dibuat!', 'success');
+    document.getElementById('genResultMeta').innerHTML =
+      `Durasi: <strong>${data.duration_type}</strong>  ·  Aktif saat pertama kali divalidasi user`;
+    toast('Key berhasil dibuat! Klik key untuk menyalin.', 'success');
     refreshStats();
   } else {
     toast(data.message || 'Gagal generate key', 'error');
@@ -673,73 +925,89 @@ async function generateKey() {
 }
 
 function copyKey(el) {
-  navigator.clipboard.writeText(el.textContent).then(() => toast('Key disalin ke clipboard!', 'info'));
+  const text = el.textContent.replace('CLICK TO COPY','').trim();
+  if (!text) return;
+  navigator.clipboard.writeText(text).then(() => toast('Key disalin ke clipboard ✓', 'info'));
 }
 
 // ==========================================
-// BANNED HWID
+// BANNED HWID  →  GET/POST /admin/api/banned-hwids
 // ==========================================
 async function loadBannedHwids() {
-  const container = document.getElementById('bannedHwidList');
-  container.innerHTML = '<div class="loading"><span class="spinner"></span>Memuat...</div>';
+  const c = document.getElementById('bannedHwidList');
+  c.innerHTML = '<div class="loading"><span class="spinner"></span>Memuat...</div>';
   const data = await api('GET', '/admin/api/banned-hwids');
   const list = data.banned_hwids || [];
 
   if (!list.length) {
-    container.innerHTML = `<div class="empty-state"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Tidak ada HWID yang di-ban</div>`;
+    c.innerHTML = `<div class="empty-state">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      Tidak ada HWID yang di-ban
+    </div>`;
     return;
   }
 
-  container.innerHTML = list.map(h => `
+  c.innerHTML = list.map(h => `
     <div class="hwid-item">
-      <div>
-        <div class="hwid-hash">${h.hwid_hash}</div>
-        <div class="hwid-meta">Alasan: ${h.reason || '—'} • ${h.banned_at?.substring(0,19).replace('T',' ') || '—'} • Key: ${h.license_key?.substring(0,20) || '—'}</div>
+      <div style="flex:1;min-width:0">
+        <div class="hwid-hash">${escHtml(h.hwid_hash)}</div>
+        <div class="hwid-meta">
+          Alasan: ${escHtml(h.reason || '—')}  ·
+          ${(h.banned_at||'—').substring(0,19).replace('T',' ')}  ·
+          Key: <span style="color:var(--accent)">${escHtml((h.license_key||'—').substring(0,24))}</span>
+        </div>
       </div>
-      <button class="btn btn-success" onclick="unbanHwid('${h.hwid_hash}')">Unban</button>
+      <button class="btn btn-success" style="flex-shrink:0" onclick="unbanHwid('${escHtml(h.hwid_hash)}')">Unban</button>
     </div>`).join('');
 }
 
+// POST /admin/api/banned-hwids/:hwid_hash/unban
 async function unbanHwid(hash) {
-  if (!confirm('Unban HWID ini?')) return;
-  const data = await api('POST', `/admin/api/banned-hwids/${hash}/unban`);
-  toast(data.success ? 'HWID berhasil di-unban' : data.message, data.success ? 'success' : 'error');
-  loadBannedHwids();
-  refreshStats();
+  if (!confirm('Unban HWID ini?\nDevice bisa dipakai kembali dengan key yang valid.')) return;
+  const data = await api('POST', `/admin/api/banned-hwids/${encodeURIComponent(hash)}/unban`);
+  toast(data.success ? 'HWID berhasil di-unban' : (data.message || 'Gagal'), data.success ? 'success' : 'error');
+  if (data.success) { loadBannedHwids(); refreshStats(); }
 }
 
 // ==========================================
-// MODAL
+// MODAL HELPERS
 // ==========================================
 function openModal(html) {
   document.getElementById('modalContent').innerHTML = html;
   document.getElementById('modalOverlay').classList.add('open');
 }
+
 function closeModal() {
   document.getElementById('modalOverlay').classList.remove('open');
-  activeLicenseKey = null;
+  // Don't reset _activeKey here — some flows re-open modal with same key
 }
+
 document.getElementById('modalOverlay').addEventListener('click', e => {
   if (e.target === e.currentTarget) closeModal();
+});
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModal();
 });
 
 // ==========================================
 // TOAST
 // ==========================================
-function toast(msg, type = 'info') {
+function toast(msg, type = 'info', duration = 3500) {
   const el = document.createElement('div');
   el.className = `toast ${type}`;
   el.textContent = msg;
-  document.getElementById('toastContainer').appendChild(el);
-  setTimeout(() => el.remove(), 3500);
+  const c = document.getElementById('toastContainer');
+  c.appendChild(el);
+  setTimeout(() => { el.style.opacity='0'; el.style.transition='opacity .3s'; setTimeout(()=>el.remove(), 300); }, duration);
 }
 
 // ==========================================
-// CLOCK
+// SERVER CLOCK
 // ==========================================
 function updateClock() {
-  document.getElementById('serverTime').textContent =
-    new Date().toISOString().replace('T',' ').substring(0,19) + ' UTC';
+  const el = document.getElementById('serverTime');
+  if (el) el.textContent = new Date().toISOString().replace('T', ' ').substring(0, 19) + ' UTC';
 }
 setInterval(updateClock, 1000);
 updateClock();
