@@ -18,9 +18,13 @@ TIMEZONE   = pytz.UTC
 DOWNLOAD_FOLDER = 'downloads'
 app.config['DOWNLOAD_FOLDER'] = DOWNLOAD_FOLDER
 
-# Admin credentials — ganti sebelum deploy!
+# Admin credentials — set via environment variable sebelum deploy!
 ADMIN_USER = os.environ.get('ADMIN_USER')
 ADMIN_PASS = os.environ.get('ADMIN_PASS')
+
+# API Key rahasia untuk generate key dari luar (opsional, bisa dikosongkan)
+# Jika diset, endpoint /api/generate-key membutuhkan header X-API-Key: <nilai ini>
+GENERATE_API_KEY = os.environ.get('GENERATE_API_KEY')
 
 # Path JSON
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -72,7 +76,6 @@ def load_db() -> dict:
     try:
         with open(DB_PATH, 'r') as f:
             data = json.load(f)
-            # Backward compat: tambah key baru jika DB lama
             if "banned_hwids" not in data:
                 data["banned_hwids"] = {}
             return data
@@ -147,6 +150,8 @@ def log_event(db: dict, license_key: str, event: str, detail: str = ""):
 # ==========================================
 
 def check_auth(username, password):
+    if not ADMIN_USER or not ADMIN_PASS:
+        return False
     return username == ADMIN_USER and password == ADMIN_PASS
 
 def requires_auth(f):
@@ -160,6 +165,32 @@ def requires_auth(f):
                 {'WWW-Authenticate': 'Basic realm="Admin Area"'}
             )
         return f(*args, **kwargs)
+    return decorated
+
+def requires_generate_auth(f):
+    """
+    Decorator untuk endpoint generate-key.
+    Bisa diakses via:
+      1. Admin Basic Auth (HTTP Basic), ATAU
+      2. Header X-API-Key jika GENERATE_API_KEY di-set
+    Jika tidak ada keduanya → 401.
+    """
+    @functools.wraps(f)
+    def decorated(*args, **kwargs):
+        # Cek Basic Auth admin
+        auth = request.authorization
+        if auth and check_auth(auth.username, auth.password):
+            return f(*args, **kwargs)
+        # Cek X-API-Key header
+        if GENERATE_API_KEY:
+            api_key = request.headers.get('X-API-Key', '')
+            if secrets.compare_digest(api_key, GENERATE_API_KEY):
+                return f(*args, **kwargs)
+        return Response(
+            'Akses ditolak. Admin auth atau X-API-Key required.',
+            401,
+            {'WWW-Authenticate': 'Basic realm="Admin Area"'}
+        )
     return decorated
 
 # ==========================================
@@ -202,7 +233,6 @@ def admin_stats():
     lifetime   = sum(1 for l in licenses.values() if l["duration_type"] == "lifetime")
     banned_hwids = len(db.get("banned_hwids", {}))
 
-    # Aktivasi hari ini
     today_str  = now.strftime('%Y-%m-%d')
     activated_today = sum(
         1 for l in licenses.values()
@@ -226,7 +256,7 @@ def admin_list_licenses():
     """List semua lisensi dengan filter & search."""
     db       = load_db()
     search   = request.args.get('search', '').lower()
-    status   = request.args.get('status', 'all')   # all | active | expired | banned | unbound
+    status   = request.args.get('status', 'all')
     duration = request.args.get('duration', 'all')
     page     = int(request.args.get('page', 1))
     per_page = int(request.args.get('per_page', 20))
@@ -235,17 +265,14 @@ def admin_list_licenses():
     result = []
 
     for key, lic in db["licenses"].items():
-        # Filter search
         if search and search not in key.lower():
             continue
 
-        # Hitung status
         is_banned   = lic.get("is_banned", False)
         is_active   = lic["is_active"] and not is_banned
         is_unbound  = lic["hwid"] is None and lic["is_active"] and not is_banned
         is_expired  = not lic["is_active"] and not is_banned
 
-        # Hitung sisa waktu
         time_left = None
         if lic["expires_at"] and is_active:
             exp = parse_dt(lic["expires_at"])
@@ -257,7 +284,6 @@ def admin_list_licenses():
             else:
                 time_left = "Expired"
 
-        # Filter status
         if status == 'active'  and not is_active:   continue
         if status == 'expired' and not is_expired:  continue
         if status == 'banned'  and not is_banned:   continue
@@ -281,8 +307,6 @@ def admin_list_licenses():
             "log_count":     len(lic.get("logs", [])),
         })
 
-    # Sort: banned terakhir, aktif terbaru di atas
-    result.sort(key=lambda x: (x["is_banned"], not x["is_active"], x["created_at"]), reverse=False)
     result.sort(key=lambda x: x["created_at"], reverse=True)
 
     total_filtered = len(result)
@@ -309,7 +333,6 @@ def admin_get_logs(license_key):
 @app.route('/admin/api/licenses/<license_key>/note', methods=['POST'])
 @requires_auth
 def admin_set_note(license_key):
-    """Tambah catatan ke lisensi (misal: nama buyer)."""
     data = request.get_json()
     db   = load_db()
     matched = next((k for k in db["licenses"] if k.lower() == license_key.lower()), None)
@@ -336,7 +359,6 @@ def admin_reset_hwid(license_key):
 @app.route('/admin/api/licenses/<license_key>/ban', methods=['POST'])
 @requires_auth
 def admin_ban_license(license_key):
-    """Ban lisensi + opsional ban HWID-nya sekaligus."""
     data      = request.get_json() or {}
     reason    = data.get("reason", "Tidak ada alasan")
     ban_hwid  = data.get("ban_hwid", False)
@@ -353,7 +375,6 @@ def admin_ban_license(license_key):
     lic["banned_at"]   = now_iso()
     log_event(db, matched, "BANNED", reason)
 
-    # Ban HWID juga jika diminta
     if ban_hwid and lic.get("hwid"):
         hwid_hash = lic["hwid"]
         db["banned_hwids"][hwid_hash] = {
@@ -411,7 +432,6 @@ def admin_reactivate(license_key):
 @app.route('/admin/api/licenses/<license_key>/extend', methods=['POST'])
 @requires_auth
 def admin_extend(license_key):
-    """Extend durasi lisensi (dalam hari)."""
     data = request.get_json() or {}
     days = int(data.get("days", 7))
 
@@ -470,7 +490,21 @@ def admin_unban_hwid(hwid_hash):
 # ==========================================
 
 @app.route('/api/generate-key', methods=['POST'])
+@requires_generate_auth   # <-- SEKARANG TERPROTEKSI: butuh admin auth atau X-API-Key
 def generate_key():
+    """
+    Generate license key baru.
+
+    Autentikasi (salah satu):
+      - HTTP Basic Auth dengan kredensial admin
+      - Header: X-API-Key: <nilai GENERATE_API_KEY>
+
+    Body JSON:
+      {
+        "duration_type": "lifetime" | "2weeks" | "1month" | "demo_1min" | "trial_6hours",
+        "note": "Nama buyer (opsional)"
+      }
+    """
     try:
         data = request.get_json()
         if not data or 'duration_type' not in data:
@@ -483,7 +517,7 @@ def generate_key():
 
         license_key = generate_license_key()
         created_at  = now_iso()
-        note        = data.get("note", "")  # Opsional: nama buyer langsung saat generate
+        note        = data.get("note", "")
 
         db = load_db()
         db["licenses"][license_key] = {
@@ -503,10 +537,10 @@ def generate_key():
         save_db(db)
 
         return jsonify({
-            "success":      True,
-            "license_key":  license_key,
+            "success":       True,
+            "license_key":   license_key,
             "duration_type": duration_type,
-            "message":      "License generated. Duration starts upon first activation."
+            "message":       "License generated. Duration starts upon first activation."
         }), 201
 
     except Exception as e:
@@ -515,6 +549,29 @@ def generate_key():
 
 @app.route('/api/validate', methods=['POST'])
 def validate_license():
+    """
+    Validasi license key dari klien .exe.
+
+    Body JSON:
+      {
+        "license_key": "DTC_Brand_xxxxxx",
+        "hwid": "string-hardware-id"
+      }
+
+    Response sukses:
+      {
+        "success": true,
+        "message": "Valid",
+        "duration": "1month",
+        "expires_at": "2025-12-31T00:00:00+00:00"  // atau "Never" untuk lifetime
+      }
+
+    Response gagal:
+      {
+        "success": false,
+        "message": "BANNED: <alasan>" | "EXPIRED: Duration Ended" | "Invalid Key" | "HWID Mismatch"
+      }
+    """
     try:
         data = request.get_json()
         if not data or 'license_key' not in data or 'hwid' not in data:
@@ -522,34 +579,40 @@ def validate_license():
 
         license_key  = data['license_key'].strip()
         hwid         = data['hwid'].strip()
+
+        # Validasi input dasar
+        if not license_key or not hwid:
+            return jsonify({"success": False, "message": "license_key dan hwid tidak boleh kosong"}), 400
+
         hwid_hash    = hash_hwid(hwid)
         current_time = datetime.now(TIMEZONE)
 
         db = load_db()
 
-        # Cek HWID banned
+        # ── 1. Cek HWID banned ───────────────────────────────────────────────
         if hwid_hash in db.get("banned_hwids", {}):
             return jsonify({"success": False, "message": "BANNED: Hardware ID anda telah diblokir"}), 403
 
-        # Case-insensitive search
+        # ── 2. Cari license key (case-insensitive) ───────────────────────────
         matched = next((k for k in db["licenses"] if k.lower() == license_key.lower()), None)
         if not matched:
             return jsonify({"success": False, "message": "Invalid Key"}), 404
 
         lic = db["licenses"][matched]
 
-        # Cek ban
+        # ── 3. Cek ban ───────────────────────────────────────────────────────
         if lic.get("is_banned"):
             reason = lic.get("ban_reason", "Tidak ada alasan")
             return jsonify({"success": False, "message": f"BANNED: {reason}"}), 403
 
+        # ── 4. Cek aktif ─────────────────────────────────────────────────────
         if not lic["is_active"]:
             return jsonify({"success": False, "message": "EXPIRED: License Inactive"}), 403
 
         stored_hwid    = lic["hwid"]
         expires_at_str = lic["expires_at"]
 
-        # Aktivasi pertama
+        # ── 5. Aktivasi pertama (HWID belum terikat) ─────────────────────────
         if stored_hwid is None:
             new_expires = calculate_expires_at(lic["duration_type"], current_time)
             lic["hwid"]       = hwid_hash
@@ -558,13 +621,14 @@ def validate_license():
             expires_at_str    = new_expires
             log_event(db, matched, "FIRST_ACTIVATION", f"HWID: {hwid_hash[:12]}")
 
+        # ── 6. Cek HWID mismatch ─────────────────────────────────────────────
         elif stored_hwid != hwid_hash:
             log_event(db, matched, "HWID_MISMATCH", f"Got: {hwid_hash[:12]}")
             save_db(db)
             return jsonify({"success": False, "message": "HWID Mismatch"}), 403
 
-        # Cek expiry
-        if expires_at_str:
+        # ── 7. Cek expiry ────────────────────────────────────────────────────
+        if expires_at_str and expires_at_str not in ("Never", "null", None):
             expires_at = parse_dt(expires_at_str)
             if current_time > expires_at:
                 lic["is_active"] = False
@@ -573,7 +637,7 @@ def validate_license():
                 save_db(db)
                 return jsonify({"success": False, "message": "EXPIRED: Duration Ended"}), 403
 
-        # Update last_used
+        # ── 8. Update last_used & simpan ─────────────────────────────────────
         lic["last_used"] = current_time.isoformat()
         log_event(db, matched, "VALIDATED", f"HWID: {hwid_hash[:12]}")
         db["licenses"][matched] = lic
