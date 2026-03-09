@@ -7,477 +7,237 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg:       #080b10;
-  --surface:  #0d1117;
-  --card:     #111620;
-  --border:   #1e2736;
-  --accent:   #00d4ff;
-  --accent2:  #0099cc;
-  --green:    #00ff88;
-  --red:      #ff4466;
-  --orange:   #ffaa00;
-  --purple:   #aa66ff;
-  --teal:     #00e5cc;
-  --text:     #e8edf5;
-  --muted:    #5a6a82;
-  --mono:     'JetBrains Mono', monospace;
-  --sans:     'Syne', sans-serif;
+:root{
+  --bg:#080b10;--surface:#0d1117;--card:#111620;--border:#1e2736;
+  --cyan:#00d4ff;--cyan2:#0099cc;--green:#00ff88;--red:#ff4466;
+  --orange:#ffaa00;--purple:#aa66ff;--teal:#00e5cc;--text:#e8edf5;--muted:#5a6a82;
+  --mono:'JetBrains Mono',monospace;--sans:'Syne',sans-serif;
+  /* Script colors */
+  --v1:#22d3ee;--v2:#a855f7;--v3:#fb923c;
 }
 *{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;overflow-x:hidden}
 ::-webkit-scrollbar{width:4px;height:4px}
 ::-webkit-scrollbar-track{background:var(--bg)}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
-
 .layout{display:grid;grid-template-columns:240px 1fr;min-height:100vh}
 .sidebar{background:var(--surface);border-right:1px solid var(--border);padding:24px 0;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto}
 .logo{padding:0 24px 28px;border-bottom:1px solid var(--border);margin-bottom:24px}
-.logo-title{font-family:var(--sans);font-size:18px;font-weight:800;letter-spacing:2px;color:var(--accent)}
+.logo-title{font-size:18px;font-weight:800;letter-spacing:2px;color:var(--cyan)}
 .logo-sub{font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:4px;letter-spacing:1px}
 .nav-section{padding:0 24px 8px;font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-top:8px}
 .nav-item{display:flex;align-items:center;gap:10px;padding:10px 24px;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;transition:all .2s;letter-spacing:.5px;border-left:2px solid transparent}
 .nav-item:hover{color:var(--text);background:rgba(0,212,255,.04)}
-.nav-item.active{color:var(--accent);background:rgba(0,212,255,.07);border-left-color:var(--accent)}
+.nav-item.active{color:var(--cyan);background:rgba(0,212,255,.07);border-left-color:var(--cyan)}
 .nav-item svg{width:16px;height:16px;flex-shrink:0}
 .sidebar-footer{margin-top:auto;padding:20px 24px;border-top:1px solid var(--border)}
 .online-badge{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;color:var(--green)}
 .pulse{width:8px;height:8px;background:var(--green);border-radius:50%;animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(.8)}}
-
 .main{padding:32px;overflow-x:hidden;min-height:100vh}
-.page{display:none}
-.page.active{display:block}
+.page{display:none}.page.active{display:block}
 .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px;flex-wrap:wrap;gap:12px}
 .page-title{font-size:22px;font-weight:800;letter-spacing:1px}
 .topbar-right{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px}
-.stat-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;position:relative;overflow:hidden;transition:border-color .2s;cursor:default}
-.stat-card:hover{border-color:var(--accent2)}
+.stats-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:28px}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px;position:relative;overflow:hidden;transition:border-color .2s;cursor:default}
+.stat-card:hover{border-color:var(--cyan2)}
 .stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
-.stat-card.c-blue::before{background:var(--accent)}
-.stat-card.c-green::before{background:var(--green)}
-.stat-card.c-red::before{background:var(--red)}
-.stat-card.c-orange::before{background:var(--orange)}
-.stat-card.c-purple::before{background:var(--purple)}
-.stat-card.c-teal::before{background:var(--teal)}
-.stat-label{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px}
-.stat-value{font-size:32px;font-weight:800;line-height:1}
-.stat-sub{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:6px}
-.toolbar{display:flex;align-items:center;gap:12px;margin-bottom:20px;flex-wrap:wrap}
-.search-box{flex:1;min-width:200px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:9px 14px;color:var(--text);font-family:var(--mono);font-size:13px;outline:none;transition:border-color .2s}
-.search-box:focus{border-color:var(--accent)}
-.search-box::placeholder{color:var(--muted)}
+.stat-card.c-blue::before{background:var(--cyan)}.stat-card.c-green::before{background:var(--green)}
+.stat-card.c-red::before{background:var(--red)}.stat-card.c-orange::before{background:var(--orange)}
+.stat-card.c-purple::before{background:var(--purple)}.stat-card.c-teal::before{background:var(--teal)}
+.stat-label{font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px}
+.stat-value{font-size:28px;font-weight:800;line-height:1}
+.stat-sub{font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:4px}
+.toolbar{display:flex;align-items:center;gap:10px;margin-bottom:18px;flex-wrap:wrap}
+.search-box{flex:1;min-width:180px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:9px 14px;color:var(--text);font-family:var(--mono);font-size:13px;outline:none;transition:border-color .2s}
+.search-box:focus{border-color:var(--cyan)}.search-box::placeholder{color:var(--muted)}
 .filter-select{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:9px 12px;color:var(--text);font-family:var(--mono);font-size:12px;outline:none;cursor:pointer}
-.filter-select:focus{border-color:var(--accent)}
+.filter-select:focus{border-color:var(--cyan)}
 .btn{display:inline-flex;align-items:center;gap:6px;padding:9px 16px;border-radius:8px;font-family:var(--sans);font-size:12px;font-weight:700;letter-spacing:.5px;cursor:pointer;border:none;transition:all .2s;white-space:nowrap;text-decoration:none}
 .btn svg{width:14px;height:14px;flex-shrink:0}
-.btn-accent{background:var(--accent);color:#000}
-.btn-accent:hover{background:#22dfff;transform:translateY(-1px);box-shadow:0 4px 15px rgba(0,212,255,.3)}
-.btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border)}
-.btn-ghost:hover{color:var(--text);border-color:var(--accent)}
-.btn-danger{background:rgba(255,68,102,.15);color:var(--red);border:1px solid rgba(255,68,102,.3)}
-.btn-danger:hover{background:rgba(255,68,102,.25)}
-.btn-warn{background:rgba(255,170,0,.15);color:var(--orange);border:1px solid rgba(255,170,0,.3)}
-.btn-warn:hover{background:rgba(255,170,0,.25)}
-.btn-success{background:rgba(0,255,136,.12);color:var(--green);border:1px solid rgba(0,255,136,.3)}
-.btn-success:hover{background:rgba(0,255,136,.22)}
-.btn-teal{background:rgba(0,229,204,.12);color:var(--teal);border:1px solid rgba(0,229,204,.3)}
-.btn-teal:hover{background:rgba(0,229,204,.22)}
+.btn-accent{background:var(--cyan);color:#000}.btn-accent:hover{background:#22dfff;transform:translateY(-1px);box-shadow:0 4px 15px rgba(0,212,255,.3)}
+.btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border)}.btn-ghost:hover{color:var(--text);border-color:var(--cyan)}
+.btn-danger{background:rgba(255,68,102,.15);color:var(--red);border:1px solid rgba(255,68,102,.3)}.btn-danger:hover{background:rgba(255,68,102,.25)}
+.btn-warn{background:rgba(255,170,0,.15);color:var(--orange);border:1px solid rgba(255,170,0,.3)}.btn-warn:hover{background:rgba(255,170,0,.25)}
+.btn-success{background:rgba(0,255,136,.12);color:var(--green);border:1px solid rgba(0,255,136,.3)}.btn-success:hover{background:rgba(0,255,136,.22)}
+.btn-teal{background:rgba(0,229,204,.12);color:var(--teal);border:1px solid rgba(0,229,204,.3)}.btn-teal:hover{background:rgba(0,229,204,.22)}
+.btn-vip{background:rgba(170,102,255,.18);color:var(--purple);border:1px solid rgba(170,102,255,.4)}.btn-vip:hover{background:rgba(170,102,255,.3);transform:translateY(-1px);box-shadow:0 4px 15px rgba(170,102,255,.3)}
 .table-wrap{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden}
-.table-header{display:grid;grid-template-columns:2.5fr 1fr 1.2fr 1fr 1fr 150px;padding:12px 20px;background:var(--surface);border-bottom:1px solid var(--border);font-family:var(--mono);font-size:10px;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase}
-.table-row{display:grid;grid-template-columns:2.5fr 1fr 1.2fr 1fr 1fr 150px;padding:13px 20px;border-bottom:1px solid var(--border);align-items:center;transition:background .15s}
-.table-row:last-child{border-bottom:none}
-.table-row:hover{background:rgba(0,212,255,.025)}
-.table-row.is-banned{opacity:.6}
-.key-text{font-family:var(--mono);font-size:12px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer}
-.key-text:hover{color:var(--accent)}
+.table-header{display:grid;grid-template-columns:2.5fr .9fr 1.1fr 1fr 1fr 170px;padding:11px 18px;background:var(--surface);border-bottom:1px solid var(--border);font-family:var(--mono);font-size:9px;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase}
+.table-row{display:grid;grid-template-columns:2.5fr .9fr 1.1fr 1fr 1fr 170px;padding:12px 18px;border-bottom:1px solid var(--border);align-items:center;transition:background .15s}
+.table-row:last-child{border-bottom:none}.table-row:hover{background:rgba(0,212,255,.025)}.table-row.is-banned{opacity:.55}
+.key-text{font-family:var(--mono);font-size:12px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer}.key-text:hover{color:var(--cyan)}
 .key-meta{font-size:10px;color:var(--muted);margin-top:2px;font-family:var(--mono)}
-.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.5px}
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:20px;font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.5px}
 .badge-active{background:rgba(0,255,136,.12);color:var(--green);border:1px solid rgba(0,255,136,.25)}
 .badge-expired{background:rgba(255,68,102,.1);color:var(--red);border:1px solid rgba(255,68,102,.2)}
 .badge-banned{background:rgba(255,68,102,.2);color:var(--red);border:1px solid rgba(255,68,102,.4)}
 .badge-unbound{background:rgba(255,170,0,.1);color:var(--orange);border:1px solid rgba(255,170,0,.2)}
-.badge-lifetime{background:rgba(170,102,255,.12);color:var(--purple);border:1px solid rgba(170,102,255,.25)}
+.badge-vip{background:rgba(170,102,255,.2);color:var(--purple);border:1px solid rgba(170,102,255,.4)}
 .badge-warnet{background:rgba(0,229,204,.12);color:var(--teal);border:1px solid rgba(0,229,204,.3)}
 .badge-warnet-busy{background:rgba(255,170,0,.18);color:var(--orange);border:1px solid rgba(255,170,0,.4)}
 .badge-dot{width:5px;height:5px;border-radius:50%;background:currentColor;flex-shrink:0}
+/* Script badges in table */
+.sbadge{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:4px;font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:.5px;margin:1px}
+.sbadge-v1{background:rgba(34,211,238,.1);border:1px solid rgba(34,211,238,.25);color:var(--v1)}
+.sbadge-v2{background:rgba(168,85,247,.12);border:1px solid rgba(168,85,247,.3);color:var(--v2)}
+.sbadge-v3{background:rgba(251,146,60,.1);border:1px solid rgba(251,146,60,.25);color:var(--v3)}
 .dur-tag{font-family:var(--mono);font-size:11px;color:var(--muted);background:var(--surface);border:1px solid var(--border);padding:2px 8px;border-radius:4px;white-space:nowrap}
 .action-group{display:flex;gap:4px;justify-content:flex-end;flex-wrap:wrap}
 .icon-btn{width:28px;height:28px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
-.icon-btn:hover{color:var(--text);border-color:var(--accent);background:rgba(0,212,255,.08)}
+.icon-btn:hover{color:var(--text);border-color:var(--cyan);background:rgba(0,212,255,.08)}
 .icon-btn.danger:hover{color:var(--red);border-color:var(--red);background:rgba(255,68,102,.1)}
 .icon-btn.warn:hover{color:var(--orange);border-color:var(--orange);background:rgba(255,170,0,.1)}
 .icon-btn.success:hover{color:var(--green);border-color:var(--green);background:rgba(0,255,136,.1)}
 .icon-btn.teal:hover{color:var(--teal);border-color:var(--teal);background:rgba(0,229,204,.1)}
+.icon-btn.purple:hover{color:var(--purple);border-color:var(--purple);background:rgba(170,102,255,.1)}
 .icon-btn svg{width:13px;height:13px}
-.pagination{display:flex;align-items:center;justify-content:space-between;margin-top:16px;flex-wrap:wrap;gap:8px}
+.pagination{display:flex;align-items:center;justify-content:space-between;margin-top:14px;flex-wrap:wrap;gap:8px}
 .page-info{font-family:var(--mono);font-size:12px;color:var(--muted)}
 .page-btns{display:flex;gap:4px;flex-wrap:wrap}
 .page-btn{min-width:32px;height:32px;padding:0 8px;border-radius:6px;border:1px solid var(--border);background:var(--card);color:var(--muted);cursor:pointer;font-family:var(--mono);font-size:12px;transition:all .2s;display:flex;align-items:center;justify-content:center}
-.page-btn:hover,.page-btn.active{background:var(--accent);color:#000;border-color:var(--accent)}
+.page-btn:hover,.page-btn.active{background:var(--cyan);color:#000;border-color:var(--cyan)}
 .page-btn:disabled{opacity:.3;cursor:not-allowed}
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(4px);z-index:200;display:none;align-items:center;justify-content:center;padding:16px}
 .modal-overlay.open{display:flex}
-.modal{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px;width:100%;max-width:500px;max-height:90vh;overflow-y:auto;position:relative}
+.modal{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px;width:100%;max-width:520px;max-height:90vh;overflow-y:auto;position:relative}
 .modal-title{font-size:16px;font-weight:800;letter-spacing:1px;margin-bottom:20px;display:flex;align-items:center;gap:10px}
-.modal-title svg{width:20px;height:20px;color:var(--accent);flex-shrink:0}
+.modal-title svg{width:20px;height:20px;color:var(--cyan);flex-shrink:0}
 .modal-sub{font-family:var(--mono);font-size:11px;color:var(--muted);margin-bottom:20px;word-break:break-all;background:var(--surface);padding:8px 12px;border-radius:6px;border:1px solid var(--border)}
-.form-group{margin-bottom:16px}
-.form-label{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;display:block}
-.form-input{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--text);font-family:var(--mono);font-size:13px;outline:none;transition:border-color .2s}
-.form-input:focus{border-color:var(--accent)}
-.form-select{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--text);font-family:var(--mono);font-size:13px;outline:none;cursor:pointer}
-.form-select:focus{border-color:var(--accent)}
-.form-textarea{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--text);font-family:var(--mono);font-size:12px;outline:none;resize:vertical;min-height:80px}
-.form-textarea:focus{border-color:var(--accent)}
+.form-group{margin-bottom:16px}.form-label{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;display:block}
+.form-input{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--text);font-family:var(--mono);font-size:13px;outline:none;transition:border-color .2s}.form-input:focus{border-color:var(--cyan)}
+.form-select{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--text);font-family:var(--mono);font-size:13px;outline:none;cursor:pointer}.form-select:focus{border-color:var(--cyan)}
+.form-textarea{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--text);font-family:var(--mono);font-size:12px;outline:none;resize:vertical;min-height:80px}.form-textarea:focus{border-color:var(--cyan)}
 .checkbox-label{display:flex;align-items:center;gap:10px;cursor:pointer;font-size:13px;color:var(--text)}
-.checkbox-label input{width:15px;height:15px;accent-color:var(--accent);cursor:pointer;flex-shrink:0}
+.checkbox-label input{width:15px;height:15px;accent-color:var(--cyan);cursor:pointer;flex-shrink:0}
 .modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:24px;flex-wrap:wrap}
 .divider{height:1px;background:var(--border);margin:16px 0}
-.detail-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)}
-.detail-row:last-child{border-bottom:none}
+.detail-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)}.detail-row:last-child{border-bottom:none}
 .detail-key{font-family:var(--mono);font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
 .detail-val{font-family:var(--mono);font-size:12px;color:var(--text);text-align:right;max-width:60%;word-break:break-all}
 .log-list{max-height:360px;overflow-y:auto;border:1px solid var(--border);border-radius:8px;background:var(--surface)}
-.log-item{padding:10px 14px;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:11px;display:grid;grid-template-columns:140px 160px 1fr;gap:8px;align-items:start}
-.log-item:last-child{border-bottom:none}
-.log-time{color:var(--muted)}
-.log-event{color:var(--accent);font-weight:700}
-.log-event.ev-banned,.log-event.ev-banned_hwid,.log-event.ev-hwid_mismatch,.log-event.ev-warnet_locked{color:var(--red)}
-.log-event.ev-unbanned,.log-event.ev-reactivated,.log-event.ev-validated,.log-event.ev-first_activation,.log-event.ev-warnet_first_activation,.log-event.ev-warnet_session_start{color:var(--green)}
-.log-event.ev-extended,.log-event.ev-hwid_reset,.log-event.ev-hwid_rebound{color:var(--orange)}
-.log-event.ev-auto_expired,.log-event.ev-deactivated,.log-event.ev-expired{color:var(--red)}
-.log-event.ev-warnet_logout,.log-event.ev-warnet_force_logout{color:var(--teal)}
-.log-event.ev-warnet_enabled,.log-event.ev-warnet_disabled,.log-event.ev-warnet_revalidated{color:var(--teal)}
+.log-item{padding:10px 14px;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:11px;display:grid;grid-template-columns:140px 160px 1fr;gap:8px;align-items:start}.log-item:last-child{border-bottom:none}
+.log-time{color:var(--muted)}.log-event{color:var(--cyan);font-weight:700}
+.log-event.ev-banned,.log-event.ev-hwid_mismatch,.log-event.ev-warnet_locked,.log-event.ev-tier_denied{color:var(--red)}
+.log-event.ev-unbanned,.log-event.ev-reactivated,.log-event.ev-validated,.log-event.ev-first_activation,.log-event.ev-warnet_first_activation{color:var(--green)}
+.log-event.ev-extended,.log-event.ev-hwid_reset,.log-event.ev-tier_changed{color:var(--orange)}
+.log-event.ev-auto_expired,.log-event.ev-deactivated{color:var(--red)}
+.log-event.ev-warnet_logout,.log-event.ev-warnet_force_logout,.log-event.ev-warnet_enabled,.log-event.ev-warnet_disabled{color:var(--teal)}
 .hwid-list{display:flex;flex-direction:column;gap:10px}
 .hwid-item{background:var(--surface);border:1px solid rgba(255,68,102,.2);border-radius:10px;padding:16px;display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
-.hwid-hash{font-family:var(--mono);font-size:11px;color:var(--text);word-break:break-all}
-.hwid-meta{font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:4px}
+.hwid-hash{font-family:var(--mono);font-size:11px;color:var(--text);word-break:break-all}.hwid-meta{font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:4px}
 .warnet-session-box{background:rgba(0,229,204,.05);border:1px solid rgba(0,229,204,.2);border-radius:8px;padding:12px 14px;margin-bottom:12px}
 .warnet-session-title{font-family:var(--mono);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal);margin-bottom:8px}
-.warnet-session-hwid{font-family:var(--mono);font-size:11px;color:var(--text);word-break:break-all}
-.warnet-session-meta{font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:4px}
-.gen-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:28px;max-width:500px}
-.result-box{background:var(--surface);border:2px solid var(--accent);border-radius:8px;padding:16px;font-family:var(--mono);font-size:14px;color:var(--accent);word-break:break-all;cursor:pointer;position:relative;transition:background .2s}
-.result-box:hover{background:rgba(0,212,255,.05)}
+.vip-box{background:rgba(170,102,255,.06);border:1px solid rgba(170,102,255,.3);border-radius:8px;padding:14px;margin-bottom:12px}
+.vip-box-title{font-family:var(--mono);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--purple);margin-bottom:8px}
+/* Tier card in generate */
+.tier-option{background:var(--surface);border:2px solid var(--border);border-radius:12px;padding:16px;cursor:pointer;transition:all .2s;margin-bottom:8px}
+.tier-option:hover{border-color:var(--border)}.tier-option.active{border-color:var(--purple);background:rgba(170,102,255,.06)}
+.tier-option.active-v1{border-color:var(--v1);background:rgba(34,211,238,.04)}
+.tier-option.active-v2{border-color:var(--v2);background:rgba(168,85,247,.06)}
+.tier-option-title{font-family:var(--mono);font-size:12px;font-weight:700;margin-bottom:4px}
+.tier-option-desc{font-family:var(--mono);font-size:10px;color:var(--muted);line-height:1.5}
+.gen-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:28px;max-width:560px}
+.result-box{background:var(--surface);border:2px solid var(--cyan);border-radius:8px;padding:16px;font-family:var(--mono);font-size:14px;color:var(--cyan);word-break:break-all;cursor:pointer;position:relative;transition:background .2s}.result-box:hover{background:rgba(0,212,255,.05)}
 .result-box::after{content:'CLICK TO COPY';position:absolute;top:8px;right:10px;font-size:9px;color:var(--muted);letter-spacing:1px;font-family:var(--mono)}
 .result-meta{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:10px;padding:10px;background:var(--surface);border-radius:6px;border:1px solid var(--border)}
 .toast-container{position:fixed;bottom:24px;right:24px;z-index:999;display:flex;flex-direction:column;gap:8px;pointer-events:none}
 .toast{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 18px;font-family:var(--mono);font-size:12px;display:flex;align-items:center;gap:10px;animation:slideUp .3s ease;max-width:340px;pointer-events:auto}
-.toast.success{border-left:3px solid var(--green);color:var(--green)}
-.toast.error{border-left:3px solid var(--red);color:var(--red)}
-.toast.info{border-left:3px solid var(--accent);color:var(--accent)}
-.toast.warn{border-left:3px solid var(--orange);color:var(--orange)}
+.toast.success{border-left:3px solid var(--green);color:var(--green)}.toast.error{border-left:3px solid var(--red);color:var(--red)}.toast.info{border-left:3px solid var(--cyan);color:var(--cyan)}.toast.warn{border-left:3px solid var(--orange);color:var(--orange)}
 @keyframes slideUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
 .empty-state{padding:60px 20px;text-align:center;color:var(--muted);font-family:var(--mono);font-size:13px}
 .empty-state svg{width:40px;height:40px;margin:0 auto 16px;opacity:.3;display:block}
 .loading{text-align:center;padding:40px;font-family:var(--mono);font-size:12px;color:var(--muted)}
-.spinner{display:inline-block;width:18px;height:18px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-right:8px}
+.spinner{display:inline-block;width:18px;height:18px;border:2px solid var(--border);border-top-color:var(--cyan);border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-right:8px}
 @keyframes spin{to{transform:rotate(360deg)}}
 .info-box{background:rgba(0,212,255,.05);border:1px solid rgba(0,212,255,.2);border-radius:8px;padding:12px 14px;font-family:var(--mono);font-size:11px;color:var(--muted);margin-bottom:16px}
 .warn-box{background:rgba(255,170,0,.07);border:1px solid rgba(255,170,0,.25);border-radius:8px;padding:12px 14px;font-family:var(--mono);font-size:11px;color:var(--orange)}
 .danger-box{background:rgba(255,68,102,.07);border:1px solid rgba(255,68,102,.25);border-radius:8px;padding:12px 14px;font-family:var(--mono);font-size:11px;color:var(--red)}
 .teal-box{background:rgba(0,229,204,.06);border:1px solid rgba(0,229,204,.25);border-radius:8px;padding:12px 14px;font-family:var(--mono);font-size:11px;color:var(--teal)}
-.action-section{margin-bottom:10px}
-.action-section-title{font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:8px}
+.purple-box{background:rgba(170,102,255,.06);border:1px solid rgba(170,102,255,.3);border-radius:8px;padding:12px 14px;font-family:var(--mono);font-size:11px;color:var(--purple)}
+.action-section{margin-bottom:12px}.action-section-title{font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:8px}
 
-/* ============================================================
+/* ========================
    COPY TEMPLATE MODAL
-   ============================================================ */
-#copyModal {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,.85);
-  backdrop-filter: blur(6px);
-  z-index: 9999;
-  padding: 16px;
-  overflow-y: auto;
-  align-items: flex-start;
-  justify-content: center;
-}
-#copyModal.show { display: flex; }
-
-#copyModalBox {
-  background: #0a0e16;
-  border: 1px solid #1e2736;
-  border-radius: 20px;
-  width: 100%;
-  max-width: 720px;
-  margin: auto;
-  overflow: hidden;
-  box-shadow: 0 32px 100px rgba(0,0,0,.8), 0 0 0 1px rgba(0,212,255,.05);
-  animation: cmSlideUp .28s cubic-bezier(.22,1,.36,1);
-}
-@keyframes cmSlideUp {
-  from { opacity:0; transform:translateY(28px) scale(.98); }
-  to   { opacity:1; transform:translateY(0) scale(1); }
-}
-
-/* Header */
-.cm-header {
-  padding: 20px 24px 16px;
-  border-bottom: 1px solid #1a2030;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: linear-gradient(135deg, rgba(0,212,255,.04) 0%, transparent 60%);
-}
-.cm-header-left { display:flex; align-items:center; gap:12px; }
-.cm-header-icon {
-  width:38px; height:38px; border-radius:10px;
-  background: rgba(0,212,255,.1); border:1px solid rgba(0,212,255,.2);
-  display:flex; align-items:center; justify-content:center; font-size:18px;
-}
-.cm-header h3 { margin:0; font-size:15px; font-weight:800; color:#e2e8f0; letter-spacing:.5px; }
-.cm-header-sub { font-size:11px; color:#475569; margin-top:2px; font-family:var(--mono); }
-.cm-close {
-  background: rgba(255,255,255,.05); border:1px solid #1e2736;
-  color:#64748b; font-size:18px; cursor:pointer; line-height:1;
-  width:32px; height:32px; border-radius:8px; display:flex;
-  align-items:center; justify-content:center; transition:all .15s;
-}
-.cm-close:hover { color:#e2e8f0; border-color:#334155; background:rgba(255,255,255,.1); }
-
-/* Body */
-.cm-body { padding: 20px 24px; }
-
-/* Row 1: Buyer Type + Platform */
-.cm-controls-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin-bottom: 16px;
-}
-.cm-control-group { display:flex; flex-direction:column; gap:6px; }
-.cm-control-label {
-  font-family:var(--mono); font-size:9px; letter-spacing:2px;
-  text-transform:uppercase; color:#475569; display:flex; align-items:center; gap:5px;
-}
-
-/* Segmented toggle */
-.cm-seg { display:flex; background:#0d1117; border:1px solid #1e2736; border-radius:10px; padding:3px; gap:3px; }
-.cm-seg-btn {
-  flex:1; padding:7px 10px; border-radius:7px; border:none;
-  background:transparent; color:#5a6a82; font-family:var(--mono);
-  font-size:11px; font-weight:700; cursor:pointer; transition:all .18s;
-  display:flex; align-items:center; justify-content:center; gap:5px; white-space:nowrap;
-}
-.cm-seg-btn:hover { color:#94a3b8; }
-.cm-seg-btn.active {
-  background: #1a2234; color:#e2e8f0;
-  box-shadow: 0 2px 8px rgba(0,0,0,.4);
-}
-.cm-seg-btn.active.buyer-new  { color:#4ade80; }
-.cm-seg-btn.active.buyer-repeat { color:#60a5fa; }
-.cm-seg-btn.active.plat-wa    { color:#25d366; }
-.cm-seg-btn.active.plat-tg    { color:#29b6f6; }
-.cm-seg-btn.active.plat-dc    { color:#7289da; }
-
-/* Language row */
-.cm-lang-row { display:flex; gap:8px; margin-bottom:16px; }
-.cm-lang-btn {
-  flex:1; padding:9px 10px; border-radius:10px;
-  border:2px solid #1e2736; background:#0d1117;
-  color:#5a6a82; font-size:13px; font-weight:700;
-  cursor:pointer; transition:all .15s; display:flex;
-  align-items:center; justify-content:center; gap:6px;
-}
-.cm-lang-btn:hover { border-color:#334155; color:#e2e8f0; }
-.cm-lang-btn.active { border-color:#3b82f6; background:rgba(59,130,246,.1); color:#60a5fa; }
-
-/* Key row */
-.cm-key-row {
-  display:flex; align-items:center; gap:10px;
-  background:#0d1117; border:1px solid #1e2736;
-  border-radius:10px; padding:10px 14px; margin-bottom:16px;
-}
-.cm-key-val {
-  font-family:var(--mono); font-size:12px; color:#a78bfa;
-  flex:1; word-break:break-all;
-}
-.cm-key-badge {
-  font-size:10px; font-weight:700; padding:3px 9px;
-  border-radius:6px; white-space:nowrap; flex-shrink:0;
-}
-.bk-trial    { background:rgba(251,191,36,.12);  color:#fbbf24; }
-.bk-demo     { background:rgba(251,191,36,.12);  color:#fbbf24; }
-.bk-premium  { background:rgba(74,222,128,.12);  color:#4ade80; }
-.bk-lifetime { background:rgba(167,139,250,.12); color:#a78bfa; }
-.bk-warnet   { background:rgba(0,229,204,.12);   color:#00e5cc; }
-
-/* Buyer type banner */
-.cm-buyer-banner {
-  border-radius:10px; padding:10px 14px; margin-bottom:14px;
-  display:flex; align-items:center; gap:10px; font-size:12px;
-  font-family:var(--mono); transition:all .2s;
-}
-.cm-buyer-banner.new-buyer {
-  background:rgba(74,222,128,.06); border:1px solid rgba(74,222,128,.2); color:#4ade80;
-}
-.cm-buyer-banner.repeat-buyer {
-  background:rgba(96,165,250,.06); border:1px solid rgba(96,165,250,.2); color:#60a5fa;
-}
-.cm-buyer-banner-icon { font-size:20px; }
-.cm-buyer-banner-text { flex:1; }
-.cm-buyer-banner-title { font-weight:700; margin-bottom:2px; }
-.cm-buyer-banner-sub { opacity:.7; font-size:10px; }
-
-/* Platform strip */
-.cm-platform-strip {
-  display:flex; gap:6px; margin-bottom:14px; align-items:center;
-}
-.cm-plat-icon {
-  width:28px; height:28px; border-radius:7px; display:flex;
-  align-items:center; justify-content:center; font-size:14px;
-  border:1px solid #1e2736; background:#0d1117; flex-shrink:0;
-}
-.plat-wa   .cm-plat-icon { border-color:rgba(37,211,102,.3); background:rgba(37,211,102,.1); }
-.plat-tg   .cm-plat-icon { border-color:rgba(41,182,246,.3); background:rgba(41,182,246,.1); }
-.plat-dc   .cm-plat-icon { border-color:rgba(114,137,218,.3); background:rgba(114,137,218,.1); }
-.cm-plat-label { font-family:var(--mono); font-size:10px; color:#475569; }
-
-/* WA BUBBLE PREVIEW */
-.cm-wa-preview-wrap {
-  position:relative; border-radius:14px; overflow:hidden;
-  margin-bottom:16px; min-height:120px;
-}
-/* WhatsApp-style wallpaper bg */
-.cm-wa-bg {
-  position:absolute; inset:0;
-  background-color:#0a1014;
-  background-image:
-    radial-gradient(circle at 20% 20%, rgba(0,212,255,.03) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, rgba(0,200,83,.02) 0%, transparent 50%);
-  border:1px solid #1a2030;
-  border-radius:14px;
-}
-/* subtle tiled pattern like WA */
-.cm-wa-bg::before {
-  content:''; position:absolute; inset:0;
-  background-image:
-    url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.01'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-  opacity:.5;
-}
-.cm-wa-inner {
-  position:relative; z-index:1;
-  padding:14px 14px 10px;
-  max-height:320px; overflow-y:auto;
-  scrollbar-width:thin; scrollbar-color:#1e2736 transparent;
-}
-.cm-wa-inner::-webkit-scrollbar { width:3px; }
-.cm-wa-inner::-webkit-scrollbar-thumb { background:#1e2736; border-radius:3px; }
-
-/* WA message bubble — our side (right, green) */
-.wa-bubble-out {
-  display:flex; justify-content:flex-end; margin-bottom:4px;
-}
-.wa-bubble-out-inner {
-  background: #005c4b;
-  border-radius: 12px 2px 12px 12px;
-  padding: 9px 12px 6px;
-  max-width: 88%;
-  position:relative;
-  box-shadow: 0 1px 3px rgba(0,0,0,.4);
-}
-.wa-bubble-out-inner::before {
-  content:''; position:absolute; top:0; right:-6px;
-  border-left:7px solid #005c4b; border-top:7px solid transparent;
-}
-.wa-bubble-text {
-  font-size:12.5px; color:#e9edef; line-height:1.55;
-  white-space:pre-wrap; word-break:break-word;
-  font-family:-apple-system,'Segoe UI',sans-serif;
-}
-.wa-bubble-meta {
-  display:flex; justify-content:flex-end; align-items:center;
-  gap:4px; margin-top:3px;
-}
-.wa-bubble-time { font-size:10px; color:rgba(233,237,239,.6); }
-.wa-tick { font-size:11px; color:#53bdeb; }
-
-/* WA status bar */
-.wa-status-bar {
-  background:#1f2c34; padding:6px 14px 6px 12px;
-  display:flex; align-items:center; gap:10px; border-bottom:1px solid #0d1117;
-}
-.wa-avatar {
-  width:34px; height:34px; border-radius:50%;
-  background:linear-gradient(135deg,#00d4ff,#0099cc);
-  display:flex; align-items:center; justify-content:center;
-  font-size:14px; flex-shrink:0;
-}
-.wa-contact-name { font-size:13px; font-weight:700; color:#e9edef; }
-.wa-contact-sub  { font-size:11px; color:#8696a0; }
-.wa-header-icons { margin-left:auto; display:flex; gap:14px; opacity:.5; }
-
-/* Telegram style override */
-.tg-bubble-out-inner {
-  background: #2b5278 !important;
-  border-radius: 12px 2px 12px 12px !important;
-}
-.tg-bubble-out-inner::before {
-  border-left-color: #2b5278 !important;
-}
-.wa-status-bar.tg-header { background:#17212b; }
-
-/* Discord style */
-.dc-bubble-out-inner {
-  background: #36393f !important;
-  border-radius: 4px 12px 12px 12px !important;
-}
-.dc-bubble-out-inner::before { display:none !important; }
-.wa-status-bar.dc-header { background:#2f3136; }
-
-/* Footer */
-.cm-footer {
-  padding:14px 24px 20px;
-  border-top:1px solid #1a2030;
-  display:flex; gap:10px; align-items:center;
-}
-.cm-copy-btn {
-  flex:1; padding:12px; border-radius:10px; border:none;
-  font-size:13px; font-weight:800; cursor:pointer;
-  transition:all .18s; display:flex; align-items:center;
-  justify-content:center; gap:7px; letter-spacing:.3px;
-  background: var(--accent); color:#000;
-}
-.cm-copy-btn:hover { background:#22dfff; transform:translateY(-1px); box-shadow:0 6px 20px rgba(0,212,255,.3); }
-.cm-copy-btn.copied { background:#16a34a; color:#fff; pointer-events:none; }
-.cm-cancel-btn {
-  padding:12px 18px; border-radius:10px; border:1px solid #1e2736;
-  background:transparent; color:#5a6a82; cursor:pointer;
-  font-size:12px; font-weight:700; transition:all .15s;
-}
-.cm-cancel-btn:hover { background:#0d1117; color:#94a3b8; border-color:#334155; }
-
-@media(max-width:1100px){
-  .stats-grid{grid-template-columns:repeat(2,1fr)}
-  .table-header,.table-row{grid-template-columns:2fr 1fr 1fr .8fr 90px}
-  .col-hwid{display:none}
-}
-@media(max-width:768px){
-  .layout{grid-template-columns:1fr}
-  .sidebar{display:none}
-  .main{padding:16px}
-  .stats-grid{grid-template-columns:repeat(2,1fr);gap:10px}
-  .table-header,.table-row{grid-template-columns:1.5fr 1fr 1fr 80px}
-  .col-hwid,.col-duration{display:none}
-  .cm-controls-row{grid-template-columns:1fr}
-  #copyModalBox{border-radius:16px}
-}
+======================== */
+#copyModal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(6px);z-index:9999;padding:16px;overflow-y:auto;align-items:flex-start;justify-content:center}
+#copyModal.show{display:flex}
+#copyModalBox{background:#0a0e16;border:1px solid #1e2736;border-radius:20px;width:100%;max-width:740px;margin:auto;overflow:hidden;box-shadow:0 32px 100px rgba(0,0,0,.8);animation:cmSlideUp .28s cubic-bezier(.22,1,.36,1)}
+@keyframes cmSlideUp{from{opacity:0;transform:translateY(28px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+.cm-header{padding:18px 24px 14px;border-bottom:1px solid #1a2030;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(135deg,rgba(0,212,255,.04) 0%,transparent 60%)}
+.cm-header-left{display:flex;align-items:center;gap:12px}
+.cm-header-icon{width:38px;height:38px;border-radius:10px;background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.2);display:flex;align-items:center;justify-content:center;font-size:18px}
+.cm-header h3{margin:0;font-size:15px;font-weight:800;color:#e2e8f0;letter-spacing:.5px}
+.cm-header-sub{font-size:11px;color:#475569;margin-top:2px;font-family:var(--mono)}
+.cm-close{background:rgba(255,255,255,.05);border:1px solid #1e2736;color:#64748b;font-size:18px;cursor:pointer;line-height:1;width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.cm-close:hover{color:#e2e8f0;border-color:#334155}
+.cm-body{padding:18px 24px}
+.cm-type-row{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.cm-type-btn{flex:1;min-width:120px;padding:9px 12px;border-radius:10px;border:2px solid #1e2736;background:#0d1117;color:#5a6a82;font-size:12px;font-weight:700;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:6px;text-align:center}
+.cm-type-btn:hover{border-color:#334155;color:#94a3b8}
+.cm-type-btn.active-sale{border-color:var(--v1);background:rgba(34,211,238,.06);color:var(--v1)}
+.cm-type-btn.active-upgrade{border-color:var(--v2);background:rgba(168,85,247,.06);color:var(--v2)}
+.cm-type-btn.active-v2release{border-color:var(--orange);background:rgba(251,146,60,.06);color:var(--orange)}
+.cm-controls-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.cm-control-label{font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#475569;display:block;margin-bottom:5px}
+.cm-seg{display:flex;background:#0d1117;border:1px solid #1e2736;border-radius:8px;padding:3px;gap:3px}
+.cm-seg-btn{flex:1;padding:6px 8px;border-radius:5px;border:none;background:transparent;color:#5a6a82;font-family:var(--mono);font-size:11px;font-weight:700;cursor:pointer;transition:all .18s;display:flex;align-items:center;justify-content:center;gap:4px;white-space:nowrap}
+.cm-seg-btn:hover{color:#94a3b8}.cm-seg-btn.active{background:#1a2234;color:#e2e8f0;box-shadow:0 2px 8px rgba(0,0,0,.4)}
+.cm-seg-btn.active.buyer-new{color:#4ade80}.cm-seg-btn.active.buyer-repeat{color:#60a5fa}
+.cm-seg-btn.active.plat-wa{color:#25d366}.cm-seg-btn.active.plat-tg{color:#29b6f6}.cm-seg-btn.active.plat-dc{color:#7289da}
+.cm-lang-row{display:flex;gap:8px;margin-bottom:12px}
+.cm-lang-btn{flex:1;padding:8px;border-radius:8px;border:2px solid #1e2736;background:#0d1117;color:#5a6a82;font-size:12px;font-weight:700;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:5px}
+.cm-lang-btn:hover{border-color:#334155;color:#e2e8f0}.cm-lang-btn.active{border-color:#3b82f6;background:rgba(59,130,246,.1);color:#60a5fa}
+.cm-key-row{display:flex;align-items:center;gap:10px;background:#0d1117;border:1px solid #1e2736;border-radius:8px;padding:9px 12px;margin-bottom:12px}
+.cm-key-val{font-family:var(--mono);font-size:12px;color:#a78bfa;flex:1;word-break:break-all}
+.cm-key-badge{font-size:9px;font-weight:700;padding:3px 8px;border-radius:5px;white-space:nowrap;flex-shrink:0;font-family:var(--mono)}
+.bk-trial{background:rgba(251,191,36,.12);color:#fbbf24}
+.bk-premium{background:rgba(74,222,128,.12);color:#4ade80}
+.bk-lifetime{background:rgba(167,139,250,.12);color:#a78bfa}
+.bk-lifetime-vip{background:rgba(170,102,255,.2);color:#c084fc;border:1px solid rgba(170,102,255,.4)}
+.bk-warnet{background:rgba(0,229,204,.12);color:#00e5cc}
+.cm-info-strip{border-radius:8px;padding:10px 12px;margin-bottom:10px;display:flex;align-items:center;gap:8px;font-size:11px;font-family:var(--mono)}
+.cm-info-strip.orange{background:rgba(251,146,60,.06);border:1px solid rgba(251,146,60,.2);color:var(--orange)}
+.cm-info-strip.purple{background:rgba(170,102,255,.06);border:1px solid rgba(170,102,255,.2);color:var(--purple)}
+.cm-info-strip.cyan{background:rgba(34,211,238,.05);border:1px solid rgba(34,211,238,.15);color:var(--cyan)}
+.cm-wa-preview-wrap{position:relative;border-radius:12px;overflow:hidden;margin-bottom:14px}
+.cm-wa-bg{position:absolute;inset:0;background-color:#0a1014;border:1px solid #1a2030;border-radius:12px}
+.wa-status-bar{background:#1f2c34;padding:6px 12px;display:flex;align-items:center;gap:8px;border-bottom:1px solid #0d1117}
+.wa-avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#00d4ff,#0099cc);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
+.wa-contact-name{font-size:13px;font-weight:700;color:#e9edef}
+.wa-contact-sub{font-size:10px;color:#8696a0}
+.wa-header-icons{margin-left:auto;display:flex;gap:12px;opacity:.4}
+.cm-wa-inner{position:relative;z-index:1;padding:12px 12px 8px;max-height:300px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:#1e2736 transparent}
+.cm-wa-inner::-webkit-scrollbar{width:3px}.cm-wa-inner::-webkit-scrollbar-thumb{background:#1e2736;border-radius:3px}
+.wa-bubble-out{display:flex;justify-content:flex-end;margin-bottom:4px}
+.wa-bubble-out-inner{background:#005c4b;border-radius:12px 2px 12px 12px;padding:8px 11px 5px;max-width:90%;position:relative;box-shadow:0 1px 3px rgba(0,0,0,.4)}
+.wa-bubble-out-inner::before{content:'';position:absolute;top:0;right:-6px;border-left:7px solid #005c4b;border-top:7px solid transparent}
+.wa-bubble-text{font-size:12px;color:#e9edef;line-height:1.55;white-space:pre-wrap;word-break:break-word;font-family:-apple-system,'Segoe UI',sans-serif}
+.wa-bubble-meta{display:flex;justify-content:flex-end;align-items:center;gap:4px;margin-top:2px}
+.wa-bubble-time{font-size:10px;color:rgba(233,237,239,.6)}.wa-tick{font-size:11px;color:#53bdeb}
+.tg-bubble-out-inner{background:#2b5278 !important;border-radius:12px 2px 12px 12px !important}
+.tg-bubble-out-inner::before{border-left-color:#2b5278 !important}
+.wa-status-bar.tg-header{background:#17212b}
+.dc-bubble-out-inner{background:#36393f !important;border-radius:4px 12px 12px 12px !important}
+.dc-bubble-out-inner::before{display:none !important}
+.wa-status-bar.dc-header{background:#2f3136}
+.cm-footer{padding:12px 24px 18px;border-top:1px solid #1a2030;display:flex;gap:10px;align-items:center}
+.cm-copy-btn{flex:1;padding:11px;border-radius:9px;border:none;font-size:13px;font-weight:800;cursor:pointer;transition:all .18s;display:flex;align-items:center;justify-content:center;gap:7px;background:var(--cyan);color:#000}
+.cm-copy-btn:hover{background:#22dfff;transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,212,255,.3)}
+.cm-copy-btn.copied{background:#16a34a;color:#fff;pointer-events:none}
+.cm-cancel-btn{padding:11px 16px;border-radius:9px;border:1px solid #1e2736;background:transparent;color:#5a6a82;cursor:pointer;font-size:12px;font-weight:700;transition:all .15s}
+.cm-cancel-btn:hover{background:#0d1117;color:#94a3b8}
+@media(max-width:1100px){.stats-grid{grid-template-columns:repeat(3,1fr)}.table-header,.table-row{grid-template-columns:2fr 1fr 1fr .8fr 90px}.col-hwid{display:none}}
+@media(max-width:768px){.layout{grid-template-columns:1fr}.sidebar{display:none}.main{padding:16px}.stats-grid{grid-template-columns:repeat(2,1fr)}.table-header,.table-row{grid-template-columns:1.5fr 1fr 1fr 80px}.col-hwid,.col-duration{display:none}.cm-controls-row{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-
 <div class="layout">
-<!-- SIDEBAR -->
 <aside class="sidebar">
   <div class="logo">
     <div class="logo-title">⚡ DERAS</div>
-    <div class="logo-sub">ADMIN PANEL v3.1</div>
+    <div class="logo-sub">ADMIN PANEL v3.5</div>
   </div>
   <nav>
     <div class="nav-section">Menu</div>
@@ -504,10 +264,9 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
   </div>
 </aside>
 
-<!-- MAIN -->
 <main class="main">
 
-  <!-- PAGE: DASHBOARD -->
+  <!-- DASHBOARD -->
   <div class="page active" id="page-dashboard">
     <div class="topbar">
       <div class="page-title">Dashboard</div>
@@ -519,29 +278,26 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
       </div>
     </div>
     <div class="stats-grid">
-      <div class="stat-card c-blue"><div class="stat-label">Total Lisensi</div><div class="stat-value" id="s-total">—</div><div class="stat-sub">All time</div></div>
-      <div class="stat-card c-green"><div class="stat-label">Aktif</div><div class="stat-value" id="s-active">—</div><div class="stat-sub">Valid & terikat HWID</div></div>
-      <div class="stat-card c-orange"><div class="stat-label">Menunggu Aktivasi</div><div class="stat-value" id="s-unbound">—</div><div class="stat-sub">Belum dipakai</div></div>
-      <div class="stat-card c-red"><div class="stat-label">Expired</div><div class="stat-value" id="s-expired">—</div><div class="stat-sub">Habis masa</div></div>
-      <div class="stat-card c-red"><div class="stat-label">Banned Key</div><div class="stat-value" id="s-banned">—</div><div class="stat-sub">Diblokir admin</div></div>
-      <div class="stat-card c-purple"><div class="stat-label">Lifetime</div><div class="stat-value" id="s-lifetime">—</div><div class="stat-sub">Akses permanen</div></div>
-      <div class="stat-card c-teal"><div class="stat-label">Warnet Aktif</div><div class="stat-value" id="s-warnet">—</div><div class="stat-sub">Mode multi-device</div></div>
-      <div class="stat-card c-blue"><div class="stat-label">HWID Banned</div><div class="stat-value" id="s-bannedHwid">—</div><div class="stat-sub">Device diblokir</div></div>
-      <div class="stat-card c-green"><div class="stat-label">Aktif Hari Ini</div><div class="stat-value" id="s-today">—</div><div class="stat-sub">Last used hari ini</div></div>
+      <div class="stat-card c-blue"><div class="stat-label">Total</div><div class="stat-value" id="s-total">—</div><div class="stat-sub">Semua lisensi</div></div>
+      <div class="stat-card c-green"><div class="stat-label">Aktif</div><div class="stat-value" id="s-active">—</div><div class="stat-sub">Valid & terikat</div></div>
+      <div class="stat-card c-orange"><div class="stat-label">Unbound</div><div class="stat-value" id="s-unbound">—</div><div class="stat-sub">Belum aktivasi</div></div>
+      <div class="stat-card c-red"><div class="stat-label">Expired</div><div class="stat-value" id="s-expired">—</div></div>
+      <div class="stat-card c-red"><div class="stat-label">Banned</div><div class="stat-value" id="s-banned">—</div></div>
+      <div class="stat-card c-purple"><div class="stat-label">👑 VIP Aktif</div><div class="stat-value" id="s-vip">—</div><div class="stat-sub">V1 + V2 akses</div></div>
+      <div class="stat-card c-teal"><div class="stat-label">Warnet</div><div class="stat-value" id="s-warnet">—</div></div>
+      <div class="stat-card c-blue"><div class="stat-label">HWID Ban</div><div class="stat-value" id="s-bannedHwid">—</div></div>
+      <div class="stat-card c-green"><div class="stat-label">Aktif Hari Ini</div><div class="stat-value" id="s-today">—</div></div>
     </div>
     <div style="display:flex;gap:12px;flex-wrap:wrap">
       <button class="btn btn-accent" onclick="showPage('generate')">
         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
         Generate Key Baru
       </button>
-      <button class="btn btn-ghost" onclick="showPage('licenses')">
-        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
-        Lihat Semua Lisensi
-      </button>
+      <button class="btn btn-ghost" onclick="showPage('licenses')">Lihat Semua Lisensi</button>
     </div>
   </div>
 
-  <!-- PAGE: LICENSES -->
+  <!-- LICENSES -->
   <div class="page" id="page-licenses">
     <div class="topbar">
       <div class="page-title">Manajemen Lisensi</div>
@@ -561,6 +317,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
         <option value="banned">Banned</option>
         <option value="unbound">Belum Aktif</option>
         <option value="warnet">⚡ Warnet</option>
+        <option value="vip">👑 VIP</option>
       </select>
       <select class="filter-select" id="filterDuration" onchange="resetAndLoad()">
         <option value="all">Semua Durasi</option>
@@ -570,31 +327,36 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
         <option value="trial_6hours">Trial 6 Jam</option>
         <option value="demo_1min">Demo 1 Menit</option>
       </select>
-      <button class="btn btn-ghost" onclick="loadLicenses()" title="Refresh">
-        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+      <select class="filter-select" id="filterTier" onchange="resetAndLoad()">
+        <option value="all">Semua Tier</option>
+        <option value="standard">Standard</option>
+        <option value="vip">👑 VIP</option>
+      </select>
+      <button class="btn btn-ghost" onclick="loadLicenses()">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:14px;height:14px"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
       </button>
     </div>
     <div class="table-wrap">
       <div class="table-header">
         <div>License Key / Catatan</div><div>Status</div>
-        <div class="col-hwid">HWID</div><div class="col-duration">Durasi</div>
+        <div>Script Akses</div><div class="col-duration">Durasi</div>
         <div>Sisa Waktu</div><div style="text-align:right">Aksi</div>
       </div>
       <div id="licenseTableBody"><div class="loading"><span class="spinner"></span>Memuat data...</div></div>
     </div>
     <div class="pagination">
-      <div class="page-info" id="pageInfo">— data</div>
+      <div class="page-info" id="pageInfo">—</div>
       <div class="page-btns" id="pageBtns"></div>
     </div>
   </div>
 
-  <!-- PAGE: GENERATE -->
+  <!-- GENERATE -->
   <div class="page" id="page-generate">
     <div class="topbar"><div class="page-title">Generate License Key</div></div>
     <div class="gen-card">
       <div class="form-group">
         <label class="form-label">Durasi Lisensi</label>
-        <select class="form-select" id="genDuration">
+        <select class="form-select" id="genDuration" onchange="updateGenOptions()">
           <option value="lifetime">🔮 Lifetime — Permanent</option>
           <option value="1month" selected>📅 1 Bulan (30 hari)</option>
           <option value="2weeks">📅 2 Minggu (14 hari)</option>
@@ -602,90 +364,102 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
           <option value="demo_1min">⚡ Demo 1 Menit</option>
         </select>
       </div>
+
+      <!-- Script selection — always visible -->
+      <div class="form-group">
+        <label class="form-label">Script Yang Diizinkan</label>
+        <div id="scriptOptions">
+          <div class="tier-option active-v1" id="opt-v1" onclick="selectScript('rapid_click')">
+            <div class="tier-option-title" style="color:var(--v1)">🔷 Script V1 — Rapid Click Only</div>
+            <div class="tier-option-desc">Custom delay, HWID Lock. Ringan &amp; simpel.</div>
+          </div>
+          <div class="tier-option" id="opt-v2" onclick="selectScript('macro_full')">
+            <div class="tier-option-title" style="color:var(--v2)">🔶 Script V2 — Smart Macro</div>
+            <div class="tier-option-desc">Rapid Click + Smart Mode + Overlay + Load/Save Config + Multi-language.</div>
+          </div>
+          <!-- VIP option — only for lifetime -->
+          <div class="tier-option" id="opt-vip" onclick="selectScript('vip')" style="display:none">
+            <div class="tier-option-title" style="color:var(--purple)">👑 VIP — Script V1 + V2 (Lifetime VIP)</div>
+            <div class="tier-option-desc">Akses ke dua script sekaligus. Saat V3 rilis, otomatis termasuk.</div>
+          </div>
+        </div>
+        <input type="hidden" id="genScriptChoice" value="rapid_click">
+      </div>
+
       <div class="form-group">
         <label class="form-label">Catatan / Nama Buyer (Opsional)</label>
-        <input class="form-input" id="genNote" placeholder="contoh: Budi - WA 0812xxx - @telegram">
+        <input class="form-input" id="genNote" placeholder="contoh: Budi - WA 0812xxx">
       </div>
       <div class="form-group">
         <label class="checkbox-label">
           <input type="checkbox" id="genWarnet">
           <span>⚡ Mode Warnet (multi-device, sesi-based)</span>
         </label>
-        <div class="teal-box" style="margin-top:8px">
-          ⚡ Warnet Mode: Siapapun bisa pakai key ini asalkan tidak ada yang sedang aktif. Timer berjalan terus, tapi HWID tidak terkunci permanen.
-        </div>
       </div>
-      <div class="info-box">ℹ️ Durasi dihitung MULAI saat pertama kali key divalidasi oleh user — bukan saat di-generate.</div>
+      <div class="info-box">ℹ️ Timer mulai saat pertama kali key divalidasi oleh user.</div>
       <button class="btn btn-accent" style="width:100%;justify-content:center;padding:12px" onclick="generateKey()">
-        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:14px;height:14px"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
         GENERATE KEY
       </button>
       <div id="genResult" style="margin-top:20px;display:none">
         <label class="form-label">✅ Key Berhasil Dibuat</label>
         <div class="result-box" id="genResultKey" onclick="copyKey(this)"></div>
         <div class="result-meta" id="genResultMeta"></div>
+        <button class="btn btn-ghost" style="width:100%;justify-content:center;margin-top:12px" id="genCopyTemplate" onclick="">💬 Buat Template Chat</button>
       </div>
     </div>
   </div>
 
-  <!-- PAGE: BANNED HWID -->
+  <!-- BANNED HWID -->
   <div class="page" id="page-banned">
     <div class="topbar">
       <div class="page-title">Banned HWID</div>
       <div class="topbar-right">
-        <button class="btn btn-ghost" onclick="loadBannedHwids()">
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-          Refresh
-        </button>
+        <button class="btn btn-ghost" onclick="loadBannedHwids()">Refresh</button>
       </div>
     </div>
-    <div class="info-box" style="margin-bottom:20px">ℹ️ HWID yang di-ban tidak bisa digunakan di device manapun, meskipun dengan key yang berbeda.</div>
+    <div class="info-box" style="margin-bottom:20px">ℹ️ HWID yang di-ban tidak bisa digunakan di device manapun, meskipun dengan key berbeda.</div>
     <div id="bannedHwidList" class="hwid-list"><div class="loading"><span class="spinner"></span>Memuat...</div></div>
   </div>
 
 </main>
 </div>
 
-<!-- STANDARD MODAL -->
-<div class="modal-overlay" id="modalOverlay">
-  <div class="modal" id="modalContent"></div>
-</div>
-
-<!-- TOAST -->
+<div class="modal-overlay" id="modalOverlay"><div class="modal" id="modalContent"></div></div>
 <div class="toast-container" id="toastContainer"></div>
 
-<!-- ============================================================
-     COPY TEMPLATE MODAL
-     ============================================================ -->
+<!-- COPY TEMPLATE MODAL -->
 <div id="copyModal">
   <div id="copyModalBox">
-
-    <!-- Header -->
     <div class="cm-header">
       <div class="cm-header-left">
-        <div class="cm-header-icon">📋</div>
-        <div>
-          <h3>Kirim Template Chat</h3>
-          <div class="cm-header-sub" id="cmHeaderSub">—</div>
-        </div>
+        <div class="cm-header-icon">💬</div>
+        <div><h3>Template Chat</h3><div class="cm-header-sub" id="cmHeaderSub">—</div></div>
       </div>
       <button class="cm-close" onclick="closeCopyModal()">✕</button>
     </div>
-
-    <!-- Body -->
     <div class="cm-body">
+      <!-- Template type selector -->
+      <label class="cm-control-label">Jenis Template</label>
+      <div class="cm-type-row" id="cmTypeRow">
+        <button class="cm-type-btn active-sale" id="ttype-sale" onclick="setCmType('sale')">🛒 Penjualan / Aktivasi</button>
+        <button class="cm-type-btn" id="ttype-upgrade" onclick="setCmType('upgrade')">👑 Upgrade ke VIP</button>
+        <button class="cm-type-btn" id="ttype-v2release" onclick="setCmType('v2release')">🚀 Notif V2 Rilis</button>
+      </div>
 
-      <!-- Controls: Buyer Type + Platform -->
+      <!-- Info strip based on type -->
+      <div id="cmInfoStrip" class="cm-info-strip cyan" style="display:none"></div>
+
       <div class="cm-controls-row">
-        <div class="cm-control-group">
-          <div class="cm-control-label">👤 Tipe Buyer</div>
+        <div>
+          <span class="cm-control-label">👤 Buyer</span>
           <div class="cm-seg" id="buyerSeg">
-            <button class="cm-seg-btn buyer-new active" onclick="setBuyer('new')">🆕 Buyer Baru</button>
-            <button class="cm-seg-btn buyer-repeat" onclick="setBuyer('repeat')">🔄 Repeat Buyer</button>
+            <button class="cm-seg-btn buyer-new active" onclick="setBuyer('new')">🆕 Baru</button>
+            <button class="cm-seg-btn buyer-repeat" onclick="setBuyer('repeat')">🔄 Repeat</button>
           </div>
         </div>
-        <div class="cm-control-group">
-          <div class="cm-control-label">💬 Platform</div>
+        <div>
+          <span class="cm-control-label">💬 Platform</span>
           <div class="cm-seg" id="platSeg">
             <button class="cm-seg-btn plat-wa active" onclick="setPlatform('wa')">📱 WA</button>
             <button class="cm-seg-btn plat-tg" onclick="setPlatform('tg')">✈️ TG</button>
@@ -693,86 +467,59 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
           </div>
         </div>
       </div>
-
-      <!-- Language -->
       <div class="cm-lang-row">
         <button class="cm-lang-btn active" id="btnLangID" onclick="setLang('id')">🇮🇩 Indonesia</button>
         <button class="cm-lang-btn" id="btnLangEN" onclick="setLang('en')">🇬🇧 English</button>
       </div>
-
-      <!-- Key display -->
       <div class="cm-key-row">
         <span class="cm-key-val" id="cmKeyVal">—</span>
         <span class="cm-key-badge" id="cmKeyBadge">—</span>
       </div>
-
-      <!-- Buyer type banner -->
-      <div class="cm-buyer-banner new-buyer" id="cmBuyerBanner">
-        <div class="cm-buyer-banner-icon">🆕</div>
-        <div class="cm-buyer-banner-text">
-          <div class="cm-buyer-banner-title" id="cmBuyerTitle">Buyer Baru</div>
-          <div class="cm-buyer-banner-sub" id="cmBuyerSub">Template dengan sambutan + penjelasan setup lengkap</div>
-        </div>
-      </div>
-
-      <!-- Platform strip -->
-      <div class="cm-platform-strip" id="cmPlatStrip">
-        <div class="cm-plat-icon">📱</div>
-        <span class="cm-plat-label" id="cmPlatLabel">WhatsApp — format plain text, emoji friendly</span>
-      </div>
-
-      <!-- WA Bubble Preview -->
       <div class="cm-wa-preview-wrap">
         <div class="cm-wa-bg"></div>
-
-        <!-- Chat header (platform-styled) -->
         <div class="wa-status-bar" id="cmChatHeader">
-          <div class="wa-avatar" id="cmChatAvatar">🌧️</div>
+          <div class="wa-avatar">🌧️</div>
           <div>
-            <div class="wa-contact-name" id="cmChatName">Heavy Rain Macro</div>
+            <div class="wa-contact-name">Heavy Rain Macro</div>
             <div class="wa-contact-sub" id="cmChatSub">online</div>
           </div>
-          <div class="wa-header-icons">
-            <span>📞</span><span>⋮</span>
-          </div>
+          <div class="wa-header-icons"><span>📞</span><span>⋮</span></div>
         </div>
-
-        <!-- Bubble area -->
-        <div class="cm-wa-inner" id="cmBubbleArea">
-          <!-- rendered dynamically -->
-        </div>
+        <div class="cm-wa-inner" id="cmBubbleArea"></div>
       </div>
-
-    </div><!-- /cm-body -->
-
-    <!-- Footer -->
+    </div>
     <div class="cm-footer">
-      <button class="cm-copy-btn" id="cmCopyBtn" onclick="doCopyTemplate()">
-        📋 Copy Template
-      </button>
+      <button class="cm-copy-btn" id="cmCopyBtn" onclick="doCopyTemplate()">📋 Copy Template</button>
       <button class="cm-cancel-btn" onclick="closeCopyModal()">Tutup</button>
     </div>
-
   </div>
 </div>
 
 <script>
 // ==========================================
-// STATE
+// CONSTANTS
 // ==========================================
-let currentPage = 1, totalPages = 1, searchTimer = null, _activeKey = null;
+const DL_V1='https://hujanderaspbasahkuyup.vercel.app/download?script=v1';
+const DL_V2='https://hujanderaspbasahkuyup.vercel.app/download?script=v2';
+const DL_BASE='https://hujanderaspbasahkuyup.vercel.app/download';
 
 // ==========================================
-// NAVIGATION
+// STATE
 // ==========================================
-function showPage(name) {
+let currentPage=1,totalPages=1,searchTimer=null,_activeKey=null;
+let _genKey='',_genDuration='',_genIsWarnet=false,_genScriptType='rapid_click';
+let _cmKey='',_cmDuration='',_cmWarnet=false,_cmAllowedScripts=[];
+let _cmLang='id',_cmBuyer='new',_cmPlat='wa',_cmType='sale';
+
+// ==========================================
+// NAV
+// ==========================================
+function showPage(name){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-  const page=document.getElementById('page-'+name);
-  if(page)page.classList.add('active');
+  document.getElementById('page-'+name)?.classList.add('active');
   const nm={dashboard:0,licenses:1,generate:2,banned:3};
-  const ni=document.querySelectorAll('.nav-item');
-  if(nm[name]!==undefined)ni[nm[name]]?.classList.add('active');
+  document.querySelectorAll('.nav-item')[nm[name]||0]?.classList.add('active');
   if(name==='dashboard')refreshStats();
   if(name==='licenses'){currentPage=1;loadLicenses();}
   if(name==='banned')loadBannedHwids();
@@ -782,34 +529,26 @@ function showPage(name) {
 // API
 // ==========================================
 async function api(method,url,body){
-  try{
-    const opts={method,headers:{'Content-Type':'application/json'}};
-    if(body!==undefined)opts.body=JSON.stringify(body);
-    const res=await fetch(url,opts);
-    return await res.json();
-  }catch(e){toast('Network error: '+e.message,'error');return{success:false,message:e.message};}
-}
-async function apiDelete(url){
-  try{const res=await fetch(url,{method:'DELETE',headers:{'Content-Type':'application/json'}});return await res.json();}
+  try{const opts={method,headers:{'Content-Type':'application/json'}};if(body!==undefined)opts.body=JSON.stringify(body);const res=await fetch(url,opts);return await res.json();}
   catch(e){toast('Network error: '+e.message,'error');return{success:false,message:e.message};}
 }
+async function apiDelete(url){try{const res=await fetch(url,{method:'DELETE',headers:{'Content-Type':'application/json'}});return await res.json();}catch(e){toast('Error','error');return{success:false};}}
 
 // ==========================================
 // STATS
 // ==========================================
 async function refreshStats(){
-  try{
-    const d=await api('GET','/admin/api/stats');
-    document.getElementById('s-total').textContent=d.total??'—';
-    document.getElementById('s-active').textContent=d.active??'—';
-    document.getElementById('s-expired').textContent=d.expired??'—';
-    document.getElementById('s-banned').textContent=d.banned??'—';
-    document.getElementById('s-unbound').textContent=d.unbound??'—';
-    document.getElementById('s-lifetime').textContent=d.lifetime??'—';
-    document.getElementById('s-bannedHwid').textContent=d.banned_hwids??'—';
-    document.getElementById('s-today').textContent=d.activated_today??'—';
-    document.getElementById('s-warnet').textContent=d.warnet??'—';
-  }catch(e){console.error(e);}
+  const d=await api('GET','/admin/api/stats');
+  if(!d)return;
+  document.getElementById('s-total').textContent=d.total??'—';
+  document.getElementById('s-active').textContent=d.active??'—';
+  document.getElementById('s-expired').textContent=d.expired??'—';
+  document.getElementById('s-banned').textContent=d.banned??'—';
+  document.getElementById('s-unbound').textContent=d.unbound??'—';
+  document.getElementById('s-vip').textContent=d.vip??'—';
+  document.getElementById('s-bannedHwid').textContent=d.banned_hwids??'—';
+  document.getElementById('s-today').textContent=d.activated_today??'—';
+  document.getElementById('s-warnet').textContent=d.warnet??'—';
 }
 
 // ==========================================
@@ -824,16 +563,14 @@ async function loadLicenses(){
   const search=document.getElementById('searchInput').value;
   const status=document.getElementById('filterStatus').value;
   const duration=document.getElementById('filterDuration').value;
-  const params=new URLSearchParams({search,status,duration,page:currentPage,per_page:25});
+  const tier=document.getElementById('filterTier').value;
+  const params=new URLSearchParams({search,status,duration,tier,page:currentPage,per_page:25});
   const data=await api('GET',`/admin/api/licenses?${params}`);
-  if(!data||data.error){body.innerHTML='<div class="empty-state">Gagal memuat data</div>';return;}
+  if(!data||data.error){body.innerHTML='<div class="empty-state">Gagal memuat</div>';return;}
   totalPages=data.pages||1;
-  document.getElementById('pageInfo').textContent=`${data.total} lisensi • halaman ${data.page}/${totalPages}`;
+  document.getElementById('pageInfo').textContent=`${data.total} lisensi • hal ${data.page}/${totalPages}`;
   renderPagination();
-  if(!data.licenses||!data.licenses.length){
-    body.innerHTML=`<div class="empty-state"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Tidak ada lisensi ditemukan</div>`;
-    return;
-  }
+  if(!data.licenses||!data.licenses.length){body.innerHTML=`<div class="empty-state"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Tidak ada lisensi</div>`;return;}
   body.innerHTML=data.licenses.map(l=>buildRow(l)).join('');
 }
 
@@ -843,9 +580,17 @@ function buildRow(l){
   else if(!l.is_active)sb=`<span class="badge badge-expired"><span class="badge-dot"></span>EXPIRED</span>`;
   else if(l.is_unbound)sb=`<span class="badge badge-unbound"><span class="badge-dot"></span>UNBOUND</span>`;
   else if(l.is_warnet&&l.warnet_active_hwid)sb=`<span class="badge badge-warnet-busy"><span class="badge-dot"></span>WARNET BUSY</span>`;
-  else if(l.is_warnet)sb=`<span class="badge badge-warnet"><span class="badge-dot"></span>WARNET FREE</span>`;
+  else if(l.is_warnet)sb=`<span class="badge badge-warnet"><span class="badge-dot"></span>WARNET</span>`;
   else sb=`<span class="badge badge-active"><span class="badge-dot"></span>AKTIF</span>`;
-  const db=l.duration_type==='lifetime'?`<span class="badge badge-lifetime">LIFETIME</span>`:`<span class="dur-tag">${l.duration_type}</span>`;
+
+  const isVip=l.license_tier==='vip';
+  const scripts=l.allowed_scripts||['rapid_click'];
+  const scriptBadges=scripts.map(s=>{
+    if(s==='rapid_click')return `<span class="sbadge sbadge-v1">V1</span>`;
+    if(s==='macro_full')return `<span class="sbadge sbadge-v2">V2</span>`;
+    return `<span class="sbadge" style="background:rgba(251,146,60,.1);border-color:rgba(251,146,60,.3);color:var(--v3)">${s}</span>`;
+  }).join('');
+
   let tl='—',tc='var(--muted)';
   if(l.is_active&&!l.is_unbound){
     if(l.duration_type==='lifetime'){tl='∞';tc='var(--purple)';}
@@ -854,33 +599,32 @@ function buildRow(l){
   }
   const sk=l.license_key.length>26?l.license_key.substring(0,26)+'…':l.license_key;
   const ek=l.license_key.replace(/'/g,"\\'");
-  const ib=l.is_banned?'true':'false',ia=l.is_active?'true':'false';
-  const iw=l.is_warnet?'true':'false',hh=l.hwid_full?'true':'false';
-  const dt=l.duration_type;
-  const wt=l.is_warnet?`<span style="color:var(--teal);font-size:9px;background:rgba(0,229,204,.1);border:1px solid rgba(0,229,204,.2);padding:1px 5px;border-radius:3px;margin-left:4px">⚡WARNET</span>`:'';
+  const ib=l.is_banned,ia=l.is_active,iw=l.is_warnet,hh=!!l.hwid_full;
+  const dt=l.duration_type,tier=l.license_tier||'standard';
+  const allowedJSON=JSON.stringify(scripts).replace(/"/g,"'");
+
+  const wt=l.is_warnet?`<span style="color:var(--teal);font-size:9px;background:rgba(0,229,204,.1);border:1px solid rgba(0,229,204,.2);padding:1px 5px;border-radius:3px;margin-left:4px">⚡W</span>`:'';
+  const vipTag=isVip?`<span style="color:var(--purple);font-size:9px;background:rgba(170,102,255,.1);border:1px solid rgba(170,102,255,.2);padding:1px 5px;border-radius:3px;margin-left:3px">👑</span>`:'';
+
+  const canUpgrade=(dt==='lifetime'&&tier!=='vip'&&!l.is_banned&&l.is_active);
+  const canManageTier=(dt==='lifetime'&&!l.is_banned);
+
   return `<div class="table-row ${l.is_banned?'is-banned':''}">
     <div>
-      <div class="key-text" title="${l.license_key}" onclick="showDetail('${ek}')">${sk}${wt}</div>
+      <div class="key-text" title="${l.license_key}" onclick="showDetail('${ek}')">${sk}${wt}${vipTag}</div>
       ${l.note?`<div class="key-meta">📝 ${escHtml(l.note)}</div>`:''}
       ${l.last_used?`<div class="key-meta">🕐 ${l.last_used.substring(0,16).replace('T',' ')}</div>`:''}
-      ${l.is_warnet&&l.warnet_active_hwid?`<div class="key-meta" style="color:var(--orange)">🔒 Sesi aktif</div>`:''}
     </div>
     <div>${sb}</div>
-    <div class="col-hwid" style="font-family:var(--mono);font-size:11px;color:var(--muted)">${l.hwid_short?l.hwid_short:'<span style="opacity:.4">Unbound</span>'}</div>
-    <div class="col-duration">${db}</div>
+    <div>${scriptBadges}${isVip?'<br><span style="font-family:var(--mono);font-size:9px;color:var(--purple)">👑VIP</span>':''}</div>
+    <div class="col-duration"><span class="dur-tag">${dt}</span></div>
     <div style="font-family:var(--mono);font-size:12px;color:${tc}">${tl}</div>
     <div class="action-group">
-      <button class="icon-btn" title="Copy Template Chat" onclick="openCopyModal('${ek}','${dt}',${iw})">
+      <button class="icon-btn" title="Template Chat" onclick="openCopyModal('${ek}','${dt}',${iw},'${tier}',${JSON.stringify(scripts).replace(/"/g,'&quot;')})">
         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
       </button>
-      <button class="icon-btn" title="Detail" onclick="showDetail('${ek}')">
-        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
-      </button>
-      <button class="icon-btn" title="Activity Logs" onclick="showLogs('${ek}')">
-        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
-      </button>
-      ${l.is_warnet&&l.warnet_active_hwid?`<button class="icon-btn teal" title="Force Logout" onclick="doWarnetForceLogout('${ek}')"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg></button>`:''}
-      <button class="icon-btn" title="Aksi" onclick="showActions('${ek}',${ib},${ia},'${dt}',${hh},${iw})">
+      ${canUpgrade?`<button class="icon-btn purple" title="Upgrade ke VIP" onclick="showTierModal('${ek}','standard',${JSON.stringify(scripts).replace(/"/g,'&quot;')})"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg></button>`:''}
+      <button class="icon-btn" title="Aksi" onclick="showActions('${ek}',${ib},${ia},'${dt}',${hh},${iw},'${tier}',${JSON.stringify(scripts).replace(/"/g,'&quot;')})">
         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"/></svg>
       </button>
     </div>
@@ -888,7 +632,6 @@ function buildRow(l){
 }
 
 function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-
 function renderPagination(){
   const c=document.getElementById('pageBtns');
   let h=`<button class="page-btn" ${currentPage===1?'disabled':''} onclick="gotoPage(${currentPage-1})">‹</button>`;
@@ -902,39 +645,85 @@ function renderPagination(){
 function gotoPage(p){if(p<1||p>totalPages)return;currentPage=p;loadLicenses();}
 
 // ==========================================
-// DETAIL / LOGS / ACTIONS
+// TIER MODAL
+// ==========================================
+function showTierModal(key,currentTier,scripts){
+  _activeKey=key;
+  const isVip=currentTier==='vip';
+  const scriptsArr=typeof scripts==='string'?JSON.parse(scripts):scripts;
+  openModal(`<div class="modal-title" style="color:var(--purple)">
+    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
+    Kelola Tier — 👑 VIP
+  </div>
+  <div class="modal-sub">${escHtml(key)}</div>
+  <div class="vip-box">
+    <div class="vip-box-title">👑 Apa itu Lifetime VIP?</div>
+    <div style="font-family:var(--mono);font-size:11px;color:var(--muted);line-height:1.7">
+      Tier VIP = akses ke <strong style="color:var(--purple)">Script V1 + Script V2</strong> sekaligus.<br>
+      • <span style="color:var(--v1)">Script V1</span> — Rapid Click Only (live)<br>
+      • <span style="color:var(--v2)">Script V2</span> — Smart Mode, Overlay, Load/Save (live)<br>
+      • Script V3 — All-in-One (coming soon) — otomatis include<br><br>
+      User tidak perlu beli ulang saat update baru rilis.
+    </div>
+  </div>
+  <div style="margin-bottom:12px;font-family:var(--mono);font-size:11px;color:var(--muted)">
+    Script saat ini: ${(scriptsArr||[]).map(s=>s==='rapid_click'?'<span style="color:var(--v1)">V1</span>':'<span style="color:var(--v2)">V2</span>').join(' + ')}
+  </div>
+  ${isVip
+    ?`<div class="warn-box" style="margin-bottom:12px">⚠️ Downgrade akan mencabut akses salah satu script.</div>
+      <button class="btn btn-ghost" style="width:100%;justify-content:center" onclick="doSetTier('standard')">⬇️ Downgrade ke Standard (V1 saja)</button>`
+    :`<button class="btn btn-vip" style="width:100%;justify-content:center;padding:12px;font-size:13px" onclick="doSetTier('vip')">👑 Upgrade ke Lifetime VIP (V1 + V2)</button>`
+  }
+  <div class="modal-actions" style="margin-top:12px">
+    <button class="btn btn-ghost" onclick="closeModal()">Batal</button>
+  </div>`);
+}
+
+async function doSetTier(newTier){
+  const key=_activeKey;if(!key)return;
+  const label=newTier==='vip'?'Upgrade ke VIP':'Downgrade ke Standard';
+  if(!confirm(`${label}?\n\nKey: ${key}`))return;
+  const data=await api('POST',`/admin/api/licenses/${encodeURIComponent(key)}/set-tier`,{tier:newTier});
+  toast(data.message||(data.success?label+' berhasil':'Gagal'),data.success?'success':'error');
+  if(data.success){closeModal();loadLicenses();refreshStats();}
+}
+
+// ==========================================
+// DETAIL + LOGS + ACTIONS
 // ==========================================
 async function showDetail(key){
   _activeKey=key;
-  const params=new URLSearchParams({search:key,status:'all',duration:'all',page:1,per_page:1});
+  const params=new URLSearchParams({search:key,status:'all',duration:'all',tier:'all',page:1,per_page:1});
   const data=await api('GET',`/admin/api/licenses?${params}`);
   const l=data.licenses&&data.licenses[0];
   if(!l){toast('Data tidak ditemukan','error');return;}
   const st=l.is_banned?'BANNED':!l.is_active?'EXPIRED/INACTIVE':l.is_unbound?'UNBOUND':'AKTIF';
+  const isVip=l.license_tier==='vip';
+  const scripts=l.allowed_scripts||['rapid_click'];
   let wb='';
   if(l.is_warnet){
-    if(l.warnet_active_hwid){
-      wb=`<div class="warnet-session-box"><div class="warnet-session-title">⚡ Sesi Warnet Aktif</div><div class="warnet-session-hwid">${escHtml(l.warnet_active_hwid)}</div><div class="warnet-session-meta">Mulai: ${(l.warnet_session_start||'—').substring(0,19).replace('T',' ')}</div><button class="btn btn-teal" style="margin-top:8px;width:100%;justify-content:center" onclick="doWarnetForceLogout('${escHtml(key)}')">🔌 Force Logout</button></div>`;
-    }else{wb=`<div class="teal-box" style="margin-bottom:12px">⚡ Mode Warnet — Tidak ada sesi aktif.</div>`;}
+    if(l.warnet_active_hwid){wb=`<div class="warnet-session-box"><div class="warnet-session-title">⚡ Sesi Warnet Aktif</div><div style="font-family:var(--mono);font-size:11px;color:var(--text);word-break:break-all">${escHtml(l.warnet_active_hwid)}</div><div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:4px">Mulai: ${(l.warnet_session_start||'—').substring(0,19).replace('T',' ')}</div><button class="btn btn-teal" style="margin-top:8px;width:100%;justify-content:center" onclick="doWarnetForceLogout('${escHtml(key)}')">🔌 Force Logout</button></div>`;}
+    else{wb=`<div class="teal-box" style="margin-bottom:12px">⚡ Mode Warnet — Tidak ada sesi aktif.</div>`;}
   }
-  openModal(`<div class="modal-title"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/></svg>Detail Lisensi ${l.is_warnet?'<span class="badge badge-warnet" style="margin-left:8px">⚡ WARNET</span>':''}</div>
+  if(isVip){wb+=`<div class="vip-box"><div class="vip-box-title">👑 Lifetime VIP</div><div style="font-family:var(--mono);font-size:10px;color:var(--muted)">Scripts: ${scripts.join(', ')}</div></div>`;}
+  openModal(`<div class="modal-title"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/></svg>Detail Lisensi</div>
   ${wb}
   <div class="detail-row"><span class="detail-key">Key</span><span class="detail-val" style="font-size:10px">${escHtml(l.license_key)}</span></div>
   <div class="detail-row"><span class="detail-key">Status</span><span class="detail-val">${st}</span></div>
-  <div class="detail-row"><span class="detail-key">Mode</span><span class="detail-val" style="color:${l.is_warnet?'var(--teal)':'var(--muted)'}">${l.is_warnet?'⚡ Warnet':'🔒 Normal'}</span></div>
+  <div class="detail-row"><span class="detail-key">Tier</span><span class="detail-val" style="color:${isVip?'var(--purple)':'var(--muted)'}">${isVip?'👑 VIP':'Standard'}</span></div>
+  <div class="detail-row"><span class="detail-key">Scripts</span><span class="detail-val" style="font-size:10px">${scripts.map(s=>s==='rapid_click'?'<span style="color:var(--v1)">V1 (Rapid Click)</span>':'<span style="color:var(--v2)">V2 (Smart Macro)</span>').join(', ')}</span></div>
   <div class="detail-row"><span class="detail-key">Durasi</span><span class="detail-val">${l.duration_type}</span></div>
   <div class="detail-row"><span class="detail-key">Created</span><span class="detail-val">${(l.created_at||'—').substring(0,19).replace('T',' ')}</span></div>
-  <div class="detail-row"><span class="detail-key">Expires</span><span class="detail-val">${l.expires_at?l.expires_at.substring(0,19).replace('T',' '):l.is_unbound?'<span style="color:var(--orange)">Belum dimulai</span>':'Never'}</span></div>
+  <div class="detail-row"><span class="detail-key">Expires</span><span class="detail-val">${l.expires_at?l.expires_at.substring(0,19).replace('T',' '):l.is_unbound?'Belum dimulai':'Never'}</span></div>
   <div class="detail-row"><span class="detail-key">Last Used</span><span class="detail-val">${l.last_used?l.last_used.substring(0,19).replace('T',' '):'—'}</span></div>
-  <div class="detail-row"><span class="detail-key">HWID Hash</span><span class="detail-val" style="font-size:10px">${l.hwid_full||'—'}</span></div>
+  <div class="detail-row"><span class="detail-key">HWID</span><span class="detail-val" style="font-size:10px">${l.hwid_full||'—'}</span></div>
   <div class="detail-row"><span class="detail-key">Catatan</span><span class="detail-val">${escHtml(l.note||'—')}</span></div>
   ${l.is_banned?`<div class="detail-row"><span class="detail-key">Alasan Ban</span><span class="detail-val" style="color:var(--red)">${escHtml(l.ban_reason||'—')}</span></div>`:''}
-  <div class="detail-row"><span class="detail-key">Logs</span><span class="detail-val">${l.log_count} entri</span></div>
   <div class="modal-actions">
     <button class="btn btn-ghost" onclick="closeModal()">Tutup</button>
     <button class="btn btn-ghost" onclick="showLogs('${escHtml(key)}')">📋 Log</button>
-    <button class="btn btn-teal" onclick="closeModal();openCopyModal('${escHtml(key)}','${l.duration_type}',${!!l.is_warnet})">💬 Template Chat</button>
-    <button class="btn btn-accent" onclick="showActions('${escHtml(key)}',${l.is_banned},${l.is_active},'${l.duration_type}',${!!l.hwid_full},${!!l.is_warnet})">⚙️ Aksi</button>
+    <button class="btn btn-teal" onclick="closeModal();openCopyModal('${escHtml(key)}','${l.duration_type}',${!!l.is_warnet},'${l.license_tier||'standard'}',${JSON.stringify(scripts)})">💬 Template</button>
+    <button class="btn btn-accent" onclick="showActions('${escHtml(key)}',${l.is_banned},${l.is_active},'${l.duration_type}',${!!l.hwid_full},${!!l.is_warnet},'${l.license_tier||'standard'}',${JSON.stringify(scripts)})">⚙️ Aksi</button>
   </div>`);
 }
 
@@ -942,7 +731,7 @@ async function showLogs(key){
   _activeKey=key;
   openModal(`<div class="modal-title"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>Activity Logs</div>
   <div class="modal-sub">${escHtml(key)}</div>
-  <div class="log-list" id="logListInner"><div class="loading"><span class="spinner"></span>Memuat log...</div></div>
+  <div class="log-list" id="logListInner"><div class="loading"><span class="spinner"></span>Memuat...</div></div>
   <div class="modal-actions"><button class="btn btn-ghost" onclick="closeModal()">Tutup</button></div>`);
   const data=await api('GET',`/admin/api/licenses/${encodeURIComponent(key)}/logs`);
   const logs=data.logs||[];
@@ -955,61 +744,87 @@ async function showLogs(key){
   }).join('');
 }
 
-function showActions(key,isBanned,isActive,durationType,hasHwid,isWarnet){
+function showActions(key,isBanned,isActive,durationType,hasHwid,isWarnet,tier,scripts){
   _activeKey=key;
+  const isVip=tier==='vip';
+  const scriptsArr=typeof scripts==='string'?JSON.parse(scripts):scripts;
   const short=key.length>32?key.substring(0,32)+'…':key;
   let s='';
   if(isBanned){
     s+=`<div class="action-section"><div class="action-section-title">🔓 Pulihkan</div><button class="btn btn-success" style="width:100%;justify-content:center;margin-bottom:8px" onclick="doAction('unban')">✅ Unban Lisensi</button></div>`;
   }else{
-    s+=`<div class="action-section"><div class="action-section-title">⚡ Mode Warnet</div>${isWarnet?`<div class="teal-box" style="margin-bottom:8px;font-size:10px">Mode warnet sedang AKTIF.</div><button class="btn btn-ghost" style="width:100%;justify-content:center;margin-bottom:6px" onclick="doSetWarnet(false)">🔒 Nonaktifkan Warnet</button><button class="btn btn-teal" style="width:100%;justify-content:center;margin-bottom:8px" onclick="doWarnetForceLogout('${escHtml(key)}')">🔌 Force Logout Sesi</button>`:`<div class="info-box" style="margin-bottom:8px;font-size:10px">Mode normal: HWID terikat permanen.</div><button class="btn btn-teal" style="width:100%;justify-content:center;margin-bottom:8px" onclick="doSetWarnet(true)">⚡ Aktifkan Mode Warnet</button>`}</div>`;
+    // Tier — lifetime only
+    if(durationType==='lifetime'){
+      s+=`<div class="action-section"><div class="action-section-title">👑 Tier Lisensi</div>`;
+      if(isVip){
+        s+=`<div class="purple-box" style="margin-bottom:8px;font-size:10px">👑 VIP Aktif — akses: ${(scriptsArr||[]).join(', ')}</div>
+            <button class="btn btn-ghost" style="width:100%;justify-content:center;margin-bottom:4px" onclick="doSetTier('standard')">⬇️ Downgrade ke Standard</button>`;
+      }else{
+        s+=`<button class="btn btn-vip" style="width:100%;justify-content:center;margin-bottom:4px;padding:10px" onclick="doSetTier('vip')">👑 Upgrade ke Lifetime VIP (V1 + V2)</button>`;
+      }
+      s+=`</div>`;
+    }
+    // Warnet
+    s+=`<div class="action-section"><div class="action-section-title">⚡ Warnet</div>
+      ${isWarnet
+        ?`<button class="btn btn-ghost" style="width:100%;justify-content:center;margin-bottom:6px" onclick="doSetWarnet(false)">🔒 Nonaktifkan Warnet</button>
+           <button class="btn btn-teal" style="width:100%;justify-content:center;margin-bottom:8px" onclick="doWarnetForceLogout('${escHtml(key)}')">🔌 Force Logout</button>`
+        :`<button class="btn btn-teal" style="width:100%;justify-content:center;margin-bottom:8px" onclick="doSetWarnet(true)">⚡ Aktifkan Mode Warnet</button>`
+      }</div>`;
     if(hasHwid||isWarnet)s+=`<div class="action-section"><div class="action-section-title">🔧 HWID</div><button class="btn btn-warn" style="width:100%;justify-content:center;margin-bottom:8px" onclick="doAction('reset-hwid')">🔄 Reset HWID</button></div>`;
     if(isActive){
-      s+=`<div class="action-section"><div class="action-section-title">📅 Durasi & Kelola</div>${durationType!=='lifetime'?`<button class="btn btn-warn" style="width:100%;justify-content:center;margin-bottom:8px" onclick="showExtendModal()">📅 Extend Durasi</button>`:''}<button class="btn btn-ghost" style="width:100%;justify-content:center;margin-bottom:8px" onclick="showNoteModal()">📝 Edit Catatan</button><button class="btn btn-ghost" style="width:100%;justify-content:center;margin-bottom:8px" onclick="doAction('deactivate')">⏸ Nonaktifkan</button></div><div class="action-section"><div class="action-section-title">🚫 Blokir</div><button class="btn btn-danger" style="width:100%;justify-content:center;margin-bottom:8px" onclick="showBanModal()">🚫 Ban Lisensi</button></div>`;
+      s+=`<div class="action-section"><div class="action-section-title">📅 Durasi</div>
+          ${durationType!=='lifetime'?`<button class="btn btn-warn" style="width:100%;justify-content:center;margin-bottom:6px" onclick="showExtendModal()">📅 Extend Durasi</button>`:''}
+          <button class="btn btn-ghost" style="width:100%;justify-content:center;margin-bottom:6px" onclick="showNoteModal()">📝 Edit Catatan</button>
+          <button class="btn btn-ghost" style="width:100%;justify-content:center;margin-bottom:8px" onclick="doAction('deactivate')">⏸ Nonaktifkan</button>
+          </div><div class="action-section"><div class="action-section-title">🚫 Blokir</div>
+          <button class="btn btn-danger" style="width:100%;justify-content:center;margin-bottom:8px" onclick="showBanModal()">🚫 Ban</button></div>`;
     }else{
-      s+=`<div class="action-section"><div class="action-section-title">▶️ Aktifkan</div><button class="btn btn-success" style="width:100%;justify-content:center;margin-bottom:8px" onclick="doAction('reactivate')">▶️ Aktifkan Kembali</button><button class="btn btn-ghost" style="width:100%;justify-content:center;margin-bottom:8px" onclick="showNoteModal()">📝 Edit Catatan</button></div><div class="action-section"><div class="action-section-title">🚫 Blokir</div><button class="btn btn-danger" style="width:100%;justify-content:center;margin-bottom:8px" onclick="showBanModal()">🚫 Ban Lisensi</button></div>`;
+      s+=`<div class="action-section"><div class="action-section-title">▶️ Aktifkan</div>
+          <button class="btn btn-success" style="width:100%;justify-content:center;margin-bottom:6px" onclick="doAction('reactivate')">▶️ Aktifkan Kembali</button>
+          <button class="btn btn-ghost" style="width:100%;justify-content:center;margin-bottom:8px" onclick="showNoteModal()">📝 Edit Catatan</button>
+          </div><div class="action-section"><div class="action-section-title">🚫 Blokir</div>
+          <button class="btn btn-danger" style="width:100%;justify-content:center;margin-bottom:8px" onclick="showBanModal()">🚫 Ban</button></div>`;
     }
-    s+=`<div class="action-section"><div class="action-section-title">🗑 Hapus</div><button class="btn btn-danger" style="width:100%;justify-content:center;border-color:var(--red)" onclick="confirmDelete()">🗑 Hapus Permanen</button></div>`;
+    s+=`<div class="action-section"><div class="action-section-title">🗑 Hapus</div><button class="btn btn-danger" style="width:100%;justify-content:center" onclick="confirmDelete()">🗑 Hapus Permanen</button></div>`;
   }
-  openModal(`<div class="modal-title"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Aksi Lisensi ${isWarnet?'<span class="badge badge-warnet" style="margin-left:8px">⚡ WARNET</span>':''}</div>
+  openModal(`<div class="modal-title"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Aksi</div>
   <div class="modal-sub">${escHtml(short)}</div>${s}
   <button class="btn btn-ghost" style="width:100%;justify-content:center;margin-top:8px" onclick="closeModal()">Batal</button>`);
 }
 
 async function doAction(action){
   const key=_activeKey;if(!key)return;
-  const lm={'reset-hwid':'HWID di-reset ✓','deactivate':'Nonaktif','reactivate':'Aktif kembali','unban':'Berhasil di-unban'};
   const data=await api('POST',`/admin/api/licenses/${encodeURIComponent(key)}/${action}`);
-  toast(data.message||(data.success?(lm[action]||'Berhasil'):'Gagal'),data.success?'success':'error');
+  toast(data.message||(data.success?'Berhasil':'Gagal'),data.success?'success':'error');
   if(data.success){closeModal();loadLicenses();refreshStats();}
 }
 async function doSetWarnet(enable){
   const key=_activeKey;if(!key)return;
-  if(!confirm(`${enable?'Aktifkan':'Nonaktifkan'} Mode Warnet?\n\nKey: ${key}`))return;
+  if(!confirm(`${enable?'Aktifkan':'Nonaktifkan'} Mode Warnet?\n\n${key}`))return;
   const data=await api('POST',`/admin/api/licenses/${encodeURIComponent(key)}/set-warnet`,{is_warnet:enable});
   toast(data.message||(data.success?'Berhasil':'Gagal'),data.success?'success':'error');
   if(data.success){closeModal();loadLicenses();refreshStats();}
 }
 async function doWarnetForceLogout(key){
   if(!key)key=_activeKey;if(!key)return;
-  if(!confirm(`Force logout sesi warnet?\n\nKey: ${key}`))return;
+  if(!confirm(`Force logout sesi warnet?\n\n${key}`))return;
   const data=await api('POST',`/admin/api/licenses/${encodeURIComponent(key)}/warnet-logout`);
   toast(data.message||(data.success?'Sesi di-clear':'Gagal'),data.success?'success':'error');
   if(data.success){closeModal();loadLicenses();}
 }
 async function confirmDelete(){
   const key=_activeKey;if(!key)return;
-  if(!confirm(`Hapus permanen?\n\n${key}\n\nTidak bisa dibatalkan!`))return;
+  if(!confirm(`Hapus permanen?\n\n${key}`))return;
   const data=await apiDelete(`/admin/api/licenses/${encodeURIComponent(key)}/delete`);
-  toast(data.success?'Dihapus permanen':(data.message||'Gagal'),data.success?'success':'error');
+  toast(data.success?'Dihapus':(data.message||'Gagal'),data.success?'success':'error');
   if(data.success){closeModal();loadLicenses();refreshStats();}
 }
-
 function showBanModal(){
   document.getElementById('modalContent').innerHTML=`<div class="modal-title" style="color:var(--red)"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/></svg>Ban Lisensi</div>
   <div class="modal-sub">${escHtml(_activeKey||'')}</div>
-  <div class="form-group"><label class="form-label">Alasan Ban</label><input class="form-input" id="banReason" placeholder="Cheat detected / share lisensi / dll"></div>
-  <div class="form-group"><label class="checkbox-label"><input type="checkbox" id="banHwid">Ban HWID device sekaligus</label><div class="warn-box" style="margin-top:8px">⚠️ Device tidak bisa pakai key apapun lagi</div></div>
+  <div class="form-group"><label class="form-label">Alasan</label><input class="form-input" id="banReason" placeholder="Cheat / share key / dll"></div>
+  <div class="form-group"><label class="checkbox-label"><input type="checkbox" id="banHwid">Ban HWID device sekaligus</label></div>
   <div class="modal-actions"><button class="btn btn-ghost" onclick="closeModal()">Batal</button><button class="btn btn-danger" onclick="submitBan()">🚫 Ban</button></div>`;
 }
 async function submitBan(){
@@ -1022,21 +837,19 @@ async function submitBan(){
 function showExtendModal(){
   document.getElementById('modalContent').innerHTML=`<div class="modal-title"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>Extend Durasi</div>
   <div class="modal-sub">${escHtml(_activeKey||'')}</div>
-  <div class="form-group"><label class="form-label">Tambah Hari</label><input class="form-input" id="extendDays" type="number" value="30" min="1" max="3650"></div>
-  <div class="info-box">ℹ️ Dihitung dari tanggal kadaluarsa saat ini.</div>
+  <div class="form-group"><label class="form-label">Tambah Hari</label><input class="form-input" id="extendDays" type="number" value="30" min="1"></div>
   <div class="modal-actions"><button class="btn btn-ghost" onclick="closeModal()">Batal</button><button class="btn btn-accent" onclick="submitExtend()">✅ Extend</button></div>`;
 }
 async function submitExtend(){
   const days=parseInt(document.getElementById('extendDays')?.value)||30;
-  if(days<1||days>3650){toast('Hari tidak valid','error');return;}
   const data=await api('POST',`/admin/api/licenses/${encodeURIComponent(_activeKey)}/extend`,{days});
-  if(data.success){const exp=data.new_expires?data.new_expires.substring(0,10):'';toast(`+${days} hari${exp?' → '+exp:''}`, 'success');closeModal();loadLicenses();}
+  if(data.success){toast(`+${days} hari berhasil`,'success');closeModal();loadLicenses();}
   else toast(data.message||'Gagal','error');
 }
 function showNoteModal(){
   document.getElementById('modalContent').innerHTML=`<div class="modal-title"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>Edit Catatan</div>
   <div class="modal-sub">${escHtml(_activeKey||'')}</div>
-  <div class="form-group"><label class="form-label">Catatan</label><input class="form-input" id="noteInput" placeholder="Budi — 0812xxx — @telegram"></div>
+  <div class="form-group"><label class="form-label">Catatan</label><input class="form-input" id="noteInput" placeholder="Budi — 0812xxx"></div>
   <div class="modal-actions"><button class="btn btn-ghost" onclick="closeModal()">Batal</button><button class="btn btn-accent" onclick="submitNote()">💾 Simpan</button></div>`;
 }
 async function submitNote(){
@@ -1047,21 +860,48 @@ async function submitNote(){
 }
 
 // ==========================================
-// GENERATE
+// GENERATE KEY
 // ==========================================
+let _selectedScript='rapid_click';
+
+function selectScript(val){
+  _selectedScript=val;
+  document.getElementById('genScriptChoice').value=val;
+  document.querySelectorAll('.tier-option').forEach(el=>el.className='tier-option');
+  if(val==='rapid_click')document.getElementById('opt-v1').classList.add('active-v1');
+  else if(val==='macro_full')document.getElementById('opt-v2').classList.add('active-v2');
+  else if(val==='vip')document.getElementById('opt-vip').classList.add('active');
+}
+
+function updateGenOptions(){
+  const dur=document.getElementById('genDuration').value;
+  const isLifetime=dur==='lifetime';
+  document.getElementById('opt-vip').style.display=isLifetime?'block':'none';
+  if(!isLifetime&&_selectedScript==='vip'){selectScript('rapid_click');}
+}
+
 async function generateKey(){
   const duration=document.getElementById('genDuration').value;
   const note=document.getElementById('genNote').value;
   const is_warnet=document.getElementById('genWarnet').checked;
+  const script=_selectedScript;
+  const license_tier=script==='vip'?'vip':'standard';
+  const allowed_scripts=script==='vip'?['rapid_click','macro_full']:(script==='macro_full'?['macro_full']:['rapid_click']);
   const btn=document.querySelector('#page-generate .btn-accent');
   if(btn){btn.disabled=true;btn.textContent='Generating...';}
-  const data=await api('POST','/api/generate-key',{duration_type:duration,note,is_warnet});
+  const data=await api('POST','/api/generate-key',{duration_type:duration,note,is_warnet,license_tier,allowed_scripts});
   if(btn){btn.disabled=false;btn.innerHTML=`<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:14px;height:14px"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg> GENERATE KEY`;}
   if(data.success){
+    _genKey=data.license_key;_genDuration=data.duration_type;_genIsWarnet=data.is_warnet;
     document.getElementById('genResult').style.display='block';
     document.getElementById('genResultKey').textContent=data.license_key;
-    document.getElementById('genResultMeta').innerHTML=`Durasi: <strong>${data.duration_type}</strong>  ·  Mode: <strong>${data.is_warnet?'⚡ Warnet':'🔒 Normal'}</strong>`;
-    toast('Key dibuat! Klik untuk copy.','success');
+    const scripts=(data.allowed_scripts||['rapid_click']);
+    const scriptLabel=scripts.map(s=>s==='rapid_click'?'V1':'V2').join('+');
+    const tierLabel=data.license_tier==='vip'?'👑 Lifetime VIP':'Standard';
+    document.getElementById('genResultMeta').innerHTML=`Durasi: <strong>${data.duration_type}</strong> · Tier: <strong>${tierLabel}</strong> · Script: <strong>${scriptLabel}</strong> · Mode: <strong>${data.is_warnet?'⚡ Warnet':'🔒 Normal'}</strong>`;
+    const ctaBtn=document.getElementById('genCopyTemplate');
+    ctaBtn.onclick=()=>openCopyModal(data.license_key,data.duration_type,data.is_warnet,data.license_tier,data.allowed_scripts||['rapid_click']);
+    toast('Key dibuat!','success');
     refreshStats();
   }else toast(data.message||'Gagal','error');
 }
@@ -1080,7 +920,7 @@ async function loadBannedHwids(){
   const data=await api('GET','/admin/api/banned-hwids');
   const list=data.banned_hwids||[];
   if(!list.length){c.innerHTML=`<div class="empty-state"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Tidak ada HWID yang di-ban</div>`;return;}
-  c.innerHTML=list.map(h=>`<div class="hwid-item"><div style="flex:1;min-width:0"><div class="hwid-hash">${escHtml(h.hwid_hash)}</div><div class="hwid-meta">Alasan: ${escHtml(h.reason||'—')} · ${(h.banned_at||'—').substring(0,19).replace('T',' ')} · Key: <span style="color:var(--accent)">${escHtml((h.license_key||'—').substring(0,24))}</span></div></div><button class="btn btn-success" style="flex-shrink:0" onclick="unbanHwid('${escHtml(h.hwid_hash)}')">Unban</button></div>`).join('');
+  c.innerHTML=list.map(h=>`<div class="hwid-item"><div style="flex:1;min-width:0"><div class="hwid-hash">${escHtml(h.hwid_hash)}</div><div class="hwid-meta">Alasan: ${escHtml(h.reason||'—')} · ${(h.banned_at||'—').substring(0,19).replace('T',' ')} · Key: ${escHtml((h.license_key||'—').substring(0,24))}</div></div><button class="btn btn-success" style="flex-shrink:0" onclick="unbanHwid('${escHtml(h.hwid_hash)}')">Unban</button></div>`).join('');
 }
 async function unbanHwid(hash){
   if(!confirm('Unban HWID ini?'))return;
@@ -1096,465 +936,178 @@ function openModal(html){document.getElementById('modalContent').innerHTML=html;
 function closeModal(){document.getElementById('modalOverlay').classList.remove('open');}
 document.getElementById('modalOverlay').addEventListener('click',e=>{if(e.target===e.currentTarget)closeModal();});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeCopyModal();}});
-
-// ==========================================
-// TOAST
-// ==========================================
 function toast(msg,type='info',duration=3500){
-  const el=document.createElement('div');
-  el.className=`toast ${type}`;el.textContent=msg;
+  const el=document.createElement('div');el.className=`toast ${type}`;el.textContent=msg;
   const c=document.getElementById('toastContainer');c.appendChild(el);
   setTimeout(()=>{el.style.opacity='0';el.style.transition='opacity .3s';setTimeout(()=>el.remove(),300);},duration);
 }
-
-// ==========================================
-// CLOCK
-// ==========================================
 function updateClock(){const el=document.getElementById('serverTime');if(el)el.textContent=new Date().toISOString().replace('T',' ').substring(0,19)+' UTC';}
 setInterval(updateClock,1000);updateClock();
 
 // ==========================================
-// COPY TEMPLATE MODAL — STATE
+// COPY TEMPLATE MODAL — FULL LOGIC
 // ==========================================
-const DL_URL = 'https://hujanderaspbasahkuyup.vercel.app/download';
-
-let _cmKey  = '', _cmDuration = '', _cmWarnet = false;
-let _cmLang = 'id', _cmBuyer = 'new', _cmPlat = 'wa';
-
-// ──────────────────────────────────────────────────
-// Open / Close
-// ──────────────────────────────────────────────────
-function openCopyModal(key, duration, isWarnet) {
-  _cmKey = key; _cmDuration = duration; _cmWarnet = isWarnet;
-  _cmLang = 'id'; _cmBuyer = 'new'; _cmPlat = 'wa';
-
+function openCopyModal(key,duration,isWarnet,tier,scripts){
+  _cmKey=key;_cmDuration=duration;_cmWarnet=isWarnet;
+  _cmAllowedScripts=typeof scripts==='string'?JSON.parse(scripts.replace(/'/g,'"')):(scripts||['rapid_click']);
+  _cmLang='id';_cmBuyer='new';_cmPlat='wa';_cmType='sale';
   document.getElementById('copyModal').classList.add('show');
-
-  // Reset UI state
-  _resetSeg('buyerSeg', 'buyer-new');
-  _resetSeg('platSeg', 'plat-wa');
-  document.getElementById('btnLangID').classList.add('active');
-  document.getElementById('btnLangEN').classList.remove('active');
-  const copyBtn = document.getElementById('cmCopyBtn');
-  copyBtn.classList.remove('copied');
-  copyBtn.innerHTML = '📋 Copy Template';
-
+  _resetSeg('buyerSeg','buyer-new');_resetSeg('platSeg','plat-wa');
+  document.getElementById('btnLangID').classList.add('active');document.getElementById('btnLangEN').classList.remove('active');
+  // Show upgrade type if lifetime
+  const isLifetime=duration==='lifetime';
+  document.getElementById('ttype-upgrade').style.display=isLifetime?'':'none';
+  document.getElementById('ttype-v2release').style.display=isLifetime?'':'none';
+  document.querySelectorAll('.cm-type-btn').forEach(b=>b.classList.remove('active-sale','active-upgrade','active-v2release'));
+  document.getElementById('ttype-sale').classList.add('active-sale');
+  const cb=document.getElementById('cmCopyBtn');cb.classList.remove('copied');cb.innerHTML='📋 Copy Template';
   _renderCopyModal();
 }
+function closeCopyModal(){document.getElementById('copyModal').classList.remove('show');}
+document.getElementById('copyModal').addEventListener('click',e=>{if(e.target===document.getElementById('copyModal'))closeCopyModal();});
+function _resetSeg(segId,activeClass){document.querySelectorAll(`#${segId} .cm-seg-btn`).forEach(b=>b.classList.remove('active'));document.querySelector(`#${segId} .${activeClass}`)?.classList.add('active');}
+function setCmType(type){_cmType=type;document.querySelectorAll('.cm-type-btn').forEach(b=>b.classList.remove('active-sale','active-upgrade','active-v2release'));document.getElementById('ttype-'+type).classList.add('active-'+type);_resetCopyBtn();_renderCopyModal();}
+function setBuyer(type){_cmBuyer=type;document.querySelectorAll('#buyerSeg .cm-seg-btn').forEach(b=>b.classList.remove('active'));document.querySelector(`#buyerSeg .buyer-${type}`)?.classList.add('active');_resetCopyBtn();_renderCopyModal();}
+function setPlatform(plat){_cmPlat=plat;document.querySelectorAll('#platSeg .cm-seg-btn').forEach(b=>b.classList.remove('active'));document.querySelector(`#platSeg .plat-${plat}`)?.classList.add('active');_resetCopyBtn();_renderCopyModal();}
+function setLang(lang){_cmLang=lang;document.getElementById('btnLangID').classList.toggle('active',lang==='id');document.getElementById('btnLangEN').classList.toggle('active',lang==='en');_resetCopyBtn();_renderCopyModal();}
+function _resetCopyBtn(){const b=document.getElementById('cmCopyBtn');b.classList.remove('copied');b.innerHTML='📋 Copy Template';}
 
-function closeCopyModal() {
-  document.getElementById('copyModal').classList.remove('show');
-}
-document.getElementById('copyModal').addEventListener('click', e => {
-  if (e.target === document.getElementById('copyModal')) closeCopyModal();
-});
+function _renderCopyModal(){
+  const isID=_cmLang==='id',isVip=_cmAllowedScripts.length>=2;
+  const hasV1=_cmAllowedScripts.includes('rapid_click'),hasV2=_cmAllowedScripts.includes('macro_full');
+  document.getElementById('cmHeaderSub').textContent=_cmKey.length>38?_cmKey.substring(0,38)+'…':_cmKey;
 
-function _resetSeg(segId, activeClass) {
-  document.querySelectorAll(`#${segId} .cm-seg-btn`).forEach(b => b.classList.remove('active'));
-  document.querySelector(`#${segId} .${activeClass}`)?.classList.add('active');
-}
+  // Badge
+  const badgeMap={lifetime:isVip?['Lifetime VIP 👑','bk-lifetime-vip']:['Lifetime 🔮','bk-lifetime'],'1month':['1 Bulan 🗓️','bk-premium'],'2weeks':['2 Minggu 📅','bk-premium'],trial_6hours:['Trial 6h ⏳','bk-trial'],demo_1min:['Demo 1m ⚡','bk-trial']};
+  const[bl,bc]=badgeMap[_cmDuration]||['Unknown','bk-trial'];
+  const badgeEl=document.getElementById('cmKeyBadge');
+  badgeEl.textContent=_cmWarnet?bl+' • Warnet':bl;
+  badgeEl.className='cm-key-badge '+(_cmWarnet?'bk-warnet':bc);
+  document.getElementById('cmKeyVal').textContent=_cmKey;
 
-// ──────────────────────────────────────────────────
-// Control setters
-// ──────────────────────────────────────────────────
-function setBuyer(type) {
-  _cmBuyer = type;
-  document.querySelectorAll('#buyerSeg .cm-seg-btn').forEach(b => b.classList.remove('active'));
-  document.querySelector(`#buyerSeg .buyer-${type}`)?.classList.add('active');
-  _resetCopyBtn();
-  _renderCopyModal();
-}
+  // Info strip
+  const strip=document.getElementById('cmInfoStrip');
+  if(_cmType==='upgrade'){
+    strip.style.display='flex';strip.className='cm-info-strip purple';
+    strip.textContent='👑 Template untuk memberitahu user bahwa lisensi mereka berhasil di-upgrade ke VIP.';
+  }else if(_cmType==='v2release'){
+    strip.style.display='flex';strip.className='cm-info-strip orange';
+    strip.textContent='🚀 Template pemberitahuan bahwa Script V2 sudah tersedia — khusus user VIP.';
+  }else{strip.style.display='none';}
 
-function setPlatform(plat) {
-  _cmPlat = plat;
-  document.querySelectorAll('#platSeg .cm-seg-btn').forEach(b => b.classList.remove('active'));
-  document.querySelector(`#platSeg .plat-${plat}`)?.classList.add('active');
-  _resetCopyBtn();
-  _renderCopyModal();
-}
+  // Chat header platform
+  const hdr=document.getElementById('cmChatHeader');
+  hdr.className='wa-status-bar';
+  if(_cmPlat==='tg')hdr.classList.add('tg-header');
+  else if(_cmPlat==='dc')hdr.classList.add('dc-header');
 
-function setLang(lang) {
-  _cmLang = lang;
-  document.getElementById('btnLangID').classList.toggle('active', lang === 'id');
-  document.getElementById('btnLangEN').classList.toggle('active', lang === 'en');
-  _resetCopyBtn();
-  _renderCopyModal();
-}
-
-function _resetCopyBtn() {
-  const b = document.getElementById('cmCopyBtn');
-  b.classList.remove('copied');
-  b.innerHTML = '📋 Copy Template';
-}
-
-// ──────────────────────────────────────────────────
-// Render modal
-// ──────────────────────────────────────────────────
-function _renderCopyModal() {
-  const isID  = _cmLang === 'id';
-  const isNew = _cmBuyer === 'new';
-
-  // Header sub
-  document.getElementById('cmHeaderSub').textContent = _cmKey.length > 38 ? _cmKey.substring(0,38)+'…' : _cmKey;
-
-  // Key badge
-  const badgeMap = {
-    'lifetime':     ['Lifetime 🔮','bk-lifetime'],
-    '1month':       ['1 Bulan 🗓️','bk-premium'],
-    '2weeks':       ['2 Minggu 📅','bk-premium'],
-    'trial_6hours': ['Trial 6h ⏳','bk-trial'],
-    'demo_1min':    ['Demo 1m ⚡','bk-demo'],
-  };
-  const [bl, bc] = badgeMap[_cmDuration] || ['Unknown','bk-demo'];
-  const badgeEl = document.getElementById('cmKeyBadge');
-  badgeEl.textContent = _cmWarnet ? bl + ' • Warnet' : bl;
-  badgeEl.className = 'cm-key-badge ' + (_cmWarnet ? 'bk-warnet' : bc);
-  document.getElementById('cmKeyVal').textContent = _cmKey;
-
-  // Buyer banner
-  const banner = document.getElementById('cmBuyerBanner');
-  const bTitle = document.getElementById('cmBuyerTitle');
-  const bSub   = document.getElementById('cmBuyerSub');
-  banner.className = 'cm-buyer-banner ' + (isNew ? 'new-buyer' : 'repeat-buyer');
-  if (isID) {
-    if (isNew) {
-      bTitle.textContent = '🆕 Buyer Baru';
-      bSub.textContent   = 'Template sambutan lengkap dengan panduan setup & hotkey';
-      document.querySelector('#buyerSeg .cm-buyer-banner-icon');
-    } else {
-      bTitle.textContent = '🔄 Repeat Buyer';
-      bSub.textContent   = 'Template ringkas — cukup kirim key & sedikit pengingat';
-    }
-  } else {
-    if (isNew) {
-      bTitle.textContent = '🆕 New Buyer';
-      bSub.textContent   = 'Full welcome template with setup guide & hotkey reference';
-    } else {
-      bTitle.textContent = '🔄 Repeat Buyer';
-      bSub.textContent   = 'Short template — just key delivery + quick reminder';
-    }
-  }
-
-  // Platform strip
-  const platCfg = {
-    wa: { icon:'📱', label: isID ? 'WhatsApp — format plain text, emoji friendly' : 'WhatsApp — plain text, emoji friendly' },
-    tg: { icon:'✈️', label: isID ? 'Telegram — support bold & markdown' : 'Telegram — supports bold & markdown' },
-    dc: { icon:'🎮', label: isID ? 'Discord — support markdown formatting' : 'Discord — supports markdown formatting' },
-  };
-  const pc = platCfg[_cmPlat];
-  const strip = document.getElementById('cmPlatStrip');
-  strip.className = 'cm-platform-strip plat-' + _cmPlat;
-  strip.querySelector('.cm-plat-icon').textContent = pc.icon;
-  document.getElementById('cmPlatLabel').textContent = pc.label;
-
-  // Platform header
-  const hdr = document.getElementById('cmChatHeader');
-  const avatar = document.getElementById('cmChatAvatar');
-  const chatName = document.getElementById('cmChatName');
-  const chatSub  = document.getElementById('cmChatSub');
-  hdr.className = 'wa-status-bar';
-  if (_cmPlat === 'tg') { hdr.classList.add('tg-header'); chatName.textContent = 'Heavy Rain Macro'; chatSub.textContent = isID ? 'last seen just now' : 'last seen just now'; avatar.textContent = '🌧️'; }
-  else if (_cmPlat === 'dc') { hdr.classList.add('dc-header'); chatName.textContent = 'HeavyRainMacro'; chatSub.textContent = '#lisensi'; avatar.textContent = '⚡'; }
-  else { chatName.textContent = 'Heavy Rain Macro'; chatSub.textContent = isID ? 'online' : 'online'; avatar.textContent = '🌧️'; }
-
-  // Build & render bubble
-  const templateText = _buildTemplate(_cmKey, _cmDuration, _cmWarnet, _cmLang, _cmBuyer, _cmPlat);
+  const templateText=_buildTemplate(_cmKey,_cmDuration,_cmWarnet,_cmLang,_cmBuyer,_cmPlat,_cmAllowedScripts,_cmType);
   _renderBubble(templateText);
 }
 
-// ──────────────────────────────────────────────────
-// Bubble renderer
-// ──────────────────────────────────────────────────
-function _renderBubble(text) {
-  const area = document.getElementById('cmBubbleArea');
-  const bubbleClass = _cmPlat === 'tg' ? 'tg-bubble-out-inner' : _cmPlat === 'dc' ? 'dc-bubble-out-inner' : '';
-
-  // Split into parts for multi-bubble simulation (natural feel)
-  const lines = text.trim().split('\n');
-  const chunks = [];
-  let cur = [];
-  lines.forEach(line => {
+function _renderBubble(text){
+  const area=document.getElementById('cmBubbleArea');
+  const bubbleClass=_cmPlat==='tg'?'tg-bubble-out-inner':_cmPlat==='dc'?'dc-bubble-out-inner':'';
+  const lines=text.trim().split('\n');const chunks=[];let cur=[];
+  lines.forEach(line=>{
     cur.push(line);
-    // Natural break: after greeting block (first 2 lines), after each section separator
-    if (cur.length >= 6 && (line === '' || line.startsWith('⚙️') || line.startsWith('🎮') || line.startsWith('📌') || line.startsWith('📥'))) {
-      chunks.push(cur.join('\n').trim());
-      cur = [];
-    }
+    if(cur.length>=5&&(line===''||line.startsWith('⚙️')||line.startsWith('🎮')||line.startsWith('📌')||line.startsWith('📥')||line.startsWith('👑')||line.startsWith('🚀'))){chunks.push(cur.join('\n').trim());cur=[];}
   });
-  if (cur.length) chunks.push(cur.join('\n').trim());
-
-  const now = new Date();
-  const timeStr = now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
-
-  area.innerHTML = chunks.filter(c=>c).map((chunk, i) => {
-    const isLast = i === chunks.length - 1;
-    return `<div class="wa-bubble-out">
-      <div class="wa-bubble-out-inner ${bubbleClass}">
-        <div class="wa-bubble-text">${escHtml(chunk)}</div>
-        ${isLast ? `<div class="wa-bubble-meta"><span class="wa-bubble-time">${timeStr}</span><span class="wa-tick">✓✓</span></div>` : ''}
-      </div>
-    </div>`;
+  if(cur.length)chunks.push(cur.join('\n').trim());
+  const now=new Date();const ts=now.getHours().toString().padStart(2,'0')+':'+now.getMinutes().toString().padStart(2,'0');
+  area.innerHTML=chunks.filter(c=>c).map((chunk,i)=>{
+    const isLast=i===chunks.length-1;
+    return `<div class="wa-bubble-out"><div class="wa-bubble-out-inner ${bubbleClass}"><div class="wa-bubble-text">${escHtml(chunk)}</div>${isLast?`<div class="wa-bubble-meta"><span class="wa-bubble-time">${ts}</span><span class="wa-tick">✓✓</span></div>`:''}</div></div>`;
   }).join('');
-
-  // Scroll to bottom
-  setTimeout(() => { area.scrollTop = area.scrollHeight; }, 50);
+  setTimeout(()=>{area.scrollTop=area.scrollHeight;},50);
 }
 
-// ──────────────────────────────────────────────────
-// Copy action
-// ──────────────────────────────────────────────────
-function doCopyTemplate() {
-  const text = _buildTemplate(_cmKey, _cmDuration, _cmWarnet, _cmLang, _cmBuyer, _cmPlat);
-  navigator.clipboard.writeText(text).then(() => {
-    const btn = document.getElementById('cmCopyBtn');
-    btn.classList.add('copied');
-    btn.innerHTML = '✅ Tersalin ke Clipboard!';
-    toast('Template berhasil disalin ✓', 'success');
-    setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = '📋 Copy Template'; }, 2800);
-  }).catch(() => {
-    const ta = document.createElement('textarea');
-    ta.value = text; ta.style.cssText = 'position:fixed;opacity:0';
-    document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove();
-    toast('Template disalin ✓', 'success');
+function doCopyTemplate(){
+  const text=_buildTemplate(_cmKey,_cmDuration,_cmWarnet,_cmLang,_cmBuyer,_cmPlat,_cmAllowedScripts,_cmType);
+  navigator.clipboard.writeText(text).then(()=>{
+    const btn=document.getElementById('cmCopyBtn');btn.classList.add('copied');btn.innerHTML='✅ Tersalin!';
+    toast('Template disalin ✓','success');
+    setTimeout(()=>{btn.classList.remove('copied');btn.innerHTML='📋 Copy Template';},2800);
+  }).catch(()=>{
+    const ta=document.createElement('textarea');ta.value=text;ta.style.cssText='position:fixed;opacity:0';
+    document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();toast('Template disalin ✓','success');
   });
 }
 
-// ──────────────────────────────────────────────────
-// Template builder
-// ──────────────────────────────────────────────────
-function _buildTemplate(key, dur, isWarnet, lang, buyer, plat) {
-  const isID = lang === 'id';
-  const isNew = buyer === 'new';
+// ==========================================
+// TEMPLATE BUILDER — All scenarios
+// ==========================================
+function _buildTemplate(key,dur,isWarnet,lang,buyer,plat,scripts,type){
+  const isID=lang==='id',isNew=buyer==='new';
+  const hasV1=scripts.includes('rapid_click'),hasV2=scripts.includes('macro_full');
+  const isVip=hasV1&&hasV2;
 
-  // Duration labels
-  const durLabelID = { lifetime:'Lifetime (Permanen)', '1month':'1 Bulan', '2weeks':'2 Minggu', trial_6hours:'Trial 6 Jam', demo_1min:'Demo 1 Menit' };
-  const durLabelEN = { lifetime:'Lifetime (Permanent)', '1month':'1 Month', '2weeks':'2 Weeks', trial_6hours:'6-Hour Trial', demo_1min:'1-Minute Demo' };
-  const durLabel = isID ? (durLabelID[dur]||dur) : (durLabelEN[dur]||dur);
+  const durLabelID={lifetime:'Lifetime (Permanen)','1month':'1 Bulan','2weeks':'2 Minggu',trial_6hours:'Trial 6 Jam',demo_1min:'Demo 1 Menit'};
+  const durLabelEN={lifetime:'Lifetime (Permanent)','1month':'1 Month','2weeks':'2 Weeks',trial_6hours:'6-Hour Trial',demo_1min:'1-Minute Demo'};
+  const dL=isID?(durLabelID[dur]||dur):(durLabelEN[dur]||dur);
 
-  const dl    = `📥 ${isID?'Link Download':'Download Link'}: ${DL_URL}`;
-  const keyLine = `🔑 ${isID?'Lisensi Key':'License Key'}: \`${key}\``;
+  // Script label
+  const scriptLabelID=isVip?'Script V1 + V2 (Lifetime VIP)':hasV2?'Script V2 — Smart Macro':'Script V1 — Rapid Click';
+  const scriptLabelEN=isVip?'Script V1 + V2 (Lifetime VIP)':hasV2?'Script V2 — Smart Macro':'Script V1 — Rapid Click';
 
-  // Shared blocks
-  const setupID = `⚙️ CARA PENGGUNAAN:
-1. Download file .exe (klik kanan → Run as Administrator).
-2. Paste Lisensi Key, klik "ACTIVATE LICENSE".
-3. Atur delay (rekomendasi 1–10ms), buka Point Blank.`;
+  // Download links
+  const dlLineID=isVip
+    ?`📥 Download V1: ${DL_V1}\n📥 Download V2: ${DL_V2}`
+    :(hasV2?`📥 Download V2: ${DL_V2}`:`📥 Download V1: ${DL_V1}`);
+  const dlLineEN=dlLineID;
 
-  const setupEN = `⚙️ HOW TO USE:
-1. Download the .exe (right-click → Run as Administrator).
-2. Paste your License Key, click "ACTIVATE LICENSE".
-3. Set delay (recommended 1–10ms), launch Point Blank.`;
+  const keyLine=`🔑 ${isID?'License Key':'License Key'}: \`${key}\``;
 
-  const hotkeysShortID = `🎮 HOTKEY: F1=Toggle ON/OFF · 1-2-3=Auto ON · 4-5-6=Auto OFF · Tahan klik kiri untuk nembak.`;
-  const hotkeysShortEN = `🎮 HOTKEYS: F1=Toggle ON/OFF · 1-2-3=Auto ON · 4-5-6=Auto OFF · Hold left click to shoot.`;
-
-  const hotkeysFullID = `🎮 SMART HOTKEYS:
-• [ F1 ] Toggle ON/OFF (tombol utama)
-• [ 1 ][ 2 ][ 3 ] Auto ON (Senjata / Pistol / Pisau)
-• [ 4 ][ 5 ][ 6 ] Auto OFF (Aman untuk lempar Bom / pasang C-4)
-• Cara nembak: Tahan Klik Kiri, lepas untuk berhenti.`;
-
-  const hotkeysFullEN = `🎮 SMART HOTKEYS:
-• [ F1 ] Toggle ON/OFF (main switch)
-• [ 1 ][ 2 ][ 3 ] Auto ON (Primary / Pistol / Knife)
-• [ 4 ][ 5 ][ 6 ] Auto OFF (Safe for Grenades / C-4)
-• Shoot: Hold Left Click, release to stop.`;
-
-  // ── TRIAL / DEMO — always full (regardless of buyer type) ──
-  if (dur === 'trial_6hours') {
-    if (isID) return `⏳ Uji Coba GRATIS 6 Jam — "Heavy Rain" PB Macro 🌧️🔥
-
-Halo! Key trial kamu sudah siap. Rasakan sendiri zero-input lag yang sesungguhnya!
-
-${dl}
-${keyLine}
-
-${setupID}
-
-${hotkeysFullID}
-
-📌 Timer 6 jam mulai saat pertama kali diaktifkan. Setelah habis app otomatis tutup.
-Suka performanya? Chat saya untuk upgrade ke Lifetime atau 1 Bulan! 🚀`;
-
-    return `⏳ FREE 6-Hour Trial — "Heavy Rain" PB Macro 🌧️🔥
-
-Hey! Your trial key is ready. Experience true zero-input lag!
-
-${dl}
-${keyLine}
-
-${setupEN}
-
-${hotkeysFullEN}
-
-📌 Timer starts on first activation. App closes automatically when it expires.
-Enjoying it? Message me to upgrade to Lifetime or 1 Month! 🚀`;
+  // ── TEMPLATE: Upgrade ke VIP ──
+  if(type==='upgrade'){
+    if(isID)return `👑 SELAMAT! Lisensi kamu berhasil di-UPGRADE ke *Lifetime VIP* 🔥\n\n${keyLine}\n\n✅ Sekarang kamu bisa akses:\n• Script V1 — Rapid Click\n• Script V2 — Smart Mode + Overlay + Load/Save\n\n${dlLineID}\n\nKey yang sama, tidak perlu aktivasi ulang. Langsung download V2 dan pakai!\n\n📌 Saat Script V3 rilis nanti, langsung termasuk juga — tanpa beli ulang.\nEnjoy the upgrade! 🚀👑`;
+    return `👑 Congratulations! Your license has been *UPGRADED to Lifetime VIP* 🔥\n\n${keyLine}\n\n✅ You now have access to:\n• Script V1 — Rapid Click\n• Script V2 — Smart Mode + Overlay + Load/Save\n\n${dlLineEN}\n\nSame key — no need to re-activate. Just download V2 and you're in!\n\n📌 When Script V3 launches, it's automatically included — no extra purchase.\nEnjoy! 🚀👑`;
   }
 
-  if (dur === 'demo_1min') {
-    if (isID) return `⚡ Demo 1 Menit — "Heavy Rain" PB Macro 🌧️
-
-Halo! Coba dulu 1 menit buat ngerasain sensasinya.
-
-${dl}
-${keyLine}
-
-${setupID}
-
-📌 Key berlaku 1 menit sejak diaktifkan. Tertarik lanjut? Chat saya! 🔥`;
-
-    return `⚡ 1-Minute Demo — "Heavy Rain" PB Macro 🌧️
-
-Hey! Try 1 minute to feel the difference.
-
-${dl}
-${keyLine}
-
-${setupEN}
-
-📌 Key lasts 1 minute from activation. Want more? Message me! 🔥`;
+  // ── TEMPLATE: V2 Rilis (notifikasi ke user VIP) ──
+  if(type==='v2release'){
+    if(isID)return `🚀 KABAR BAGUS! Script V2 *sudah RILIS* dan siap didownload! 🎉\n\n${keyLine}\n\nSebagai user *VIP*, kamu langsung bisa akses tanpa beli ulang.\n\n📥 Download Script V2 sekarang:\n${DL_V2}\n\n⚙️ FITUR BARU DI V2:\n• Smart Mode — Hotkey slot 1/2/3/4/5/6\n• Scope Bind (Q / Right Click)\n• In-Game Overlay (F7) — tanpa Alt+Tab\n• Load / Save Config (F6)\n• Multi-language (ID / EN / PT)\n\n📌 Key yang sama, tinggal download dan aktifkan!\nSama-sama download dulu, nanti tanya saya kalau ada kendala. 🔥`;
+    return `🚀 BIG NEWS! Script V2 is now *LIVE* and ready to download! 🎉\n\n${keyLine}\n\nAs a *VIP* user, you get access immediately — no extra purchase needed.\n\n📥 Download Script V2 now:\n${DL_V2}\n\n⚙️ NEW IN V2:\n• Smart Mode — Hotkey slots 1/2/3/4/5/6\n• Scope Bind (Q / Right Click)\n• In-Game Overlay (F7) — no Alt+Tab needed\n• Load / Save Config (F6)\n• Multi-language (ID / EN / PT)\n\n📌 Same license key — just download and activate!\nLet me know if you run into anything! 🔥`;
   }
 
-  // ── WARNET ──
-  if (isWarnet) {
-    if (isID) {
-      if (isNew) return `✅ Lisensi Warnet Aktif — "Heavy Rain" PB Macro 🌧️🔥 [${durLabel}]
-
-Halo! Key kamu sudah siap. Ini adalah lisensi Mode Warnet — bisa ganti-gantian antar PC, tapi hanya 1 PC per waktu.
-
-${dl}
-${keyLine}
-
-${setupID}
-
-${hotkeysFullID}
-
-📌 Catatan Warnet:
-• Key TIDAK terkunci ke 1 PC. Siapapun bisa login selama tidak ada sesi aktif.
-• Selesai main → TUTUP app agar sesi dilepas untuk pengguna berikutnya.
-• Ada sesi stuck? Chat saya untuk force logout. 🚀`;
-
-      return `🔄 Warnet — Perpanjang/Ganti PC\n\nHalo lagi! Berikut key lanjutan kamu.\n\n${dl}\n${keyLine}\n\n📌 Ingat: Tutup app saat selesai agar sesi dilepas. Ada masalah? Chat saya!`;
-    } else {
-      if (isNew) return `✅ Warnet License Active — "Heavy Rain" PB Macro 🌧️🔥 [${durLabel}]
-
-Hey! Your key is ready. This is Warnet Mode — shareable between PCs, one at a time.
-
-${dl}
-${keyLine}
-
-${setupEN}
-
-${hotkeysFullEN}
-
-📌 Warnet Notes:
-• Key is NOT locked to 1 PC. Anyone can login if no active session exists.
-• Done playing → CLOSE the app to release the session for the next user.
-• Session stuck? Contact me for force logout. 🚀`;
-
-      return `🔄 Warnet Renewal/PC Change\n\nHey! Here's your updated key.\n\n${dl}\n${keyLine}\n\n📌 Reminder: Close the app when done to release the session. Any issues? Message me!`;
-    }
+  // ── TEMPLATE: Sale / Aktivasi ──
+  if(dur==='trial_6hours'){
+    if(isID)return `⏳ Trial GRATIS 6 Jam — "Heavy Rain" PB Macro 🌧️\n\nHalo! Key trial kamu sudah siap.\n\n${dlLineID}\n${keyLine}\n\n⚙️ CARA PAKAI:\n1. Download, klik kanan → Run as Administrator\n2. Paste key → ACTIVATE LICENSE\n3. Atur delay, buka Point Blank.\n\n📌 Timer 6 jam mulai saat pertama aktivasi.\nSuka? Chat saya untuk upgrade!`;
+    return `⏳ FREE 6-Hour Trial — "Heavy Rain" PB Macro 🌧️\n\nHey! Your trial key is ready.\n\n${dlLineEN}\n${keyLine}\n\n⚙️ HOW TO USE:\n1. Download, right-click → Run as Administrator\n2. Paste key → ACTIVATE LICENSE\n3. Set delay, launch Point Blank.\n\n📌 6-hour timer starts on first activation.\nLiking it? Message me to upgrade!`;
   }
-
-  // ── LIFETIME ──
-  if (dur === 'lifetime') {
-    if (isID) {
-      if (isNew) return `🔮 Lisensi LIFETIME Aktif — "Heavy Rain" PB Macro 🌧️🔥
-
-Terima kasih sudah order! Kamu sekarang punya akses PERMANEN tanpa batas waktu. 👑
-
-${dl}
-${keyLine}
-
-${setupID}
-
-${hotkeysFullID}
-
-📌 Lisensi ini terkunci ke hardware PC kamu (HWID Lock) selamanya.
-Ganti PC / reinstall Windows? Chat saya untuk reset HWID.
-Nikmati rapid fire tanpa delay selamanya! 🔥👑`;
-
-      return `🔄 Welcome back! Key Lifetime kamu masih sama, ini pengingat kamu:\n\n${keyLine}\n\nAda kendala atau mau reset HWID? Langsung chat saya aja ya! 🔥`;
-    } else {
-      if (isNew) return `🔮 LIFETIME License Activated — "Heavy Rain" PB Macro 🌧️🔥
-
-Thanks for your order! You now have PERMANENT unlimited access. 👑
-
-${dl}
-${keyLine}
-
-${setupEN}
-
-${hotkeysFullEN}
-
-📌 This license is permanently locked to your PC hardware (HWID Lock).
-Changed PC or reinstalled Windows? Contact me for an HWID reset.
-Enjoy lag-free rapid fire forever! 🔥👑`;
-
-      return `🔄 Welcome back! Your Lifetime key is still the same, here's a quick reminder:\n\n${keyLine}\n\nNeed an HWID reset or have any issues? Just message me! 🔥`;
-    }
+  if(dur==='demo_1min'){
+    if(isID)return `⚡ Demo 1 Menit — "Heavy Rain" PB Macro 🌧️\n\nCoba dulu!\n\n${dlLineID}\n${keyLine}\n\n📌 Key berlaku 1 menit dari aktivasi.`;
+    return `⚡ 1-Minute Demo — "Heavy Rain" PB Macro 🌧️\n\nTry it out!\n\n${dlLineEN}\n${keyLine}\n\n📌 Key lasts 1 minute from activation.`;
   }
-
-  // ── 1 MONTH / 2 WEEKS ──
-  const durIcon = dur === '1month' ? '🗓️' : '📅';
-
-  if (isID) {
-    if (isNew) return `${durIcon} Lisensi ${durLabel} Aktif — "Heavy Rain" PB Macro 🌧️🔥
-
-Terima kasih sudah order! Pembayaran berhasil diverifikasi. 🚀
-
-${dl}
-${keyLine}
-
-${setupID}
-
-${hotkeysFullID}
-
-📌 Lisensi terkunci ke hardware PC kamu (HWID Lock). Timer ${durLabel} mulai saat pertama kali diaktifkan.
-Ganti PC / reinstall Windows? Chat saya untuk reset HWID.
-Selamat menikmati rapid fire tanpa delay! 🔥`;
-
-    return `${durIcon} Perpanjangan ${durLabel} — "Heavy Rain" PB Macro
-
-Halo lagi! Ini key baru kamu untuk lanjut bermain.
-
-${keyLine}
-
-${hotkeysShortID}
-
-📌 HWID Lock: lisensi terkunci ke PC yang sama. Reset HWID? Chat saya! 🔥`;
-  } else {
-    if (isNew) return `${durIcon} ${durLabel} License Activated — "Heavy Rain" PB Macro 🌧️🔥
-
-Thanks for your order! Payment verified. 🚀
-
-${dl}
-${keyLine}
-
-${setupEN}
-
-${hotkeysFullEN}
-
-📌 License is locked to your PC hardware (HWID Lock). Timer starts on first activation.
-Changed PC or reinstalled Windows? Contact me for an HWID reset.
-Enjoy lag-free rapid fire! 🔥`;
-
-    return `${durIcon} ${durLabel} Renewal — "Heavy Rain" PB Macro
-
-Hey! Here's your renewed key.
-
-${keyLine}
-
-${hotkeysShortEN}
-
-📌 HWID Lock: tied to your current PC. Need HWID reset? Message me! 🔥`;
+  if(isWarnet){
+    if(isID){if(isNew)return `✅ Lisensi Warnet [${dL}] — "Heavy Rain" PB Macro 🌧️\n\n${dlLineID}\n${keyLine}\n\n⚙️ CARA PAKAI:\n1. Download → Run as Admin\n2. Paste key → Activate\n\n📌 Mode warnet: bisa ganti PC, tapi 1 device per waktu.\nTutup app saat selesai supaya sesi dilepas.`;
+    return `🔄 Renewal Warnet — ${dL}\n\n${keyLine}\n\n📌 Tutup app saat selesai. Ada stuck? Chat saya!`;}
+    if(isNew)return `✅ Warnet License [${dL}] — "Heavy Rain" PB Macro 🌧️\n\n${dlLineEN}\n${keyLine}\n\n⚙️ SETUP:\n1. Download → Run as Admin\n2. Paste key → Activate\n\n📌 Warnet mode: shareable, one device at a time. Close app when done.`;
+    return `🔄 Warnet Renewal — ${dL}\n\n${keyLine}\n\n📌 Close app when done. Session stuck? Message me!`;
   }
+  if(dur==='lifetime'){
+    const v2Hotkeys=isVip||hasV2?`\n\n🎮 HOTKEYS V2:\n• F7 — Overlay ON/OFF\n• F6 — Load / Save Config\n• 1/2/3 — Auto ON (Senjata)\n• 4/5/6 — Auto OFF (Bom/C4)`:'\n\n🎮 HOTKEY:\n• F1 — Toggle ON/OFF\n• Tahan klik kiri untuk rapid fire';
+    const v2HotkeysEN=isVip||hasV2?`\n\n🎮 V2 HOTKEYS:\n• F7 — Toggle Overlay\n• F6 — Load / Save Config\n• 1/2/3 — Auto ON (Weapon slots)\n• 4/5/6 — Auto OFF (Safe for Bomb)`:'\n\n🎮 HOTKEY:\n• F1 — Toggle ON/OFF';
+    if(isID){if(isNew)return `🔮 Lisensi ${dL} AKTIF — "Heavy Rain" PB Macro 🌧️👑\n\nTerima kasih sudah order! Akses permanen kamu sudah aktif.\n\n${dlLineID}\n${keyLine}\n\nScript: ${scriptLabelID}\n\n⚙️ SETUP:\n1. Download → Run as Administrator\n2. Paste key → ACTIVATE\n3. Atur delay → buka Point Blank${v2Hotkeys}\n\n📌 HWID Lock ke PC ini. Ganti PC? Chat saya untuk reset.${isVip?'\n\n👑 VIP: Saat Script V3 rilis, otomatis termasuk tanpa beli ulang!':''}`;
+    return `🔄 Welcome back!\n\n${keyLine}\n\nGanti PC atau mau reset HWID? Chat saya! 🔥${isVip?'\n\n👑 VIP kamu masih aktif — V1 + V2 tetap bisa dipakai.':''}`;}
+    if(isNew)return `🔮 ${dL} License ACTIVE — "Heavy Rain" PB Macro 🌧️👑\n\nThanks for your order! Permanent access activated.\n\n${dlLineEN}\n${keyLine}\n\nScript: ${scriptLabelEN}\n\n⚙️ SETUP:\n1. Download → Run as Admin\n2. Paste key → ACTIVATE\n3. Set delay → Launch Point Blank${v2HotkeysEN}\n\n📌 HWID locked to this PC. Changed PC? Contact me for reset.${isVip?'\n\n👑 VIP: Script V3 will be automatically included when it launches!':''}`;
+    return `🔄 Welcome back!\n\n${keyLine}\n\nNeed HWID reset? Message me! 🔥${isVip?'\n\n👑 Your VIP is still active — V1 + V2 ready.':''}`;
+  }
+  // Monthly / 2weeks
+  const durIcon=dur==='1month'?'🗓️':'📅';
+  const hotkeysBlock=hasV2?`\n\n🎮 HOTKEYS:\n• F7 Overlay, F6 Load/Save, 1-3 ON, 4-6 OFF`:'\n\n🎮 HOTKEY: F1 Toggle ON/OFF';
+  const hotkeysBlockEN=hotkeysBlock;
+  if(isID){if(isNew)return `${durIcon} Lisensi ${dL} — "Heavy Rain" PB Macro 🌧️🔥\n\nTerima kasih! Pembayaran terverifikasi.\n\n${dlLineID}\n${keyLine}\n\nScript: ${scriptLabelID}${hotkeysBlock}\n\n📌 HWID Lock. Timer ${dL} mulai saat pertama aktivasi.\nGanti PC? Chat saya!`;
+  return `${durIcon} Perpanjangan ${dL} — Heavy Rain Macro\n\nKey baru kamu:\n\n${keyLine}\n\nScript: ${scriptLabelID}\n\n📌 HWID Lock. Reset? Chat saya! 🔥`;}
+  if(isNew)return `${durIcon} ${dL} License — "Heavy Rain" PB Macro 🌧️🔥\n\nPayment verified! 🚀\n\n${dlLineEN}\n${keyLine}\n\nScript: ${scriptLabelEN}${hotkeysBlockEN}\n\n📌 HWID Lock. Timer starts on first activation.\nChanged PC? Contact me.`;
+  return `${durIcon} ${dL} Renewal — Heavy Rain Macro\n\nYour new key:\n\n${keyLine}\n\nScript: ${scriptLabelEN}\n\n📌 HWID tied to current PC. Reset? Message me! 🔥`;
 }
 
 // ==========================================
 // INIT
 // ==========================================
 refreshStats();
+updateGenOptions();
 </script>
 </body>
 </html>
