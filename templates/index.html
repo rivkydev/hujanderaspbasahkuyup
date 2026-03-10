@@ -100,8 +100,8 @@ section.tight{padding:48px 0}
 /* =====================
    SCRIPTS — 3 CARDS
 ===================== */
-.scripts-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:48px}
-.script-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:28px;position:relative;overflow:hidden;transition:all .35s cubic-bezier(.4,0,.2,1)}
+.scripts-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:48px;align-items:stretch}
+.script-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:28px;position:relative;overflow:hidden;transition:all .35s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column}
 .script-card::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .35s;border-radius:20px}
 .script-card.v1::before{background:radial-gradient(ellipse at 50% 0%,rgba(34,211,238,.08),transparent 70%)}
 .script-card.v2::before{background:radial-gradient(ellipse at 50% 0%,rgba(168,85,247,.1),transparent 70%)}
@@ -122,7 +122,7 @@ section.tight{padding:48px 0}
 .v3 .script-version{color:var(--orange)}
 .script-name{font-family:var(--font-display);font-size:20px;font-weight:900;color:#fff;margin-bottom:6px}
 .script-tagline{font-size:13px;color:var(--muted);margin-bottom:20px;line-height:1.5}
-.script-features{list-style:none;display:flex;flex-direction:column;gap:8px;margin-bottom:24px}
+.script-features{list-style:none;display:flex;flex-direction:column;gap:8px;margin-bottom:24px;flex:1}
 .script-features li{display:flex;align-items:center;gap:8px;font-size:13px;color:rgba(226,232,240,.75)}
 .script-features li::before{content:'';width:5px;height:5px;border-radius:50%;flex-shrink:0}
 .v1 .script-features li::before{background:var(--cyan)}
@@ -134,8 +134,8 @@ section.tight{padding:48px 0}
 .v2 .script-dl-btn{background:rgba(168,85,247,.15);border:1px solid rgba(168,85,247,.4);color:var(--purple)}
 .v2 .script-dl-btn:hover{background:rgba(168,85,247,.25);border-color:var(--purple);transform:translateY(-1px)}
 .v3-locked{width:100%;display:flex;align-items:center;justify-content:center;gap:8px;padding:11px;border-radius:10px;font-family:var(--font-display);font-size:11px;font-weight:700;letter-spacing:1px;background:rgba(251,146,60,.05);border:1px dashed rgba(251,146,60,.25);color:rgba(251,146,60,.5);cursor:default}
-.script-divider{height:1px;background:var(--border);margin:16px 0}
-.script-tier-note{font-family:var(--font-mono);font-size:10px;color:var(--muted);line-height:1.5}
+.script-divider{height:1px;background:var(--border);margin:20px 0 14px}
+.script-tier-note{font-family:var(--font-mono);font-size:10px;color:var(--muted);line-height:1.5;margin-bottom:14px}
 
 /* =====================
    LICENSE TIER TABLE
@@ -185,8 +185,8 @@ section.tight{padding:48px 0}
 /* =====================
    HOW TO USE
 ===================== */
-.steps-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:40px}
-.step-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;position:relative;overflow:hidden;transition:border-color .25s}
+.steps-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:40px;align-items:stretch}
+.step-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;position:relative;overflow:hidden;transition:border-color .25s;display:flex;flex-direction:column}
 .step-card:hover{border-color:rgba(34,211,238,.3)}
 .step-num{font-family:var(--font-display);font-size:48px;font-weight:900;color:rgba(34,211,238,.08);line-height:1;margin-bottom:12px}
 .step-icon{font-size:28px;margin-bottom:12px;display:block}
@@ -202,8 +202,8 @@ section.tight{padding:48px 0}
 /* =====================
    PRICING
 ===================== */
-.pricing-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:48px}
-.price-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:28px;transition:all .35s;position:relative;overflow:hidden}
+.pricing-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:48px;align-items:stretch}
+.price-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:28px;transition:all .35s;position:relative;overflow:hidden;display:flex;flex-direction:column}
 .price-card:hover{transform:translateY(-8px)}
 .price-card.featured{border-color:rgba(34,211,238,.4);background:linear-gradient(135deg,rgba(34,211,238,.06) 0%,var(--card) 100%)}
 .price-card.featured:hover{box-shadow:0 20px 60px rgba(34,211,238,.2)}
@@ -220,7 +220,7 @@ section.tight{padding:48px 0}
 .price-unit{font-family:var(--font-mono);font-size:11px;color:var(--muted);margin-bottom:20px}
 .price-strikethrough{font-family:var(--font-mono);font-size:13px;color:var(--muted);text-decoration:line-through;display:inline-block;margin-right:6px}
 .promo-badge{display:inline-block;padding:2px 8px;border-radius:4px;background:rgba(251,146,60,.15);border:1px solid rgba(251,146,60,.3);color:var(--orange);font-family:var(--font-mono);font-size:9px;font-weight:700}
-.price-features{list-style:none;display:flex;flex-direction:column;gap:9px;margin-bottom:24px}
+.price-features{list-style:none;display:flex;flex-direction:column;gap:9px;margin-bottom:24px;flex:1}
 .price-features li{display:flex;align-items:center;gap:8px;font-size:13px;color:rgba(226,232,240,.75)}
 .price-features li .check{font-size:14px}
 .price-features li .check.y{color:var(--green)}
@@ -291,6 +291,14 @@ section.tight{padding:48px 0}
   .hero-title{letter-spacing:-1px}
   .tier-table thead th:nth-child(3),.tier-table tbody td:nth-child(3){display:none}
 }
+/* =====================
+   LANG SWITCHER
+===================== */
+#lang-switcher{position:fixed;top:20px;right:20px;z-index:1000;display:flex;gap:6px;background:rgba(11,15,26,.85);backdrop-filter:blur(12px);border:1px solid var(--border);border-radius:100px;padding:5px 8px}
+.lang-btn{padding:5px 12px;border-radius:100px;font-family:var(--font-mono);font-size:10px;font-weight:700;letter-spacing:.5px;cursor:pointer;border:none;background:transparent;color:var(--muted);transition:all .2s}
+.lang-btn.active{background:rgba(34,211,238,.15);color:var(--cyan);border:1px solid rgba(34,211,238,.3)}
+.lang-btn:hover:not(.active){color:var(--text)}
+[data-lang]{transition:opacity .15s}
 </style>
 </head>
 <body>
@@ -301,6 +309,13 @@ section.tight{padding:48px 0}
 <div class="vignette"></div>
 <div class="mesh-glow"></div>
 <div class="grid-bg"></div>
+
+<!-- Language Switcher -->
+<div id="lang-switcher">
+  <button class="lang-btn active" onclick="setLang('id')">🇮🇩 ID</button>
+  <button class="lang-btn" onclick="setLang('en')">🇺🇸 EN</button>
+  <button class="lang-btn" onclick="setLang('pt')">🇧🇷 PT</button>
+</div>
 
 <div class="page-wrap">
 
@@ -348,10 +363,8 @@ section.tight{padding:48px 0}
       <svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
       VIDEO DEMO & TUTORIAL
     </span>
-    <h2 class="section-h" style="text-align:center;margin:0 auto 12px">Lihat Sendiri Sebelum Beli</h2>
-    <p class="section-sub" style="margin:0 auto 48px;text-align:center">
-      Review jujur, demo live gameplay, dan panduan setup lengkap dalam video.
-    </p>
+    <h2 class="section-h" style="text-align:center;margin:0 auto 12px" data-t="sec-video-h">Lihat Sendiri Sebelum Beli</h2>
+    <p class="section-sub" style="margin:0 auto 48px;text-align:center" data-t="sec-video-sub">Review jujur, demo live gameplay, dan panduan setup lengkap dalam video.</p>
   </div>
 
   <!-- Main video embed area — ganti YOUR_VIDEO_ID -->
@@ -365,8 +378,8 @@ section.tight{padding:48px 0}
         </div>
       </div>
       <div style="text-align:center;margin-top:16px">
-        <div style="font-family:var(--font-display);font-size:15px;font-weight:700;color:#fff;margin-bottom:8px">Demo Live — Script V2 Gameplay</div>
-        <div style="font-family:var(--font-mono);font-size:11px;color:var(--muted)">Klik untuk putar demo video gameplay resmi</div>
+        <div style="font-family:var(--font-display);font-size:15px;font-weight:700;color:#fff;margin-bottom:8px" data-t="vid-main-title">Demo Live — Script V2 Gameplay</div>
+        <div style="font-family:var(--font-mono);font-size:11px;color:var(--muted)" data-t="vid-main-sub">Klik untuk putar demo video gameplay resmi</div>
       </div>
     </div>
   </div>
@@ -383,9 +396,9 @@ section.tight{padding:48px 0}
         <div class="video-play"><div class="play-btn"><div class="play-icon"></div></div></div>
       </div>
       <div class="video-info">
-        <div class="video-tag" style="color:var(--cyan)">● SCRIPT V1 — LIVE</div>
-        <div class="video-title">Demo Rapid Click Script V1</div>
-        <div class="video-meta">Review gameplay + setup lengkap</div>
+        <div class="video-tag" style="color:var(--cyan)" data-t="vid1-tag">● SCRIPT V1 — LIVE</div>
+        <div class="video-title" data-t="vid1-title">Demo Rapid Click Script V1</div>
+        <div class="video-meta" data-t="vid1-meta">Review gameplay + setup lengkap</div>
       </div>
     </a>
     <!-- Video 2 — Tutorial cara pakai -->
@@ -398,9 +411,9 @@ section.tight{padding:48px 0}
         <div class="video-play"><div class="play-btn"><div class="play-icon"></div></div></div>
       </div>
       <div class="video-info">
-        <div class="video-tag" style="color:var(--green)">● SETUP GUIDE</div>
-        <div class="video-title">Cara Download, Install & Run</div>
-        <div class="video-meta">Step-by-step dari download sampai aktif</div>
+        <div class="video-tag" style="color:var(--green)" data-t="vid2-tag">● SETUP GUIDE</div>
+        <div class="video-title" data-t="vid2-title">Cara Download, Install & Run</div>
+        <div class="video-meta" data-t="vid2-meta">Step-by-step dari download sampai aktif</div>
       </div>
     </a>
     <!-- Video 3 — V2 preview -->
@@ -413,9 +426,9 @@ section.tight{padding:48px 0}
         <div class="video-play"><div class="play-btn" style="opacity:.5;cursor:default"><div class="play-icon"></div></div></div>
       </div>
       <div class="video-info">
-        <div class="video-tag" style="color:var(--purple)">◐ SCRIPT V2 — SOON</div>
-        <div class="video-title">Preview V2 — Smart Mode + Overlay</div>
-        <div class="video-meta">Teaser fitur terbaru — segera hadir</div>
+        <div class="video-tag" style="color:var(--purple)" data-t="vid3-tag">◐ SCRIPT V2 — SOON</div>
+        <div class="video-title" data-t="vid3-title">Preview V2 — Smart Mode + Overlay</div>
+        <div class="video-meta" data-t="vid3-meta">Teaser fitur terbaru — segera hadir</div>
       </div>
     </a>
   </div>
@@ -433,8 +446,8 @@ section.tight{padding:48px 0}
 ============================== -->
 <section>
   <span class="section-tag">⚡ TIGA VERSI SCRIPT</span>
-  <h2 class="section-h">Pilih Script Sesuai Kebutuhan</h2>
-  <p class="section-sub">Dua script sudah tersedia untuk download. Script V3 All-in-One sedang dalam pengembangan.</p>
+  <h2 class="section-h" data-t="sec-script-h">Pilih Script Sesuai Kebutuhan</h2>
+  <p class="section-sub" data-t="sec-script-sub">Dua script sudah tersedia untuk download. Script V3 All-in-One sedang dalam pengembangan.</p>
 
   <div class="scripts-grid">
     <!-- V1 -->
@@ -450,7 +463,7 @@ section.tight{padding:48px 0}
         <li>Interface sederhana & ringan</li>
       </ul>
       <div class="script-divider"></div>
-      <div class="script-tier-note" style="margin-bottom:16px">🔒 Tier: <strong style="color:var(--cyan)">Standard V1</strong> atau <strong style="color:var(--purple)">VIP</strong></div>
+      <div class="script-tier-note">🔒 Tier: <strong style="color:var(--cyan)">Standard V1</strong> atau <strong style="color:var(--purple)">VIP</strong></div>
       <a href="/download?script=v1" class="script-dl-btn">
         <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
         DOWNLOAD SCRIPT V1
@@ -473,7 +486,7 @@ section.tight{padding:48px 0}
         <li>HWID Lock Protection</li>
       </ul>
       <div class="script-divider"></div>
-      <div class="script-tier-note" style="margin-bottom:16px">🔒 Tier: <strong style="color:var(--purple)">Standard V2</strong> atau <strong style="color:var(--purple)">VIP</strong></div>
+      <div class="script-tier-note">🔒 Tier: <strong style="color:var(--purple)">Standard V2</strong> atau <strong style="color:var(--purple)">VIP</strong></div>
       <a href="/download?script=v2" class="script-dl-btn">
         <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
         DOWNLOAD SCRIPT V2
@@ -496,7 +509,7 @@ section.tight{padding:48px 0}
         <li>Profile per Senjata</li>
       </ul>
       <div class="script-divider"></div>
-      <div class="script-tier-note" style="margin-bottom:16px">🔒 Tier: <strong style="color:var(--orange)">Lifetime VIP (upgrade)</strong></div>
+      <div class="script-tier-note">🔒 Tier: <strong style="color:var(--orange)">Lifetime VIP (upgrade)</strong></div>
       <div class="v3-locked">
         <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
         DALAM PENGEMBANGAN
@@ -505,8 +518,8 @@ section.tight{padding:48px 0}
   </div>
 
   <!-- License Access Table -->
-  <h3 style="font-family:var(--font-display);font-size:18px;font-weight:700;color:#fff;margin-top:56px;margin-bottom:0">Tabel Akses Lisensi</h3>
-  <p style="color:var(--muted);font-size:13px;margin-top:8px;margin-bottom:0">Setiap lisensi terikat ke satu script, kecuali VIP yang mendapat akses ke V1 + V2.</p>
+  <h3 style="font-family:var(--font-display);font-size:18px;font-weight:700;color:#fff;margin-top:56px;margin-bottom:0" data-t="tbl-title">Tabel Akses Lisensi</h3>
+  <p style="color:var(--muted);font-size:13px;margin-top:8px;margin-bottom:0" data-t="tbl-sub">Setiap lisensi terikat ke satu script. Lifetime VIP mencakup V2 + V3 (saat rilis) — tidak termasuk V1.</p>
   <div class="tier-table-wrap">
     <table class="tier-table">
       <thead>
@@ -538,7 +551,7 @@ section.tight{padding:48px 0}
           <td><span class="check-y">✓</span></td>
           <td><span class="check-n">✕</span></td>
           <td><span class="check-n">✕</span></td>
-          <td class="col-vip"><span class="check-n" style="font-size:10px;color:var(--purple)">Upgrade →</span></td>
+          <td class="col-vip"><span class="check-n">✕</span></td>
         </tr>
         <tr>
           <td>Lifetime Standard V2</td>
@@ -549,7 +562,7 @@ section.tight{padding:48px 0}
         </tr>
         <tr>
           <td><span style="color:var(--purple);font-weight:700">👑 Lifetime VIP</span></td>
-          <td><span class="check-vip">✓</span></td>
+          <td><span class="check-n">✕</span></td>
           <td><span class="check-vip">✓</span></td>
           <td><span style="font-family:var(--font-mono);font-size:9px;color:var(--orange)">Saat rilis</span></td>
           <td class="col-vip"><span class="check-vip">✓</span></td>
@@ -564,33 +577,33 @@ section.tight{padding:48px 0}
 ============================== -->
 <section>
   <span class="section-tag green">📖 CARA PENGGUNAAN</span>
-  <h2 class="section-h">Setup dalam 4 Langkah</h2>
-  <p class="section-sub">Dari download sampai aktif di Point Blank — cepat dan mudah.</p>
+  <h2 class="section-h" data-t="sec-how-h">Setup dalam 4 Langkah</h2>
+  <p class="section-sub" data-t="sec-how-sub">Dari download sampai aktif di Point Blank — cepat dan mudah.</p>
 
   <div class="steps-grid">
     <div class="step-card">
       <div class="step-num">01</div>
       <span class="step-icon">📥</span>
-      <div class="step-title">DOWNLOAD</div>
-      <div class="step-desc">Klik tombol Download. Pilih Script V1 atau V2 sesuai lisensi yang kamu punya.</div>
+      <div class="step-title" data-t="step1-title">DOWNLOAD</div>
+      <div class="step-desc" data-t="step1-desc">Klik tombol Download. Pilih Script V1 atau V2 sesuai lisensi yang kamu punya.</div>
     </div>
     <div class="step-card">
       <div class="step-num">02</div>
       <span class="step-icon">🛡️</span>
-      <div class="step-title">RUN AS ADMIN</div>
-      <div class="step-desc">Klik kanan file .exe → <strong>Run as Administrator</strong>. Jika ada warning antivirus, klik "More Info" → "Run Anyway".</div>
+      <div class="step-title" data-t="step2-title">RUN AS ADMIN</div>
+      <div class="step-desc" data-t="step2-desc">Klik kanan file .exe → <strong>Run as Administrator</strong>. Jika ada warning antivirus, klik "More Info" → "Run Anyway".</div>
     </div>
     <div class="step-card">
       <div class="step-num">03</div>
       <span class="step-icon">🔑</span>
-      <div class="step-title">AKTIVASI</div>
-      <div class="step-desc">Masukkan License Key yang diberikan admin, klik <strong>ACTIVATE LICENSE</strong>. Timer mulai berjalan saat ini.</div>
+      <div class="step-title" data-t="step3-title">AKTIVASI</div>
+      <div class="step-desc" data-t="step3-desc">Masukkan License Key yang diberikan admin, klik <strong>ACTIVATE LICENSE</strong>. Timer mulai berjalan saat ini.</div>
     </div>
     <div class="step-card">
       <div class="step-num">04</div>
       <span class="step-icon">🎮</span>
-      <div class="step-title">MAIN!</div>
-      <div class="step-desc">Buka Point Blank. Atur delay (rekomendasi 1–10ms), tekan <strong>F1</strong> untuk ON/OFF.</div>
+      <div class="step-title" data-t="step4-title">MAIN!</div>
+      <div class="step-desc" data-t="step4-desc">Buka Point Blank. Atur delay (rekomendasi 1–10ms), tekan <strong>F1</strong> untuk ON/OFF.</div>
     </div>
   </div>
 
@@ -635,14 +648,14 @@ section.tight{padding:48px 0}
 ============================== -->
 <section>
   <span class="section-tag orange">💰 HARGA & PAKET</span>
-  <h2 class="section-h">Pilih Paket Terbaikmu</h2>
-  <p class="section-sub">Semua harga sudah termasuk lisensi aktif. Timer mulai saat pertama kali diaktifkan — bukan saat beli.</p>
+  <h2 class="section-h" data-t="sec-price-h">Pilih Paket Terbaikmu</h2>
+  <p class="section-sub" data-t="sec-price-sub">Semua harga sudah termasuk lisensi aktif. Timer mulai saat pertama kali diaktifkan — bukan saat beli.</p>
 
   <div style="margin-top:28px;background:rgba(34,211,238,.05);border:1px solid rgba(34,211,238,.15);border-radius:12px;padding:16px 20px;display:flex;align-items:center;gap:12px">
     <span style="font-size:20px">ℹ️</span>
     <span style="font-size:13px;color:rgba(226,232,240,.7)">
-      <strong style="color:var(--cyan)">Standard</strong>: pilih satu script (V1 atau V2). &nbsp;|&nbsp;
-      <strong style="color:var(--purple)">Lifetime VIP</strong>: akses ke V1 + V2 sekaligus, tanpa beli ulang saat update rilis.
+      <strong style="color:var(--cyan)">Standard V2</strong>: hanya Script V2 selamanya. &nbsp;|&nbsp;
+      <strong style="color:var(--purple)">Lifetime VIP</strong>: Script V2 sekarang + V3 gratis saat rilis. Script V1 dijual terpisah (trial/bulanan).
     </span>
   </div>
 
@@ -681,76 +694,73 @@ section.tight{padding:48px 0}
       </ul>
       <a href="https://wa.me/6285823358559?text=Halo+min%2C+mau+beli+V1+1+Bulan+20K" target="_blank" class="price-btn cyan">BELI SEKARANG</a>
     </div>
-    <div class="price-card">
-      <span class="price-label perm">LIFETIME</span>
-      <div class="price-name">Lifetime V1</div>
-      <div class="price-desc">Bayar sekali, pakai selamanya</div>
-      <div class="price-amount" style="color:#818cf8">100K</div>
-      <div class="price-unit">Rp 100.000 / permanent</div>
+    <div class="price-card" style="opacity:.45;pointer-events:none;filter:grayscale(.8)">
+      <span class="price-label basic" style="text-decoration:line-through">LIFETIME</span>
+      <div class="price-name" style="text-decoration:line-through;color:var(--muted)">Lifetime V1</div>
+      <div class="price-desc">Tidak tersedia — V2 sudah rilis</div>
+      <div class="price-amount" style="color:var(--muted);font-size:24px;margin-top:8px">DITUTUP</div>
+      <div class="price-unit" style="margin-bottom:20px">Paket ini tidak lagi dijual</div>
       <ul class="price-features">
-        <li><span class="check y">✓</span> Script V1 Rapid Click</li>
-        <li><span class="check y">✓</span> Custom Delay</li>
-        <li><span class="check y">✓</span> HWID Lock</li>
-        <li><span class="check n">✕</span> Smart Mode</li>
-        <li><span class="check n">✕</span> Script V2</li>
+        <li><span class="check n">✕</span> Tidak tersedia lagi</li>
+        <li><span class="check n">✕</span> Upgrade ke VIP V2 untuk lifetime</li>
       </ul>
-      <a href="https://wa.me/6285823358559?text=Halo+min%2C+mau+beli+Lifetime+V1+100K" target="_blank" class="price-btn cyan">BELI SEKARANG</a>
+      <div class="price-btn" style="background:rgba(100,116,139,.08);border:1px solid rgba(100,116,139,.2);color:var(--muted);cursor:not-allowed;display:flex;align-items:center;justify-content:center;padding:12px;border-radius:10px;font-family:var(--font-display);font-size:11px;font-weight:700;letter-spacing:1px">
+        🚫 TIDAK TERSEDIA
+      </div>
     </div>
-    <div class="price-card vip">
-      <div class="vip-ribbon">👑 VIP</div>
-      <span class="price-label vip">BEST VALUE</span>
+    <div class="price-card vip" style="border-style:dashed;opacity:.7">
+      <div class="vip-ribbon" style="background:var(--muted)">INFO</div>
+      <span class="price-label vip">PINDAH KE V2</span>
       <div class="price-name">Lifetime VIP</div>
-      <div class="price-desc">V1 + V2 + update mendatang</div>
-      <div class="price-amount" style="color:var(--purple)">150K</div>
-      <div class="price-unit">Rp 150.000 / permanent</div>
-      <ul class="price-features">
-        <li><span class="check vip">✓</span> Script V1 Rapid Click</li>
-        <li><span class="check vip">✓</span> Script V2 Smart Macro</li>
-        <li><span class="check vip">✓</span> Update mendatang (V3)</li>
-        <li><span class="check vip">✓</span> HWID Lock 2 Script</li>
-        <li><span class="check vip">✓</span> Prioritas support</li>
-      </ul>
-      <a href="https://wa.me/6285823358559?text=Halo+min%2C+mau+beli+Lifetime+VIP+150K" target="_blank" class="price-btn purple">👑 BELI VIP</a>
+      <div class="price-desc" style="color:rgba(168,85,247,.8)">VIP sekarang ada di seksi V2 di bawah</div>
+      <div style="margin:20px 0;padding:16px;background:rgba(168,85,247,.08);border:1px solid rgba(168,85,247,.2);border-radius:12px;font-size:12px;color:rgba(226,232,240,.7);line-height:1.7">
+        Lifetime VIP kini hanya tersedia di paket <strong style="color:var(--purple)">V2 + V3</strong>.<br>
+        Tidak termasuk V1 agar harga tetap fair.<br>
+        <span style="color:var(--muted);font-size:11px">Scroll ke bawah → Seksi Script V2</span>
+      </div>
+      <a href="#v2-pricing" class="price-btn purple" onclick="document.getElementById('v2-pricing').scrollIntoView({behavior:'smooth'});return false;">
+        ↓ Lihat VIP di Seksi V2
+      </a>
     </div>
   </div>
 
   <!-- V2 Pricing -->
-  <h3 style="font-family:var(--font-display);font-size:14px;font-weight:700;color:var(--purple);letter-spacing:2px;margin-top:48px;margin-bottom:20px">◆ SCRIPT V2 — SMART MACRO</h3>
+  <h3 id="v2-pricing" style="font-family:var(--font-display);font-size:14px;font-weight:700;color:var(--purple);letter-spacing:2px;margin-top:48px;margin-bottom:20px">◆ SCRIPT V2 — SMART MACRO</h3>
   <div class="pricing-grid">
     <div class="price-card">
       <span class="price-label basic">TRIAL</span>
       <div class="price-name">2 Minggu</div>
       <div class="price-desc">Coba Smart Mode 2 minggu</div>
-      <div class="price-amount" style="color:var(--purple)">19K</div>
-      <div class="price-unit">Rp 19.000 / 14 hari</div>
+      <div class="price-amount" style="color:var(--purple)">20K</div>
+      <div class="price-unit">Rp 20.000 / 14 hari</div>
       <ul class="price-features">
         <li><span class="check y">✓</span> Script V2 — Semua fitur</li>
         <li><span class="check y">✓</span> Smart Mode + Hotkey</li>
         <li><span class="check y">✓</span> Overlay (F7)</li>
         <li><span class="check n">✕</span> Script V1</li>
       </ul>
-      <a href="https://wa.me/6285823358559?text=Halo+min%2C+mau+beli+V2+2+Minggu+19K" target="_blank" class="price-btn" style="background:rgba(168,85,247,.12);border:1px solid rgba(168,85,247,.3);color:var(--purple)">BELI SEKARANG</a>
+      <a href="https://wa.me/6285823358559?text=Halo+min%2C+mau+beli+V2+2+Minggu+20K" target="_blank" class="price-btn" style="background:rgba(168,85,247,.12);border:1px solid rgba(168,85,247,.3);color:var(--purple)">BELI SEKARANG</a>
     </div>
     <div class="price-card" style="border-color:rgba(168,85,247,.35)">
       <span class="price-label hot" style="background:rgba(168,85,247,.12);border-color:rgba(168,85,247,.3);color:var(--purple)">POPULER</span>
       <div class="price-name">1 Bulan V2</div>
       <div class="price-desc">Sebulan penuh Smart Mode</div>
-      <div class="price-amount" style="color:var(--purple)">25K</div>
-      <div class="price-unit">Rp 25.000 / 30 hari</div>
+      <div class="price-amount" style="color:var(--purple)">30K</div>
+      <div class="price-unit">Rp 30.000 / 30 hari</div>
       <ul class="price-features">
         <li><span class="check y">✓</span> Script V2 — Semua fitur</li>
         <li><span class="check y">✓</span> Smart Mode + Hotkey</li>
         <li><span class="check y">✓</span> Overlay + Load/Save</li>
         <li><span class="check n">✕</span> Script V1</li>
       </ul>
-      <a href="https://wa.me/6285823358559?text=Halo+min%2C+mau+beli+V2+1+Bulan+25K" target="_blank" class="price-btn" style="background:rgba(168,85,247,.15);border:1px solid rgba(168,85,247,.4);color:var(--purple)">BELI SEKARANG</a>
+      <a href="https://wa.me/6285823358559?text=Halo+min%2C+mau+beli+V2+1+Bulan+30K" target="_blank" class="price-btn" style="background:rgba(168,85,247,.15);border:1px solid rgba(168,85,247,.4);color:var(--purple)">BELI SEKARANG</a>
     </div>
     <div class="price-card">
       <span class="price-label perm">LIFETIME</span>
       <div class="price-name">Lifetime V2</div>
       <div class="price-desc">Bayar sekali, V2 selamanya</div>
-      <div class="price-amount" style="color:#818cf8">125K</div>
-      <div class="price-unit">Rp 125.000 / permanent</div>
+      <div class="price-amount" style="color:#818cf8">75K</div>
+      <div class="price-unit">Rp 75.000 / permanent</div>
       <ul class="price-features">
         <li><span class="check y">✓</span> Script V2 — Semua fitur</li>
         <li><span class="check y">✓</span> Smart Mode + Hotkey</li>
@@ -758,23 +768,24 @@ section.tight{padding:48px 0}
         <li><span class="check n">✕</span> Script V1</li>
         <li><span class="check n">✕</span> Script V3</li>
       </ul>
-      <a href="https://wa.me/6285823358559?text=Halo+min%2C+mau+beli+Lifetime+V2+125K" target="_blank" class="price-btn" style="background:rgba(168,85,247,.12);border:1px solid rgba(168,85,247,.3);color:var(--purple)">BELI SEKARANG</a>
+      <a href="https://wa.me/6285823358559?text=Halo+min%2C+mau+beli+Lifetime+V2+75K" target="_blank" class="price-btn" style="background:rgba(168,85,247,.12);border:1px solid rgba(168,85,247,.3);color:var(--purple)">BELI SEKARANG</a>
     </div>
     <div class="price-card vip">
       <div class="vip-ribbon">👑 VIP</div>
       <span class="price-label vip">ULTIMATE</span>
       <div class="price-name">Lifetime VIP</div>
-      <div class="price-desc">V1 + V2 + semua update mendatang</div>
+      <div class="price-desc">V2 sekarang + V3 gratis saat rilis</div>
       <div class="price-amount" style="color:var(--purple)">150K</div>
       <div class="price-unit">Rp 150.000 / permanent</div>
       <ul class="price-features">
-        <li><span class="check vip">✓</span> Script V1 + V2 sekaligus</li>
-        <li><span class="check vip">✓</span> Update otomatis (V3 saat rilis)</li>
-        <li><span class="check vip">✓</span> HWID Lock up to 2 script</li>
-        <li><span class="check vip">✓</span> Tidak perlu beli ulang</li>
+        <li><span class="check vip">✓</span> Script V2 — Semua fitur</li>
+        <li><span class="check vip">✓</span> Script V3 — Gratis saat rilis</li>
+        <li><span class="check vip">✓</span> Tidak perlu beli lagi saat update</li>
+        <li><span class="check vip">✓</span> HWID Lock</li>
         <li><span class="check vip">✓</span> Prioritas support admin</li>
+        <li><span class="check n">✕</span> Tidak termasuk Script V1</li>
       </ul>
-      <a href="https://wa.me/6285823358559?text=Halo+min%2C+mau+beli+Lifetime+VIP+150K" target="_blank" class="price-btn purple">👑 BELI VIP</a>
+      <a href="https://wa.me/6285823358559?text=Halo+min%2C+mau+beli+Lifetime+VIP+V2%2BV3+150K" target="_blank" class="price-btn purple">👑 BELI VIP V2+V3</a>
     </div>
   </div>
 </section>
@@ -787,29 +798,30 @@ section.tight{padding:48px 0}
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
       <span style="font-size:32px">👑</span>
       <div>
-        <div style="font-family:var(--font-display);font-size:20px;font-weight:900;color:var(--purple)">Kenapa Pilih Lifetime VIP?</div>
-        <div style="font-size:13px;color:var(--muted);margin-top:4px">Satu kali bayar — akses selamanya ke semua script yang ada dan yang akan datang.</div>
+        <div style="font-family:var(--font-display);font-size:20px;font-weight:900;color:var(--purple)" data-t="vip-title">Kenapa Pilih Lifetime VIP?</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:4px" data-t="vip-sub">Beli V2 sekarang, dapat V3 gratis saat rilis. Tidak perlu beli ulang.</div>
       </div>
     </div>
     <div class="vip-compare">
       <div class="vip-col col-std">
-        <div class="vip-col-title">🔷 LIFETIME STANDARD</div>
+        <div class="vip-col-title">🔷 LIFETIME STANDARD V2</div>
         <ul>
-          <li>Akses 1 script saja (V1 atau V2)</li>
-          <li>Jika mau V2, harus beli Lifetime V2 lagi</li>
+          <li>Akses Script V2 saja (selamanya)</li>
+          <li>Saat V3 rilis, harus beli Lifetime V3 lagi</li>
           <li>Total beli dua = lebih mahal</li>
           <li>Tidak termasuk update mendatang</li>
         </ul>
       </div>
       <div class="vip-arrow">→</div>
       <div class="vip-col col-vip">
-        <div class="vip-col-title">👑 LIFETIME VIP</div>
+        <div class="vip-col-title">👑 LIFETIME VIP (V2+V3)</div>
         <ul>
-          <li>Akses V1 + V2 sekaligus</li>
+          <li>Akses Script V2 sekarang</li>
           <li>Script V3 otomatis tersedia saat rilis</li>
           <li>Bayar sekali, tidak perlu upgrade lagi</li>
-          <li>Harga lebih hemat vs beli satuan</li>
+          <li>Lebih hemat vs beli V2 + V3 satuan</li>
           <li>Prioritas support dari admin</li>
+          <li style="color:rgba(100,116,139,.5)"><em>Tidak termasuk Script V1</em></li>
         </ul>
       </div>
     </div>
@@ -849,8 +861,8 @@ section.tight{padding:48px 0}
 ============================== -->
 <section style="padding:64px 0;text-align:center">
   <div class="glass" style="padding:48px;border-radius:24px;background:linear-gradient(135deg,rgba(34,211,238,.05),rgba(168,85,247,.04))">
-    <h2 class="section-h" style="text-align:center;margin:0 auto 16px">Siap Mulai?</h2>
-    <p style="color:var(--muted);margin-bottom:36px;font-size:15px">Download gratis sekarang atau hubungi admin untuk info lebih lanjut.</p>
+    <h2 class="section-h" style="text-align:center;margin:0 auto 16px" data-t="cta-h">Siap Mulai?</h2>
+    <p style="color:var(--muted);margin-bottom:36px;font-size:15px" data-t="cta-sub">Download gratis sekarang atau hubungi admin untuk info lebih lanjut.</p>
     <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:16px">
       <a href="/download" class="btn-primary">
         <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
@@ -879,18 +891,19 @@ section.tight{padding:48px 0}
       <a href="https://wa.me/6285823358559" target="_blank">WhatsApp</a>
       <a href="https://youtube.com/@heavyrainmacro" target="_blank">YouTube</a>
     </div>
-    <div class="footer-copy">© 2024 HUJAN DERAS · Semua hak dilindungi</div>
+    <div class="footer-copy" data-t="footer-copy">© 2024 HUJAN DERAS · Semua hak dilindungi</div>
   </div>
 </footer>
 
 </div><!-- end page-wrap -->
 
 <script>
-/* Rain */
+/* =====================
+   RAIN
+===================== */
 (function(){
   const c=document.getElementById('rain-wrap');
-  const count=60;
-  for(let i=0;i<count;i++){
+  for(let i=0;i<60;i++){
     const d=document.createElement('div');
     d.className='raindrop';
     const h=Math.random()*60+20;
@@ -899,25 +912,25 @@ section.tight{padding:48px 0}
   }
 })();
 
-/* Lightning */
+/* =====================
+   LIGHTNING
+===================== */
 (function(){
   function flash(){
     const l=document.getElementById('lightning');
     l.classList.add('flash');
-    document.body.style.animation='shake .25s ease';
-    setTimeout(()=>{l.classList.remove('flash');document.body.style.animation='';},1500);
+    setTimeout(()=>l.classList.remove('flash'),1500);
     setTimeout(flash,Math.random()*8000+5000);
   }
   setTimeout(flash,3000);
 })();
 
-/* Main Video - replace DEMO_VIDEO_ID with real YouTube ID */
+/* =====================
+   MAIN VIDEO
+===================== */
 function loadMainVideo(){
   const videoId='DEMO_VIDEO_ID';
-  if(videoId==='DEMO_VIDEO_ID'){
-    window.open('https://youtube.com/@heavyrainmacro','_blank');
-    return;
-  }
+  if(videoId==='DEMO_VIDEO_ID'){window.open('https://youtube.com/@heavyrainmacro','_blank');return;}
   const wrap=document.getElementById('mainVideoWrap');
   const iframe=document.createElement('iframe');
   iframe.src=`https://www.youtube.com/embed/${videoId}?autoplay=1`;
@@ -928,7 +941,221 @@ function loadMainVideo(){
   wrap.appendChild(iframe);
 }
 
-/* Fade-in on scroll */
+/* =====================
+   MULTI-LANGUAGE SYSTEM
+===================== */
+const TRANSLATIONS = {
+  id: {
+    // Nav/hero
+    'hero-desc': 'Premium PB Macro tool berbasis <strong style="color:var(--cyan)">C++ Native</strong> untuk Point Blank.<br>Dari Rapid Click simpel sampai Smart Mode lengkap — ada script untuk semua level.',
+    'btn-download': '⬇ DOWNLOAD GRATIS',
+    'btn-contact': '💬 HUBUNGI ADMIN',
+    // Video section
+    'sec-video-tag': '▶ VIDEO DEMO & TUTORIAL',
+    'sec-video-h': 'Lihat Sendiri Sebelum Beli',
+    'sec-video-sub': 'Review jujur, demo live gameplay, dan panduan setup lengkap dalam video.',
+    'vid-main-title': 'Demo Live — Script V2 Gameplay',
+    'vid-main-sub': 'Klik untuk putar demo video gameplay resmi',
+    'vid1-tag': '● SCRIPT V1 — LIVE',
+    'vid1-title': 'Demo Rapid Click Script V1',
+    'vid1-meta': 'Review gameplay + setup lengkap',
+    'vid2-tag': '● SETUP GUIDE',
+    'vid2-title': 'Cara Download, Install & Run',
+    'vid2-meta': 'Step-by-step dari download sampai aktif',
+    'vid3-tag': '◐ SCRIPT V2 — SOON',
+    'vid3-title': 'Preview V2 — Smart Mode + Overlay',
+    'vid3-meta': 'Teaser fitur terbaru — segera hadir',
+    'btn-yt': '▶ Lihat Semua Video di YouTube',
+    // Scripts
+    'sec-script-tag': '⚡ TIGA VERSI SCRIPT',
+    'sec-script-h': 'Pilih Script Sesuai Kebutuhan',
+    'sec-script-sub': 'Dua script sudah tersedia untuk download. Script V3 All-in-One sedang dalam pengembangan.',
+    'tbl-title': 'Tabel Akses Lisensi',
+    'tbl-sub': 'Setiap lisensi terikat ke satu script. Lifetime VIP mencakup V2 + V3 (saat rilis) — tidak termasuk V1.',
+    // How to
+    'sec-how-tag': '📖 CARA PENGGUNAAN',
+    'sec-how-h': 'Setup dalam 4 Langkah',
+    'sec-how-sub': 'Dari download sampai aktif di Point Blank — cepat dan mudah.',
+    'step1-title': 'DOWNLOAD',
+    'step1-desc': 'Klik tombol Download. Pilih Script V1 atau V2 sesuai lisensi yang kamu punya.',
+    'step2-title': 'RUN AS ADMIN',
+    'step2-desc': 'Klik kanan file .exe → <strong>Run as Administrator</strong>. Jika ada warning antivirus, klik "More Info" → "Run Anyway".',
+    'step3-title': 'AKTIVASI',
+    'step3-desc': 'Masukkan License Key yang diberikan admin, klik <strong>ACTIVATE LICENSE</strong>. Timer mulai berjalan saat ini.',
+    'step4-title': 'MAIN!',
+    'step4-desc': 'Buka Point Blank. Atur delay (rekomendasi 1–10ms), tekan <strong>F1</strong> untuk ON/OFF.',
+    // Pricing
+    'sec-price-tag': '💰 HARGA & PAKET',
+    'sec-price-h': 'Pilih Paket Terbaikmu',
+    'sec-price-sub': 'Semua harga sudah termasuk lisensi aktif. Timer mulai saat pertama kali diaktifkan — bukan saat beli.',
+    'price-info': '<strong style="color:var(--cyan)">Standard V2</strong>: hanya Script V2 selamanya. &nbsp;|&nbsp; <strong style="color:var(--purple)">Lifetime VIP</strong>: Script V2 sekarang + V3 gratis saat rilis. Script V1 dijual terpisah.',
+    // VIP explainer
+    'vip-title': 'Kenapa Pilih Lifetime VIP?',
+    'vip-sub': 'Beli V2 sekarang, dapat V3 gratis saat rilis. Tidak perlu beli ulang.',
+    // Antivirus
+    'warn-title': '⚠️ ANTIVIRUS FALSE POSITIVE — INI NORMAL',
+    'warn-body': 'Script ini ditulis dalam <strong>C++ Native</strong> dan berkomunikasi langsung dengan input sistem. Beberapa antivirus menandainya sebagai "suspicious" padahal <strong>bukan virus</strong>. Ikuti langkah berikut:',
+    'warn-s1': 'Buka <strong>Windows Security</strong> → Virus & threat protection → Protection history',
+    'warn-s2': 'Temukan file yang diblokir → klik <strong>"Allow on device"</strong>',
+    'warn-s3': 'Atau tambahkan folder download ke <strong>Exclusions</strong> di Windows Defender',
+    'warn-s4': 'Jika muncul SmartScreen, klik <strong>"More info"</strong> → <strong>"Run anyway"</strong>',
+    // CTA / footer
+    'cta-h': 'Siap Mulai?',
+    'cta-sub': 'Download gratis sekarang atau hubungi admin untuk info lebih lanjut.',
+    'footer-copy': '© 2024 HUJAN DERAS · Semua hak dilindungi',
+    // Buttons
+    'btn-buy-now': 'BELI SEKARANG',
+    'btn-buy-vip': '👑 BELI VIP V2+V3',
+    'btn-not-avail': '🚫 TIDAK TERSEDIA',
+    'btn-go-vip': '↓ Lihat VIP di Seksi V2',
+    'btn-wa-admin': '💬 WhatsApp Admin',
+  },
+  en: {
+    'hero-desc': 'Premium PB Macro tool built with <strong style="color:var(--cyan)">C++ Native</strong> for Point Blank.<br>From simple Rapid Click to full Smart Mode — there\'s a script for every level.',
+    'btn-download': '⬇ FREE DOWNLOAD',
+    'btn-contact': '💬 CONTACT ADMIN',
+    'sec-video-tag': '▶ VIDEO DEMO & TUTORIAL',
+    'sec-video-h': 'See It Before You Buy',
+    'sec-video-sub': 'Honest review, live gameplay demo, and full setup guide in video.',
+    'vid-main-title': 'Live Demo — Script V2 Gameplay',
+    'vid-main-sub': 'Click to play official gameplay demo video',
+    'vid1-tag': '● SCRIPT V1 — LIVE',
+    'vid1-title': 'Rapid Click Script V1 Demo',
+    'vid1-meta': 'Gameplay review + full setup',
+    'vid2-tag': '● SETUP GUIDE',
+    'vid2-title': 'How to Download, Install & Run',
+    'vid2-meta': 'Step-by-step from download to activation',
+    'vid3-tag': '◐ SCRIPT V2 — COMING SOON',
+    'vid3-title': 'V2 Preview — Smart Mode + Overlay',
+    'vid3-meta': 'Latest feature teaser — coming soon',
+    'btn-yt': '▶ See All Videos on YouTube',
+    'sec-script-tag': '⚡ THREE SCRIPT VERSIONS',
+    'sec-script-h': 'Choose the Script for You',
+    'sec-script-sub': 'Two scripts are available for download. Script V3 All-in-One is under development.',
+    'tbl-title': 'License Access Table',
+    'tbl-sub': 'Each license is tied to one script. Lifetime VIP includes V2 + V3 (on release) — does not include V1.',
+    'sec-how-tag': '📖 HOW TO USE',
+    'sec-how-h': 'Setup in 4 Steps',
+    'sec-how-sub': 'From download to active in Point Blank — fast and easy.',
+    'step1-title': 'DOWNLOAD',
+    'step1-desc': 'Click the Download button. Choose Script V1 or V2 based on your license.',
+    'step2-title': 'RUN AS ADMIN',
+    'step2-desc': 'Right-click the .exe → <strong>Run as Administrator</strong>. If antivirus warns you, click "More Info" → "Run Anyway".',
+    'step3-title': 'ACTIVATE',
+    'step3-desc': 'Enter the License Key given by admin, click <strong>ACTIVATE LICENSE</strong>. Timer starts now.',
+    'step4-title': 'PLAY!',
+    'step4-desc': 'Open Point Blank. Set delay (1–10ms recommended), press <strong>F1</strong> to toggle ON/OFF.',
+    'sec-price-tag': '💰 PRICING & PACKAGES',
+    'sec-price-h': 'Choose Your Best Package',
+    'sec-price-sub': 'All prices include an active license. Timer starts on first activation — not on purchase.',
+    'price-info': '<strong style="color:var(--cyan)">Standard V2</strong>: Script V2 only, forever. &nbsp;|&nbsp; <strong style="color:var(--purple)">Lifetime VIP</strong>: Script V2 now + V3 free on release. Script V1 sold separately.',
+    'vip-title': 'Why Choose Lifetime VIP?',
+    'vip-sub': 'Buy V2 now, get V3 free on release. No need to buy again.',
+    'warn-title': '⚠️ ANTIVIRUS FALSE POSITIVE — THIS IS NORMAL',
+    'warn-body': 'This script is written in <strong>C++ Native</strong> and communicates directly with system input. Some antivirus software flags it as "suspicious" but it is <strong>not a virus</strong>. Follow these steps:',
+    'warn-s1': 'Open <strong>Windows Security</strong> → Virus & threat protection → Protection history',
+    'warn-s2': 'Find the blocked file → click <strong>"Allow on device"</strong>',
+    'warn-s3': 'Or add the download folder to <strong>Exclusions</strong> in Windows Defender',
+    'warn-s4': 'If SmartScreen appears, click <strong>"More info"</strong> → <strong>"Run anyway"</strong>',
+    'cta-h': 'Ready to Start?',
+    'cta-sub': 'Download for free now or contact admin for more info.',
+    'footer-copy': '© 2024 HUJAN DERAS · All rights reserved',
+    'btn-buy-now': 'BUY NOW',
+    'btn-buy-vip': '👑 BUY VIP V2+V3',
+    'btn-not-avail': '🚫 NOT AVAILABLE',
+    'btn-go-vip': '↓ See VIP in V2 Section',
+    'btn-wa-admin': '💬 WhatsApp Admin',
+  },
+  pt: {
+    'hero-desc': 'Ferramenta de macro PB premium em <strong style="color:var(--cyan)">C++ Nativo</strong> para Point Blank.<br>Do Rapid Click simples ao Smart Mode completo — há um script para cada nível.',
+    'btn-download': '⬇ BAIXAR GRÁTIS',
+    'btn-contact': '💬 CONTATAR ADMIN',
+    'sec-video-tag': '▶ VÍDEO DEMO & TUTORIAL',
+    'sec-video-h': 'Veja Antes de Comprar',
+    'sec-video-sub': 'Review honesta, demo ao vivo e guia completo de configuração em vídeo.',
+    'vid-main-title': 'Demo Ao Vivo — Script V2 Gameplay',
+    'vid-main-sub': 'Clique para reproduzir o vídeo demo oficial',
+    'vid1-tag': '● SCRIPT V1 — DISPONÍVEL',
+    'vid1-title': 'Demo do Script V1 Rapid Click',
+    'vid1-meta': 'Review de gameplay + configuração completa',
+    'vid2-tag': '● GUIA DE INSTALAÇÃO',
+    'vid2-title': 'Como Baixar, Instalar e Executar',
+    'vid2-meta': 'Passo a passo do download até a ativação',
+    'vid3-tag': '◐ SCRIPT V2 — EM BREVE',
+    'vid3-title': 'Preview V2 — Smart Mode + Overlay',
+    'vid3-meta': 'Teaser dos novos recursos — em breve',
+    'btn-yt': '▶ Ver Todos os Vídeos no YouTube',
+    'sec-script-tag': '⚡ TRÊS VERSÕES DE SCRIPT',
+    'sec-script-h': 'Escolha o Script Ideal para Você',
+    'sec-script-sub': 'Dois scripts disponíveis para download. Script V3 All-in-One em desenvolvimento.',
+    'tbl-title': 'Tabela de Acesso por Licença',
+    'tbl-sub': 'Cada licença está vinculada a um script. Lifetime VIP inclui V2 + V3 (no lançamento) — não inclui V1.',
+    'sec-how-tag': '📖 COMO USAR',
+    'sec-how-h': 'Configuração em 4 Passos',
+    'sec-how-sub': 'Do download até ativo no Point Blank — rápido e fácil.',
+    'step1-title': 'BAIXAR',
+    'step1-desc': 'Clique no botão Download. Escolha Script V1 ou V2 conforme sua licença.',
+    'step2-title': 'EXECUTAR COMO ADMIN',
+    'step2-desc': 'Clique com botão direito no .exe → <strong>Executar como Administrador</strong>. Se o antivírus avisar, clique em "Mais informações" → "Executar mesmo assim".',
+    'step3-title': 'ATIVAR',
+    'step3-desc': 'Insira a Chave de Licença fornecida pelo admin, clique em <strong>ATIVAR LICENÇA</strong>. O timer começa agora.',
+    'step4-title': 'JOGAR!',
+    'step4-desc': 'Abra o Point Blank. Ajuste o delay (1–10ms recomendado), pressione <strong>F1</strong> para ligar/desligar.',
+    'sec-price-tag': '💰 PREÇOS & PACOTES',
+    'sec-price-h': 'Escolha Seu Melhor Pacote',
+    'sec-price-sub': 'Todos os preços incluem licença ativa. O timer começa na primeira ativação — não na compra.',
+    'price-info': '<strong style="color:var(--cyan)">Standard V2</strong>: apenas Script V2, para sempre. &nbsp;|&nbsp; <strong style="color:var(--purple)">Lifetime VIP</strong>: Script V2 agora + V3 grátis no lançamento. Script V1 vendido separadamente.',
+    'vip-title': 'Por Que Escolher o Lifetime VIP?',
+    'vip-sub': 'Compre V2 agora, ganhe V3 grátis no lançamento. Sem necessidade de comprar novamente.',
+    'warn-title': '⚠️ FALSO POSITIVO DO ANTIVÍRUS — ISSO É NORMAL',
+    'warn-body': 'Este script é escrito em <strong>C++ Nativo</strong> e se comunica diretamente com a entrada do sistema. Alguns antivírus o marcam como "suspeito", mas <strong>não é um vírus</strong>. Siga os passos:',
+    'warn-s1': 'Abra o <strong>Windows Security</strong> → Proteção contra vírus e ameaças → Histórico de proteção',
+    'warn-s2': 'Encontre o arquivo bloqueado → clique em <strong>"Permitir no dispositivo"</strong>',
+    'warn-s3': 'Ou adicione a pasta de download às <strong>Exclusões</strong> no Windows Defender',
+    'warn-s4': 'Se o SmartScreen aparecer, clique em <strong>"Mais informações"</strong> → <strong>"Executar mesmo assim"</strong>',
+    'cta-h': 'Pronto para Começar?',
+    'cta-sub': 'Baixe gratuitamente agora ou entre em contato com o admin para mais informações.',
+    'footer-copy': '© 2024 HUJAN DERAS · Todos os direitos reservados',
+    'btn-buy-now': 'COMPRAR AGORA',
+    'btn-buy-vip': '👑 COMPRAR VIP V2+V3',
+    'btn-not-avail': '🚫 NÃO DISPONÍVEL',
+    'btn-go-vip': '↓ Ver VIP na Seção V2',
+    'btn-wa-admin': '💬 WhatsApp Admin',
+  }
+};
+
+let currentLang = localStorage.getItem('hd-lang') || 'id';
+
+function setLang(lang) {
+  currentLang = lang;
+  localStorage.setItem('hd-lang', lang);
+  // Update buttons
+  document.querySelectorAll('.lang-btn').forEach(b => {
+    b.classList.toggle('active', b.textContent.toLowerCase().includes(lang));
+  });
+  applyTranslations();
+}
+
+function applyTranslations() {
+  const T = TRANSLATIONS[currentLang] || TRANSLATIONS.id;
+  document.querySelectorAll('[data-t]').forEach(el => {
+    const key = el.getAttribute('data-t');
+    if (T[key]) el.innerHTML = T[key];
+  });
+}
+
+// Apply on load
+document.addEventListener('DOMContentLoaded', () => {
+  // Set active button
+  document.querySelectorAll('.lang-btn').forEach(b => {
+    b.classList.toggle('active', b.textContent.toLowerCase().includes(currentLang));
+  });
+  applyTranslations();
+});
+
+/* =====================
+   FADE-IN ON SCROLL
+===================== */
 const obs=new IntersectionObserver(entries=>{
   entries.forEach(e=>{if(e.isIntersecting){e.target.style.opacity='1';e.target.style.transform='translateY(0)';}});
 },{threshold:.1});
