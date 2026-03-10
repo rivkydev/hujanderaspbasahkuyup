@@ -480,7 +480,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
         <div class="wa-status-bar" id="cmChatHeader">
           <div class="wa-avatar">🌧️</div>
           <div>
-            <div class="wa-contact-name">Heavy Rain Macro</div>
+            <div class="wa-contact-name">Hujan Deras Macro</div>
             <div class="wa-contact-sub" id="cmChatSub">online</div>
           </div>
           <div class="wa-header-icons"><span>📞</span><span>⋮</span></div>
@@ -1037,6 +1037,10 @@ function doCopyTemplate(){
 // ==========================================
 // TEMPLATE BUILDER — All scenarios
 // ==========================================
+// ==========================================
+// TEMPLATE BUILDER — Patched v2
+// Brand: Hujan Deras, Hotkeys sesuai sourcecode
+// ==========================================
 function _buildTemplate(key,dur,isWarnet,lang,buyer,plat,scripts,type){
   const isID=lang==='id',isNew=buyer==='new';
   const hasV1=scripts.includes('rapid_click'),hasV2=scripts.includes('macro_full');
@@ -1046,61 +1050,84 @@ function _buildTemplate(key,dur,isWarnet,lang,buyer,plat,scripts,type){
   const durLabelEN={lifetime:'Lifetime (Permanent)','1month':'1 Month','2weeks':'2 Weeks',trial_6hours:'6-Hour Trial',demo_1min:'1-Minute Demo'};
   const dL=isID?(durLabelID[dur]||dur):(durLabelEN[dur]||dur);
 
-  // Script label
   const scriptLabelID=isVip?'Script V1 + V2 (Lifetime VIP)':hasV2?'Script V2 — Smart Macro':'Script V1 — Rapid Click';
   const scriptLabelEN=isVip?'Script V1 + V2 (Lifetime VIP)':hasV2?'Script V2 — Smart Macro':'Script V1 — Rapid Click';
 
-  // Download links
   const dlLineID=isVip
     ?`📥 Download V1: ${DL_V1}\n📥 Download V2: ${DL_V2}`
     :(hasV2?`📥 Download V2: ${DL_V2}`:`📥 Download V1: ${DL_V1}`);
   const dlLineEN=dlLineID;
 
-  const keyLine=`🔑 ${isID?'License Key':'License Key'}: \`${key}\``;
+  const keyLine=`🔑 License Key: \`${key}\``;
 
-  // ── TEMPLATE: Upgrade ke VIP ──
+  // ── V1 Hotkeys (dari sourcecode V1) ──
+  // F1 = Toggle Macro ON/OFF
+  const hotkeysV1_ID=`🎮 HOTKEY V1:\n• F1 — Toggle Macro ON / OFF\n• Tahan klik kiri → Rapid Fire aktif`;
+  const hotkeysV1_EN=`🎮 HOTKEY V1:\n• F1 — Toggle Macro ON / OFF\n• Hold left click → Rapid Fire active`;
+
+  // ── V2 Hotkeys (dari sourcecode V2) ──
+  // F1=Toggle, F6=Load/Save Config, F7=Show/Hide Overlay, F8=Ganti Bahasa
+  // Smart Mode slot keys:
+  //   1 → Senjata Utama → Macro ON
+  //   2 → Pistol → Macro OFF (pistol tidak ada recoil)
+  //   3 → Pisau → Macro OFF
+  //   4/5/6 → Bom/Granat/Gadget → Macro OFF
+  const hotkeysV2_ID=`🎮 HOTKEY V2 (Smart Mode):\n• F1 — Toggle Macro ON / OFF\n• F6 — Load / Save Config\n• F7 — Show/Hide In-Game Overlay\n• F8 — Ganti Bahasa (ID / EN / PT)\n\n🔢 Smart Slot (otomatis):\n• Tekan 1 → Senjata Utama — Macro ON\n• Tekan 2 → Pistol — Macro OFF\n• Tekan 3 → Pisau — Macro OFF\n• Tekan 4/5/6 → Bom/Granat — Macro OFF`;
+  const hotkeysV2_EN=`🎮 HOTKEY V2 (Smart Mode):\n• F1 — Toggle Macro ON / OFF\n• F6 — Load / Save Config\n• F7 — Show/Hide In-Game Overlay\n• F8 — Change Language (ID / EN / PT)\n\n🔢 Smart Slots (auto):\n• Press 1 → Primary Weapon — Macro ON\n• Press 2 → Pistol — Macro OFF\n• Press 3 → Knife — Macro OFF\n• Press 4/5/6 → Bomb/Grenade — Macro OFF`;
+
+  // ── Upgrade ke VIP ──
   if(type==='upgrade'){
-    if(isID)return `👑 SELAMAT! Lisensi kamu berhasil di-UPGRADE ke *Lifetime VIP* 🔥\n\n${keyLine}\n\n✅ Sekarang kamu bisa akses:\n• Script V1 — Rapid Click\n• Script V2 — Smart Mode + Overlay + Load/Save\n\n${dlLineID}\n\nKey yang sama, tidak perlu aktivasi ulang. Langsung download V2 dan pakai!\n\n📌 Saat Script V3 rilis nanti, langsung termasuk juga — tanpa beli ulang.\nEnjoy the upgrade! 🚀👑`;
-    return `👑 Congratulations! Your license has been *UPGRADED to Lifetime VIP* 🔥\n\n${keyLine}\n\n✅ You now have access to:\n• Script V1 — Rapid Click\n• Script V2 — Smart Mode + Overlay + Load/Save\n\n${dlLineEN}\n\nSame key — no need to re-activate. Just download V2 and you're in!\n\n📌 When Script V3 launches, it's automatically included — no extra purchase.\nEnjoy! 🚀👑`;
+    if(isID)return `👑 SELAMAT! Lisensi kamu berhasil di-UPGRADE ke *Lifetime VIP* 🔥\n\n*Hujan Deras Basah Kuyup — PB Macro*\n\n${keyLine}\n\n✅ Sekarang kamu bisa akses:\n• 🔷 Script V1 — Rapid Click\n• 🔶 Script V2 — Smart Mode + Overlay + Load/Save\n\n${dlLineID}\n\nKey yang sama, tidak perlu aktivasi ulang.\nLangsung download V2 dan pakai!\n\n${hotkeysV2_ID}\n\n📌 Saat Script V3 rilis nanti, langsung termasuk — tanpa beli ulang.\nEnjoy the upgrade! 🚀👑`;
+    return `👑 Congratulations! Your license has been *UPGRADED to Lifetime VIP* 🔥\n\n*Hujan Deras — PB Macro*\n\n${keyLine}\n\n✅ You now have access to:\n• 🔷 Script V1 — Rapid Click\n• 🔶 Script V2 — Smart Mode + Overlay + Load/Save\n\n${dlLineEN}\n\nSame key — no need to re-activate. Just download V2 and you're in!\n\n${hotkeysV2_EN}\n\n📌 When Script V3 launches, it's automatically included — no extra purchase.\nEnjoy! 🚀👑`;
   }
 
-  // ── TEMPLATE: V2 Rilis (notifikasi ke user VIP) ──
+  // ── V2 Rilis (notif ke VIP) ──
   if(type==='v2release'){
-    if(isID)return `🚀 KABAR BAGUS! Script V2 *sudah RILIS* dan siap didownload! 🎉\n\n${keyLine}\n\nSebagai user *VIP*, kamu langsung bisa akses tanpa beli ulang.\n\n📥 Download Script V2 sekarang:\n${DL_V2}\n\n⚙️ FITUR BARU DI V2:\n• Smart Mode — Hotkey slot 1/2/3/4/5/6\n• Scope Bind (Q / Right Click)\n• In-Game Overlay (F7) — tanpa Alt+Tab\n• Load / Save Config (F6)\n• Multi-language (ID / EN / PT)\n\n📌 Key yang sama, tinggal download dan aktifkan!\nSama-sama download dulu, nanti tanya saya kalau ada kendala. 🔥`;
-    return `🚀 BIG NEWS! Script V2 is now *LIVE* and ready to download! 🎉\n\n${keyLine}\n\nAs a *VIP* user, you get access immediately — no extra purchase needed.\n\n📥 Download Script V2 now:\n${DL_V2}\n\n⚙️ NEW IN V2:\n• Smart Mode — Hotkey slots 1/2/3/4/5/6\n• Scope Bind (Q / Right Click)\n• In-Game Overlay (F7) — no Alt+Tab needed\n• Load / Save Config (F6)\n• Multi-language (ID / EN / PT)\n\n📌 Same license key — just download and activate!\nLet me know if you run into anything! 🔥`;
+    if(isID)return `🚀 KABAR BAGUS! Script V2 *sudah RILIS* dan siap didownload! 🎉\n\n*Hujan Deras Basah Kuyup — PB Macro*\n\n${keyLine}\n\nSebagai user *VIP*, kamu langsung bisa akses tanpa beli ulang.\n\n📥 Download Script V2 sekarang:\n${DL_V2}\n\n⚙️ FITUR BARU DI V2:\n• Smart Mode — deteksi senjata otomatis\n• Scope Bind (Q / Klik Kanan)\n• In-Game Overlay (F7) — tanpa Alt+Tab\n• Load / Save Config (F6)\n• Multi-language ID / EN / PT (F8)\n\n${hotkeysV2_ID}\n\n📌 Key yang sama, tinggal download dan aktifkan!\nAda kendala? Chat saya! 🔥`;
+    return `🚀 BIG NEWS! Script V2 is now *LIVE* and ready to download! 🎉\n\n*Hujan Deras — PB Macro*\n\n${keyLine}\n\nAs a *VIP* user, you get access immediately — no extra purchase needed.\n\n📥 Download Script V2 now:\n${DL_V2}\n\n⚙️ NEW IN V2:\n• Smart Mode — automatic weapon detection\n• Scope Bind (Q / Right Click)\n• In-Game Overlay (F7) — no Alt+Tab needed\n• Load / Save Config (F6)\n• Multi-language ID / EN / PT (F8)\n\n${hotkeysV2_EN}\n\n📌 Same license key — just download and activate!\nLet me know if you run into anything! 🔥`;
   }
 
-  // ── TEMPLATE: Sale / Aktivasi ──
+  // ── Trial ──
   if(dur==='trial_6hours'){
-    if(isID)return `⏳ Trial GRATIS 6 Jam — "Heavy Rain" PB Macro 🌧️\n\nHalo! Key trial kamu sudah siap.\n\n${dlLineID}\n${keyLine}\n\n⚙️ CARA PAKAI:\n1. Download, klik kanan → Run as Administrator\n2. Paste key → ACTIVATE LICENSE\n3. Atur delay, buka Point Blank.\n\n📌 Timer 6 jam mulai saat pertama aktivasi.\nSuka? Chat saya untuk upgrade!`;
-    return `⏳ FREE 6-Hour Trial — "Heavy Rain" PB Macro 🌧️\n\nHey! Your trial key is ready.\n\n${dlLineEN}\n${keyLine}\n\n⚙️ HOW TO USE:\n1. Download, right-click → Run as Administrator\n2. Paste key → ACTIVATE LICENSE\n3. Set delay, launch Point Blank.\n\n📌 6-hour timer starts on first activation.\nLiking it? Message me to upgrade!`;
+    if(isID)return `⏳ *Trial GRATIS 6 Jam — Hujan Deras PB Macro* 🌧️\n\nHalo! Key trial kamu sudah siap.\n\n${dlLineID}\n${keyLine}\n\n⚙️ CARA PAKAI:\n1. Download, klik kanan → Run as Administrator\n2. Paste key → klik ACTIVATE LICENSE\n3. Atur delay sesuai selera\n4. Buka Point Blank & mainkan!\n\n${hotkeysV1_ID}\n\n📌 Timer 6 jam mulai saat pertama aktivasi.\nSuka? Chat saya untuk upgrade ke full version!`;
+    return `⏳ *FREE 6-Hour Trial — Hujan Deras PB Macro* 🌧️\n\nHey! Your trial key is ready.\n\n${dlLineEN}\n${keyLine}\n\n⚙️ HOW TO USE:\n1. Download, right-click → Run as Administrator\n2. Paste key → ACTIVATE LICENSE\n3. Adjust delay to your preference\n4. Launch Point Blank & play!\n\n${hotkeysV1_EN}\n\n📌 6-hour timer starts on first activation.\nLiking it? Message me to upgrade!`;
   }
   if(dur==='demo_1min'){
-    if(isID)return `⚡ Demo 1 Menit — "Heavy Rain" PB Macro 🌧️\n\nCoba dulu!\n\n${dlLineID}\n${keyLine}\n\n📌 Key berlaku 1 menit dari aktivasi.`;
-    return `⚡ 1-Minute Demo — "Heavy Rain" PB Macro 🌧️\n\nTry it out!\n\n${dlLineEN}\n${keyLine}\n\n📌 Key lasts 1 minute from activation.`;
+    if(isID)return `⚡ *Demo 1 Menit — Hujan Deras PB Macro* 🌧️\n\nCoba dulu!\n\n${dlLineID}\n${keyLine}\n\n${hotkeysV1_ID}\n\n📌 Key berlaku 1 menit dari aktivasi.\nMau full version? Chat saya!`;
+    return `⚡ *1-Minute Demo — Hujan Deras PB Macro* 🌧️\n\nTry it out!\n\n${dlLineEN}\n${keyLine}\n\n${hotkeysV1_EN}\n\n📌 Key lasts 1 minute from activation.\nWant the full version? Message me!`;
   }
+
+  // ── Warnet ──
   if(isWarnet){
-    if(isID){if(isNew)return `✅ Lisensi Warnet [${dL}] — "Heavy Rain" PB Macro 🌧️\n\n${dlLineID}\n${keyLine}\n\n⚙️ CARA PAKAI:\n1. Download → Run as Admin\n2. Paste key → Activate\n\n📌 Mode warnet: bisa ganti PC, tapi 1 device per waktu.\nTutup app saat selesai supaya sesi dilepas.`;
-    return `🔄 Renewal Warnet — ${dL}\n\n${keyLine}\n\n📌 Tutup app saat selesai. Ada stuck? Chat saya!`;}
-    if(isNew)return `✅ Warnet License [${dL}] — "Heavy Rain" PB Macro 🌧️\n\n${dlLineEN}\n${keyLine}\n\n⚙️ SETUP:\n1. Download → Run as Admin\n2. Paste key → Activate\n\n📌 Warnet mode: shareable, one device at a time. Close app when done.`;
-    return `🔄 Warnet Renewal — ${dL}\n\n${keyLine}\n\n📌 Close app when done. Session stuck? Message me!`;
+    const hotkeys=isID?(hasV2?hotkeysV2_ID:hotkeysV1_ID):(hasV2?hotkeysV2_EN:hotkeysV1_EN);
+    if(isID){
+      if(isNew)return `✅ *Lisensi Warnet [${dL}] — Hujan Deras PB Macro* 🌧️\n\n${dlLineID}\n${keyLine}\n\nScript: ${scriptLabelID}\n\n⚙️ CARA PAKAI:\n1. Download → klik kanan → Run as Administrator\n2. Paste key → Activate\n3. Atur delay → main!\n\n${hotkeys}\n\n📌 Mode warnet: bisa ganti PC, tapi 1 device per waktu.\nTutup app saat selesai supaya sesi dilepas.\nAda masalah? Chat saya!`;
+      return `🔄 *Renewal Warnet [${dL}] — Hujan Deras PB Macro*\n\n${keyLine}\n\nScript: ${scriptLabelID}\n\n${hotkeys}\n\n📌 Tutup app saat selesai agar sesi dilepas. Ada stuck? Chat saya!`;
+    }
+    if(isNew)return `✅ *Warnet License [${dL}] — Hujan Deras PB Macro* 🌧️\n\n${dlLineEN}\n${keyLine}\n\nScript: ${scriptLabelEN}\n\n⚙️ SETUP:\n1. Download → right-click → Run as Administrator\n2. Paste key → Activate\n3. Adjust delay → play!\n\n${hotkeys}\n\n📌 Warnet mode: shareable, one device at a time.\nClose app when done to release session.\nIssues? Message me!`;
+    return `🔄 *Warnet Renewal [${dL}] — Hujan Deras PB Macro*\n\n${keyLine}\n\nScript: ${scriptLabelEN}\n\n${hotkeys}\n\n📌 Close app when done. Session stuck? Message me!`;
   }
+
+  // ── Lifetime ──
   if(dur==='lifetime'){
-    const v2Hotkeys=isVip||hasV2?`\n\n🎮 HOTKEYS V2:\n• F7 — Overlay ON/OFF\n• F6 — Load / Save Config\n• 1/2/3 — Auto ON (Senjata)\n• 4/5/6 — Auto OFF (Bom/C4)`:'\n\n🎮 HOTKEY:\n• F1 — Toggle ON/OFF\n• Tahan klik kiri untuk rapid fire';
-    const v2HotkeysEN=isVip||hasV2?`\n\n🎮 V2 HOTKEYS:\n• F7 — Toggle Overlay\n• F6 — Load / Save Config\n• 1/2/3 — Auto ON (Weapon slots)\n• 4/5/6 — Auto OFF (Safe for Bomb)`:'\n\n🎮 HOTKEY:\n• F1 — Toggle ON/OFF';
-    if(isID){if(isNew)return `🔮 Lisensi ${dL} AKTIF — "Heavy Rain" PB Macro 🌧️👑\n\nTerima kasih sudah order! Akses permanen kamu sudah aktif.\n\n${dlLineID}\n${keyLine}\n\nScript: ${scriptLabelID}\n\n⚙️ SETUP:\n1. Download → Run as Administrator\n2. Paste key → ACTIVATE\n3. Atur delay → buka Point Blank${v2Hotkeys}\n\n📌 HWID Lock ke PC ini. Ganti PC? Chat saya untuk reset.${isVip?'\n\n👑 VIP: Saat Script V3 rilis, otomatis termasuk tanpa beli ulang!':''}`;
-    return `🔄 Welcome back!\n\n${keyLine}\n\nGanti PC atau mau reset HWID? Chat saya! 🔥${isVip?'\n\n👑 VIP kamu masih aktif — V1 + V2 tetap bisa dipakai.':''}`;}
-    if(isNew)return `🔮 ${dL} License ACTIVE — "Heavy Rain" PB Macro 🌧️👑\n\nThanks for your order! Permanent access activated.\n\n${dlLineEN}\n${keyLine}\n\nScript: ${scriptLabelEN}\n\n⚙️ SETUP:\n1. Download → Run as Admin\n2. Paste key → ACTIVATE\n3. Set delay → Launch Point Blank${v2HotkeysEN}\n\n📌 HWID locked to this PC. Changed PC? Contact me for reset.${isVip?'\n\n👑 VIP: Script V3 will be automatically included when it launches!':''}`;
-    return `🔄 Welcome back!\n\n${keyLine}\n\nNeed HWID reset? Message me! 🔥${isVip?'\n\n👑 Your VIP is still active — V1 + V2 ready.':''}`;
+    const hotkeys=isID?(isVip||hasV2?hotkeysV2_ID:hotkeysV1_ID):(isVip||hasV2?hotkeysV2_EN:hotkeysV1_EN);
+    if(isID){
+      if(isNew)return `🔮 *Lisensi ${dL} AKTIF — Hujan Deras PB Macro* 🌧️${isVip?'👑':''}\n\nTerima kasih sudah order! Akses permanen kamu sudah aktif.\n\n${dlLineID}\n${keyLine}\n\nScript: ${scriptLabelID}\n\n⚙️ CARA SETUP:\n1. Download → klik kanan → Run as Administrator\n2. Paste license key → klik ACTIVATE LICENSE\n3. Atur delay sesuai selera\n4. Buka Point Blank & main!\n\n${hotkeys}\n\n📌 HWID Lock ke PC ini. Ganti PC? Chat saya untuk reset HWID.${isVip?'\n\n👑 VIP: Saat Script V3 rilis, otomatis termasuk tanpa beli ulang!':''}`;
+      return `🔄 *Welcome back! — Hujan Deras PB Macro*\n\n${keyLine}\n\nScript: ${scriptLabelID}\n\n${hotkeys}\n\n📌 HWID terikat ke PC ini. Ganti PC? Chat saya untuk reset! 🔥${isVip?'\n\n👑 VIP kamu masih aktif — V1 + V2 tetap bisa dipakai.':''}`;
+    }
+    if(isNew)return `🔮 *${dL} License ACTIVE — Hujan Deras PB Macro* 🌧️${isVip?'👑':''}\n\nThanks for your order! Permanent access activated.\n\n${dlLineEN}\n${keyLine}\n\nScript: ${scriptLabelEN}\n\n⚙️ SETUP:\n1. Download → right-click → Run as Administrator\n2. Paste license key → ACTIVATE LICENSE\n3. Adjust delay to your preference\n4. Launch Point Blank & play!\n\n${hotkeys}\n\n📌 HWID locked to this PC. Changed PC? Contact me for HWID reset.${isVip?'\n\n👑 VIP: Script V3 will be automatically included when it launches!':''}`;
+    return `🔄 *Welcome back! — Hujan Deras PB Macro*\n\n${keyLine}\n\nScript: ${scriptLabelEN}\n\n${hotkeys}\n\n📌 HWID tied to current PC. Reset? Message me! 🔥${isVip?'\n\n👑 Your VIP is still active — V1 + V2 ready.':''}`;
   }
-  // Monthly / 2weeks
+
+  // ── 1 Bulan / 2 Minggu ──
   const durIcon=dur==='1month'?'🗓️':'📅';
-  const hotkeysBlock=hasV2?`\n\n🎮 HOTKEYS:\n• F7 Overlay, F6 Load/Save, 1-3 ON, 4-6 OFF`:'\n\n🎮 HOTKEY: F1 Toggle ON/OFF';
-  const hotkeysBlockEN=hotkeysBlock;
-  if(isID){if(isNew)return `${durIcon} Lisensi ${dL} — "Heavy Rain" PB Macro 🌧️🔥\n\nTerima kasih! Pembayaran terverifikasi.\n\n${dlLineID}\n${keyLine}\n\nScript: ${scriptLabelID}${hotkeysBlock}\n\n📌 HWID Lock. Timer ${dL} mulai saat pertama aktivasi.\nGanti PC? Chat saya!`;
-  return `${durIcon} Perpanjangan ${dL} — Heavy Rain Macro\n\nKey baru kamu:\n\n${keyLine}\n\nScript: ${scriptLabelID}\n\n📌 HWID Lock. Reset? Chat saya! 🔥`;}
-  if(isNew)return `${durIcon} ${dL} License — "Heavy Rain" PB Macro 🌧️🔥\n\nPayment verified! 🚀\n\n${dlLineEN}\n${keyLine}\n\nScript: ${scriptLabelEN}${hotkeysBlockEN}\n\n📌 HWID Lock. Timer starts on first activation.\nChanged PC? Contact me.`;
-  return `${durIcon} ${dL} Renewal — Heavy Rain Macro\n\nYour new key:\n\n${keyLine}\n\nScript: ${scriptLabelEN}\n\n📌 HWID tied to current PC. Reset? Message me! 🔥`;
+  const hotkeys=isID?(hasV2?hotkeysV2_ID:hotkeysV1_ID):(hasV2?hotkeysV2_EN:hotkeysV1_EN);
+  if(isID){
+    if(isNew)return `${durIcon} *Lisensi ${dL} — Hujan Deras PB Macro* 🌧️🔥\n\nTerima kasih! Pembayaran terverifikasi, lisensi sudah aktif.\n\n${dlLineID}\n${keyLine}\n\nScript: ${scriptLabelID}\n\n⚙️ CARA SETUP:\n1. Download → klik kanan → Run as Administrator\n2. Paste license key → klik ACTIVATE LICENSE\n3. Atur delay → buka Point Blank!\n\n${hotkeys}\n\n📌 HWID Lock ke PC ini. Timer ${dL} mulai saat pertama aktivasi.\nGanti PC? Chat saya untuk reset HWID!`;
+    return `${durIcon} *Perpanjangan ${dL} — Hujan Deras PB Macro*\n\nKey baru kamu:\n\n${keyLine}\n\nScript: ${scriptLabelID}\n\n${hotkeys}\n\n📌 HWID Lock. Reset atau ada masalah? Chat saya! 🔥`;
+  }
+  if(isNew)return `${durIcon} *${dL} License — Hujan Deras PB Macro* 🌧️🔥\n\nPayment verified! Your license is active. 🚀\n\n${dlLineEN}\n${keyLine}\n\nScript: ${scriptLabelEN}\n\n⚙️ SETUP:\n1. Download → right-click → Run as Administrator\n2. Paste license key → ACTIVATE LICENSE\n3. Adjust delay → Launch Point Blank!\n\n${hotkeys}\n\n📌 HWID Lock. Timer starts on first activation.\nChanged PC? Contact me for HWID reset.`;
+  return `${durIcon} *${dL} Renewal — Hujan Deras PB Macro*\n\nYour new key:\n\n${keyLine}\n\nScript: ${scriptLabelEN}\n\n${hotkeys}\n\n📌 HWID tied to current PC. Reset? Message me! 🔥`;
 }
 
 // ==========================================
