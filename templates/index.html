@@ -655,13 +655,13 @@ section.tight{padding:48px 0}
     <span style="font-size:20px">ℹ️</span>
     <span style="font-size:13px;color:rgba(226,232,240,.7)">
       <strong style="color:var(--cyan)">Standard V2</strong>: hanya Script V2 selamanya. &nbsp;|&nbsp;
-      <strong style="color:var(--purple)">Lifetime VIP</strong>: Script V2 sekarang + V3 gratis saat rilis. Script V1 dijual terpisah (trial/bulanan).
+      <strong style="color:var(--purple)">Lifetime VIP</strong>: Script V2 sekarang + V3 gratis saat rilis. Script V1 dijual terpisah (trial / bulanan / lifetime).
     </span>
   </div>
 
   <!-- V1 Pricing -->
   <h3 style="font-family:var(--font-display);font-size:14px;font-weight:700;color:var(--cyan);letter-spacing:2px;margin-top:40px;margin-bottom:20px">◆ SCRIPT V1 — RAPID CLICK</h3>
-  <div class="pricing-grid">
+  <div class="pricing-grid" style="grid-template-columns:repeat(3,1fr)">
     <div class="price-card">
       <span class="price-label basic">TRIAL</span>
       <div class="price-name">2 Minggu</div>
@@ -694,33 +694,20 @@ section.tight{padding:48px 0}
       </ul>
       <a href="https://wa.me/6285823358559?text=Halo+min%2C+mau+beli+V1+1+Bulan+20K" target="_blank" class="price-btn cyan">BELI SEKARANG</a>
     </div>
-    <div class="price-card" style="opacity:.45;pointer-events:none;filter:grayscale(.8)">
-      <span class="price-label basic" style="text-decoration:line-through">LIFETIME</span>
-      <div class="price-name" style="text-decoration:line-through;color:var(--muted)">Lifetime V1</div>
-      <div class="price-desc">Tidak tersedia — V2 sudah rilis</div>
-      <div class="price-amount" style="color:var(--muted);font-size:24px;margin-top:8px">DITUTUP</div>
-      <div class="price-unit" style="margin-bottom:20px">Paket ini tidak lagi dijual</div>
+    <div class="price-card">
+      <span class="price-label perm">LIFETIME</span>
+      <div class="price-name">Lifetime V1</div>
+      <div class="price-desc">Bayar sekali, V1 selamanya</div>
+      <div class="price-amount" style="color:var(--cyan)">50K</div>
+      <div class="price-unit">Rp 50.000 / permanent</div>
       <ul class="price-features">
-        <li><span class="check n">✕</span> Tidak tersedia lagi</li>
-        <li><span class="check n">✕</span> Upgrade ke VIP V2 untuk lifetime</li>
+        <li><span class="check y">✓</span> Script V1 Rapid Click</li>
+        <li><span class="check y">✓</span> Custom Delay</li>
+        <li><span class="check y">✓</span> HWID Lock</li>
+        <li><span class="check n">✕</span> Smart Mode</li>
+        <li><span class="check n">✕</span> Overlay</li>
       </ul>
-      <div class="price-btn" style="background:rgba(100,116,139,.08);border:1px solid rgba(100,116,139,.2);color:var(--muted);cursor:not-allowed;display:flex;align-items:center;justify-content:center;padding:12px;border-radius:10px;font-family:var(--font-display);font-size:11px;font-weight:700;letter-spacing:1px">
-        🚫 TIDAK TERSEDIA
-      </div>
-    </div>
-    <div class="price-card vip" style="border-style:dashed;opacity:.7">
-      <div class="vip-ribbon" style="background:var(--muted)">INFO</div>
-      <span class="price-label vip">PINDAH KE V2</span>
-      <div class="price-name">Lifetime VIP</div>
-      <div class="price-desc" style="color:rgba(168,85,247,.8)">VIP sekarang ada di seksi V2 di bawah</div>
-      <div style="margin:20px 0;padding:16px;background:rgba(168,85,247,.08);border:1px solid rgba(168,85,247,.2);border-radius:12px;font-size:12px;color:rgba(226,232,240,.7);line-height:1.7">
-        Lifetime VIP kini hanya tersedia di paket <strong style="color:var(--purple)">V2 + V3</strong>.<br>
-        Tidak termasuk V1 agar harga tetap fair.<br>
-        <span style="color:var(--muted);font-size:11px">Scroll ke bawah → Seksi Script V2</span>
-      </div>
-      <a href="#v2-pricing" class="price-btn purple" onclick="document.getElementById('v2-pricing').scrollIntoView({behavior:'smooth'});return false;">
-        ↓ Lihat VIP di Seksi V2
-      </a>
+      <a href="https://wa.me/6285823358559?text=Halo+min%2C+mau+beli+Lifetime+V1+50K" target="_blank" class="price-btn cyan">BELI SEKARANG</a>
     </div>
   </div>
 
@@ -988,7 +975,7 @@ const TRANSLATIONS = {
     'sec-price-tag': '💰 HARGA & PAKET',
     'sec-price-h': 'Pilih Paket Terbaikmu',
     'sec-price-sub': 'Semua harga sudah termasuk lisensi aktif. Timer mulai saat pertama kali diaktifkan — bukan saat beli.',
-    'price-info': '<strong style="color:var(--cyan)">Standard V2</strong>: hanya Script V2 selamanya. &nbsp;|&nbsp; <strong style="color:var(--purple)">Lifetime VIP</strong>: Script V2 sekarang + V3 gratis saat rilis. Script V1 dijual terpisah.',
+    'price-info': '<strong style="color:var(--cyan)">Standard V2</strong>: hanya Script V2 selamanya. &nbsp;|&nbsp; <strong style="color:var(--purple)">Lifetime VIP</strong>: Script V2 sekarang + V3 gratis saat rilis. Script V1 dijual terpisah (trial / bulanan / lifetime 50K).',
     // VIP explainer
     'vip-title': 'Kenapa Pilih Lifetime VIP?',
     'vip-sub': 'Beli V2 sekarang, dapat V3 gratis saat rilis. Tidak perlu beli ulang.',
@@ -1048,7 +1035,7 @@ const TRANSLATIONS = {
     'sec-price-tag': '💰 PRICING & PACKAGES',
     'sec-price-h': 'Choose Your Best Package',
     'sec-price-sub': 'All prices include an active license. Timer starts on first activation — not on purchase.',
-    'price-info': '<strong style="color:var(--cyan)">Standard V2</strong>: Script V2 only, forever. &nbsp;|&nbsp; <strong style="color:var(--purple)">Lifetime VIP</strong>: Script V2 now + V3 free on release. Script V1 sold separately.',
+    'price-info': '<strong style="color:var(--cyan)">Standard V2</strong>: Script V2 only, forever. &nbsp;|&nbsp; <strong style="color:var(--purple)">Lifetime VIP</strong>: Script V2 now + V3 free on release. Script V1 sold separately (trial / monthly / lifetime 50K).',
     'vip-title': 'Why Choose Lifetime VIP?',
     'vip-sub': 'Buy V2 now, get V3 free on release. No need to buy again.',
     'warn-title': '⚠️ ANTIVIRUS FALSE POSITIVE — THIS IS NORMAL',
@@ -1104,7 +1091,7 @@ const TRANSLATIONS = {
     'sec-price-tag': '💰 PREÇOS & PACOTES',
     'sec-price-h': 'Escolha Seu Melhor Pacote',
     'sec-price-sub': 'Todos os preços incluem licença ativa. O timer começa na primeira ativação — não na compra.',
-    'price-info': '<strong style="color:var(--cyan)">Standard V2</strong>: apenas Script V2, para sempre. &nbsp;|&nbsp; <strong style="color:var(--purple)">Lifetime VIP</strong>: Script V2 agora + V3 grátis no lançamento. Script V1 vendido separadamente.',
+    'price-info': '<strong style="color:var(--cyan)">Standard V2</strong>: apenas Script V2, para sempre. &nbsp;|&nbsp; <strong style="color:var(--purple)">Lifetime VIP</strong>: Script V2 agora + V3 grátis no lançamento. Script V1 vendido separado (trial / mensal / lifetime 50K).',
     'vip-title': 'Por Que Escolher o Lifetime VIP?',
     'vip-sub': 'Compre V2 agora, ganhe V3 grátis no lançamento. Sem necessidade de comprar novamente.',
     'warn-title': '⚠️ FALSO POSITIVO DO ANTIVÍRUS — ISSO É NORMAL',
