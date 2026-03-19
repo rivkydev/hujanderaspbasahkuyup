@@ -714,6 +714,7 @@ section.tight{padding:48px 0}
 
 /* =====================
    PRICING DATA — PER LANGUAGE
+   *** HARGA DIUPDATE ***
 ===================== */
 const PRICING_DATA = {
   id: {
@@ -722,68 +723,68 @@ const PRICING_DATA = {
     v1: [
       {
         label:'TRIAL', labelClass:'basic', name:'2 Minggu', desc:'Cocok untuk coba-coba',
-        amount:'15K', amountColor:'var(--cyan)', unit:'Rp 15.000 / 14 hari',
+        amount:'35K', amountColor:'var(--cyan)', unit:'Rp 35.000 / 14 hari',
         strikethrough:null, promoBadge:null,
         features:['<span class="check y">✓</span> Script V1 Rapid Click','<span class="check y">✓</span> Custom Delay','<span class="check y">✓</span> HWID Lock','<span class="check n">✕</span> Smart Mode','<span class="check n">✕</span> Overlay'],
         btnStyle:'background:rgba(34,211,238,.12);border:1px solid rgba(34,211,238,.3);color:var(--cyan)',
-        btnText:'BELI SEKARANG', waLink:'https://wa.me/6285823358559?text=Halo+min%2C+mau+beli+V1+2+Minggu+15K',
+        btnText:'💬 BELI VIA WHATSAPP', waLink:'https://wa.me/6285823358559?text=Halo+min%2C+mau+beli+V1+2+Minggu+35K',
         featured:false, ribbon:null, cardClass:'', cardStyle:''
       },
       {
         label:'POPULER', labelClass:'hot', name:'1 Bulan', desc:'Nilai terbaik untuk sebulan penuh',
-        amount:'20K', amountColor:'var(--cyan)', unit:'Rp 20.000 / 30 hari',
-        strikethrough:'25K', promoBadge:'PROMO',
-        features:['<span class="check y">✓</span> Script V1 Rapid Click','<span class="check y">✓</span> Custom Delay','<span class="check y">✓</span> HWID Lock','<span class="check n">✕</span> Smart Mode','<span class="check n">✕</span> Overlay'],
-        btnStyle:'background:rgba(34,211,238,.12);border:1px solid rgba(34,211,238,.3);color:var(--cyan)',
-        btnText:'BELI SEKARANG', waLink:'https://wa.me/6285823358559?text=Halo+min%2C+mau+beli+V1+1+Bulan+20K',
-        featured:true, ribbon:'PROMO', cardClass:'featured', cardStyle:''
-      },
-      {
-        label:'LIFETIME', labelClass:'perm', name:'Lifetime V1', desc:'Bayar sekali, V1 selamanya',
-        amount:'50K', amountColor:'var(--cyan)', unit:'Rp 50.000 / permanent',
+        amount:'50K', amountColor:'var(--cyan)', unit:'Rp 50.000 / 30 hari',
         strikethrough:null, promoBadge:null,
         features:['<span class="check y">✓</span> Script V1 Rapid Click','<span class="check y">✓</span> Custom Delay','<span class="check y">✓</span> HWID Lock','<span class="check n">✕</span> Smart Mode','<span class="check n">✕</span> Overlay'],
         btnStyle:'background:rgba(34,211,238,.12);border:1px solid rgba(34,211,238,.3);color:var(--cyan)',
-        btnText:'BELI SEKARANG', waLink:'https://wa.me/6285823358559?text=Halo+min%2C+mau+beli+Lifetime+V1+50K',
+        btnText:'💬 BELI VIA WHATSAPP', waLink:'https://wa.me/6285823358559?text=Halo+min%2C+mau+beli+V1+1+Bulan+50K',
+        featured:true, ribbon:'TERLARIS', cardClass:'featured', cardStyle:''
+      },
+      {
+        label:'LIFETIME', labelClass:'perm', name:'Lifetime V1', desc:'Bayar sekali, V1 selamanya',
+        amount:'120K', amountColor:'var(--cyan)', unit:'Rp 120.000 / permanent',
+        strikethrough:null, promoBadge:null,
+        features:['<span class="check y">✓</span> Script V1 Rapid Click','<span class="check y">✓</span> Custom Delay','<span class="check y">✓</span> HWID Lock','<span class="check n">✕</span> Smart Mode','<span class="check n">✕</span> Overlay'],
+        btnStyle:'background:rgba(34,211,238,.12);border:1px solid rgba(34,211,238,.3);color:var(--cyan)',
+        btnText:'💬 BELI VIA WHATSAPP', waLink:'https://wa.me/6285823358559?text=Halo+min%2C+mau+beli+Lifetime+V1+120K',
         featured:false, ribbon:null, cardClass:'', cardStyle:''
       }
     ],
     v2: [
       {
         label:'TRIAL', labelClass:'basic', name:'2 Minggu', desc:'Coba Smart Mode 2 minggu',
-        amount:'20K', amountColor:'var(--purple)', unit:'Rp 20.000 / 14 hari',
+        amount:'40K', amountColor:'var(--purple)', unit:'Rp 40.000 / 14 hari',
         strikethrough:null, promoBadge:null,
         features:['<span class="check y">✓</span> Script V2 — Semua fitur','<span class="check y">✓</span> Smart Mode + Hotkey','<span class="check y">✓</span> Overlay (F7)','<span class="check n">✕</span> Script V1'],
         btnStyle:'background:rgba(168,85,247,.12);border:1px solid rgba(168,85,247,.3);color:var(--purple)',
-        btnText:'BELI SEKARANG', waLink:'https://wa.me/6285823358559?text=Halo+min%2C+mau+beli+V2+2+Minggu+20K',
+        btnText:'💬 BELI VIA WHATSAPP', waLink:'https://wa.me/6285823358559?text=Halo+min%2C+mau+beli+V2+2+Minggu+40K',
         featured:false, ribbon:null, cardClass:'', cardStyle:''
       },
       {
         label:'POPULER', labelClass:'hot', labelStyle:'background:rgba(168,85,247,.12);border-color:rgba(168,85,247,.3);color:var(--purple)',
         name:'1 Bulan V2', desc:'Sebulan penuh Smart Mode',
-        amount:'30K', amountColor:'var(--purple)', unit:'Rp 30.000 / 30 hari',
+        amount:'60K', amountColor:'var(--purple)', unit:'Rp 60.000 / 30 hari',
         strikethrough:null, promoBadge:null,
         features:['<span class="check y">✓</span> Script V2 — Semua fitur','<span class="check y">✓</span> Smart Mode + Hotkey','<span class="check y">✓</span> Overlay + Load/Save','<span class="check n">✕</span> Script V1'],
         btnStyle:'background:rgba(168,85,247,.15);border:1px solid rgba(168,85,247,.4);color:var(--purple)',
-        btnText:'BELI SEKARANG', waLink:'https://wa.me/6285823358559?text=Halo+min%2C+mau+beli+V2+1+Bulan+30K',
+        btnText:'💬 BELI VIA WHATSAPP', waLink:'https://wa.me/6285823358559?text=Halo+min%2C+mau+beli+V2+1+Bulan+60K',
         featured:false, ribbon:null, cardClass:'', cardStyle:'border-color:rgba(168,85,247,.35)'
       },
       {
         label:'LIFETIME', labelClass:'perm', name:'Lifetime V2', desc:'Bayar sekali, V2 selamanya',
-        amount:'75K', amountColor:'#818cf8', unit:'Rp 75.000 / permanent',
+        amount:'175K', amountColor:'#818cf8', unit:'Rp 175.000 / permanent',
         strikethrough:null, promoBadge:null,
         features:['<span class="check y">✓</span> Script V2 — Semua fitur','<span class="check y">✓</span> Smart Mode + Hotkey','<span class="check y">✓</span> Overlay penuh','<span class="check n">✕</span> Script V1','<span class="check n">✕</span> Script V3'],
         btnStyle:'background:rgba(168,85,247,.12);border:1px solid rgba(168,85,247,.3);color:var(--purple)',
-        btnText:'BELI SEKARANG', waLink:'https://wa.me/6285823358559?text=Halo+min%2C+mau+beli+Lifetime+V2+75K',
+        btnText:'💬 BELI VIA WHATSAPP', waLink:'https://wa.me/6285823358559?text=Halo+min%2C+mau+beli+Lifetime+V2+175K',
         featured:false, ribbon:null, cardClass:'', cardStyle:''
       },
       {
         label:'ULTIMATE', labelClass:'vip', name:'Lifetime VIP', desc:'V2 sekarang + V3 gratis saat rilis',
-        amount:'150K', amountColor:'var(--purple)', unit:'Rp 150.000 / permanent',
+        amount:'250K', amountColor:'var(--purple)', unit:'Rp 250.000 / permanent',
         strikethrough:null, promoBadge:null,
         features:['<span class="check vip">✓</span> Script V2 — Semua fitur','<span class="check vip">✓</span> Script V3 — Gratis saat rilis','<span class="check vip">✓</span> Tidak perlu beli lagi saat update','<span class="check vip">✓</span> HWID Lock','<span class="check vip">✓</span> Prioritas support admin','<span class="check n">✕</span> Tidak termasuk Script V1'],
         btnStyle:'background:rgba(168,85,247,.2);border:1px solid rgba(168,85,247,.5);color:var(--purple)',
-        btnText:'👑 BELI VIP V2+V3', waLink:'https://wa.me/6285823358559?text=Halo+min%2C+mau+beli+Lifetime+VIP+V2%2BV3+150K',
+        btnText:'👑 BELI VIP V2+V3 VIA WA', waLink:'https://wa.me/6285823358559?text=Halo+min%2C+mau+beli+Lifetime+VIP+V2%2BV3+250K',
         featured:false, ribbon:'👑 VIP', cardClass:'vip', cardStyle:''
       }
     ]
@@ -798,7 +799,7 @@ const PRICING_DATA = {
         strikethrough:null, promoBadge:null,
         features:['<span class="check y">✓</span> Script V1 Rapid Click','<span class="check y">✓</span> Custom Delay','<span class="check y">✓</span> HWID Lock','<span class="check n">✕</span> Smart Mode','<span class="check n">✕</span> Overlay'],
         btnStyle:'background:rgba(34,211,238,.12);border:1px solid rgba(34,211,238,.3);color:var(--cyan)',
-        btnText:'BUY NOW', waLink:'https://wa.me/6285823358559?text=Hi+admin%2C+I+want+to+buy+V1+1+Month+%243',
+        btnText:'💬 BUY VIA WHATSAPP', waLink:'https://wa.me/6285823358559?text=Hi+admin%2C+I+want+to+buy+V1+1+Month+%243',
         featured:false, ribbon:null, cardClass:'', cardStyle:''
       },
       {
@@ -807,7 +808,7 @@ const PRICING_DATA = {
         strikethrough:null, promoBadge:null,
         features:['<span class="check y">✓</span> Script V1 Rapid Click','<span class="check y">✓</span> Custom Delay','<span class="check y">✓</span> HWID Lock','<span class="check n">✕</span> Smart Mode','<span class="check n">✕</span> Overlay'],
         btnStyle:'background:rgba(34,211,238,.12);border:1px solid rgba(34,211,238,.3);color:var(--cyan)',
-        btnText:'BUY NOW', waLink:'https://wa.me/6285823358559?text=Hi+admin%2C+I+want+to+buy+Lifetime+V1+%248',
+        btnText:'💬 BUY VIA WHATSAPP', waLink:'https://wa.me/6285823358559?text=Hi+admin%2C+I+want+to+buy+Lifetime+V1+%248',
         featured:true, ribbon:'BEST VALUE', cardClass:'featured', cardStyle:''
       }
     ],
@@ -819,7 +820,7 @@ const PRICING_DATA = {
         strikethrough:null, promoBadge:null,
         features:['<span class="check y">✓</span> Script V2 — All features','<span class="check y">✓</span> Smart Mode + Hotkey','<span class="check y">✓</span> Overlay + Load/Save','<span class="check n">✕</span> Script V1'],
         btnStyle:'background:rgba(168,85,247,.12);border:1px solid rgba(168,85,247,.3);color:var(--purple)',
-        btnText:'BUY NOW', waLink:'https://wa.me/6285823358559?text=Hi+admin%2C+I+want+to+buy+V2+1+Month+%245',
+        btnText:'💬 BUY VIA WHATSAPP', waLink:'https://wa.me/6285823358559?text=Hi+admin%2C+I+want+to+buy+V2+1+Month+%245',
         featured:false, ribbon:null, cardClass:'', cardStyle:''
       },
       {
@@ -828,7 +829,7 @@ const PRICING_DATA = {
         strikethrough:null, promoBadge:null,
         features:['<span class="check y">✓</span> Script V2 — All features','<span class="check y">✓</span> Smart Mode + Hotkey','<span class="check y">✓</span> Full Overlay','<span class="check n">✕</span> Script V1','<span class="check n">✕</span> Script V3'],
         btnStyle:'background:rgba(168,85,247,.12);border:1px solid rgba(168,85,247,.3);color:var(--purple)',
-        btnText:'BUY NOW', waLink:'https://wa.me/6285823358559?text=Hi+admin%2C+I+want+to+buy+Lifetime+V2+%2410',
+        btnText:'💬 BUY VIA WHATSAPP', waLink:'https://wa.me/6285823358559?text=Hi+admin%2C+I+want+to+buy+Lifetime+V2+%2410',
         featured:false, ribbon:null, cardClass:'', cardStyle:''
       },
       {
@@ -837,7 +838,7 @@ const PRICING_DATA = {
         strikethrough:null, promoBadge:null,
         features:['<span class="check vip">✓</span> Script V2 — All features','<span class="check vip">✓</span> Script V3 — Free on release','<span class="check vip">✓</span> No need to buy again on updates','<span class="check vip">✓</span> HWID Lock','<span class="check vip">✓</span> Priority admin support','<span class="check n">✕</span> Does not include Script V1'],
         btnStyle:'background:rgba(168,85,247,.2);border:1px solid rgba(168,85,247,.5);color:var(--purple)',
-        btnText:'👑 BUY VIP V2+V3', waLink:'https://wa.me/6285823358559?text=Hi+admin%2C+I+want+to+buy+Lifetime+VIP+V2%2BV3+%2412',
+        btnText:'👑 BUY VIP V2+V3 VIA WA', waLink:'https://wa.me/6285823358559?text=Hi+admin%2C+I+want+to+buy+Lifetime+VIP+V2%2BV3+%2412',
         featured:false, ribbon:'👑 VIP', cardClass:'vip', cardStyle:''
       }
     ]
@@ -852,7 +853,7 @@ const PRICING_DATA = {
         strikethrough:null, promoBadge:null,
         features:['<span class="check y">✓</span> Script V1 Rapid Click','<span class="check y">✓</span> Delay Personalizado','<span class="check y">✓</span> HWID Lock','<span class="check n">✕</span> Smart Mode','<span class="check n">✕</span> Overlay'],
         btnStyle:'background:rgba(34,211,238,.12);border:1px solid rgba(34,211,238,.3);color:var(--cyan)',
-        btnText:'COMPRAR AGORA', waLink:'https://wa.me/6285823358559?text=Oi+admin%2C+quero+comprar+V1+1+M%C3%AAs+%243',
+        btnText:'💬 COMPRAR VIA WHATSAPP', waLink:'https://wa.me/6285823358559?text=Oi+admin%2C+quero+comprar+V1+1+M%C3%AAs+%243',
         featured:false, ribbon:null, cardClass:'', cardStyle:''
       },
       {
@@ -861,7 +862,7 @@ const PRICING_DATA = {
         strikethrough:null, promoBadge:null,
         features:['<span class="check y">✓</span> Script V1 Rapid Click','<span class="check y">✓</span> Delay Personalizado','<span class="check y">✓</span> HWID Lock','<span class="check n">✕</span> Smart Mode','<span class="check n">✕</span> Overlay'],
         btnStyle:'background:rgba(34,211,238,.12);border:1px solid rgba(34,211,238,.3);color:var(--cyan)',
-        btnText:'COMPRAR AGORA', waLink:'https://wa.me/6285823358559?text=Oi+admin%2C+quero+comprar+Lifetime+V1+%248',
+        btnText:'💬 COMPRAR VIA WHATSAPP', waLink:'https://wa.me/6285823358559?text=Oi+admin%2C+quero+comprar+Lifetime+V1+%248',
         featured:true, ribbon:'MELHOR VALOR', cardClass:'featured', cardStyle:''
       }
     ],
@@ -873,7 +874,7 @@ const PRICING_DATA = {
         strikethrough:null, promoBadge:null,
         features:['<span class="check y">✓</span> Script V2 — Todos os recursos','<span class="check y">✓</span> Smart Mode + Hotkey','<span class="check y">✓</span> Overlay + Carregar/Salvar','<span class="check n">✕</span> Script V1'],
         btnStyle:'background:rgba(168,85,247,.12);border:1px solid rgba(168,85,247,.3);color:var(--purple)',
-        btnText:'COMPRAR AGORA', waLink:'https://wa.me/6285823358559?text=Oi+admin%2C+quero+comprar+V2+1+M%C3%AAs+%245',
+        btnText:'💬 COMPRAR VIA WHATSAPP', waLink:'https://wa.me/6285823358559?text=Oi+admin%2C+quero+comprar+V2+1+M%C3%AAs+%245',
         featured:false, ribbon:null, cardClass:'', cardStyle:''
       },
       {
@@ -882,7 +883,7 @@ const PRICING_DATA = {
         strikethrough:null, promoBadge:null,
         features:['<span class="check y">✓</span> Script V2 — Todos os recursos','<span class="check y">✓</span> Smart Mode + Hotkey','<span class="check y">✓</span> Overlay completo','<span class="check n">✕</span> Script V1','<span class="check n">✕</span> Script V3'],
         btnStyle:'background:rgba(168,85,247,.12);border:1px solid rgba(168,85,247,.3);color:var(--purple)',
-        btnText:'COMPRAR AGORA', waLink:'https://wa.me/6285823358559?text=Oi+admin%2C+quero+comprar+Lifetime+V2+%2410',
+        btnText:'💬 COMPRAR VIA WHATSAPP', waLink:'https://wa.me/6285823358559?text=Oi+admin%2C+quero+comprar+Lifetime+V2+%2410',
         featured:false, ribbon:null, cardClass:'', cardStyle:''
       },
       {
@@ -891,7 +892,7 @@ const PRICING_DATA = {
         strikethrough:null, promoBadge:null,
         features:['<span class="check vip">✓</span> Script V2 — Todos os recursos','<span class="check vip">✓</span> Script V3 — Grátis no lançamento','<span class="check vip">✓</span> Sem necessidade de comprar novamente','<span class="check vip">✓</span> HWID Lock','<span class="check vip">✓</span> Suporte prioritário do admin','<span class="check n">✕</span> Não inclui Script V1'],
         btnStyle:'background:rgba(168,85,247,.2);border:1px solid rgba(168,85,247,.5);color:var(--purple)',
-        btnText:'👑 COMPRAR VIP V2+V3', waLink:'https://wa.me/6285823358559?text=Oi+admin%2C+quero+comprar+Lifetime+VIP+V2%2BV3+%2412',
+        btnText:'👑 COMPRAR VIP V2+V3 VIA WA', waLink:'https://wa.me/6285823358559?text=Oi+admin%2C+quero+comprar+Lifetime+VIP+V2%2BV3+%2412',
         featured:false, ribbon:'👑 VIP', cardClass:'vip', cardStyle:''
       }
     ]
@@ -980,7 +981,7 @@ const TRANSLATIONS = {
     'sec-price-tag': '💰 HARGA & PAKET',
     'sec-price-h': 'Pilih Paket Terbaikmu',
     'sec-price-sub': 'Semua harga sudah termasuk lisensi aktif. Timer mulai saat pertama kali diaktifkan — bukan saat beli.',
-    'price-info': '<strong style="color:var(--cyan)">Standard V2</strong>: hanya Script V2 selamanya. &nbsp;|&nbsp; <strong style="color:var(--purple)">Lifetime VIP</strong>: Script V2 sekarang + V3 gratis saat rilis. Script V1 dijual terpisah (trial / bulanan / lifetime 50K).',
+    'price-info': '<strong style="color:var(--cyan)">Standard V2</strong>: hanya Script V2 selamanya. &nbsp;|&nbsp; <strong style="color:var(--purple)">Lifetime VIP</strong>: Script V2 sekarang + V3 gratis saat rilis. Script V1 dijual terpisah (trial / bulanan / lifetime).',
     'vip-title': 'Kenapa Pilih Lifetime VIP?',
     'vip-sub': 'Beli V2 sekarang, dapat V3 gratis saat rilis. Tidak perlu beli ulang.',
     'warn-title-text': 'ANTIVIRUS FALSE POSITIVE — INI NORMAL',
