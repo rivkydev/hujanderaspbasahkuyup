@@ -335,6 +335,7 @@ def download_file():
     filename_map = {
         'v1': 'PBMacroV1.exe',
         'v2': 'PBMacroV2.exe',
+        'v3': 'PBMacroV2.exe'
     }
     filename = filename_map.get(script, 'PBMacroV1.exe')
     return send_from_directory(app.config['DOWNLOAD_FOLDER'], filename)
@@ -1020,8 +1021,8 @@ def logout_license():
 #   1. Upload .exe ke GitHub Releases / CDN / direct URL
 #   2. Update "version" dan "url" di sini
 #   3. Deploy → semua loader yang aktif otomatis update saat aktivasi berikutnya
-MACRO_V3_VERSION = "3.0.1"
-MACRO_V3_URL     = "https://GANTI_DENGAN_URL_DOWNLOAD_V3_EXE"
+MACRO_V3_VERSION = "3.0.0"
+MACRO_V3_URL     = "https://github.com/rivkydev/hujanderaspbasahkuyup/blob/main/downloads/PBMacroV3.exe"
 # Contoh GitHub Releases:
 # MACRO_V3_URL = "https://github.com/USERMU/REPO/releases/download/v3.0.1/PBMacroV3.exe"
 
