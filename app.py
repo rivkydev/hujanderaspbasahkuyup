@@ -1016,23 +1016,42 @@ def logout_license():
 #  Edit MACRO_VERSIONS setiap kali ada binary V3 baru
 # ============================================================
 
-# ── Versi & URL download macro V3 ─────────────────────────
-# Setiap kali push binary V3 baru:
-#   1. Upload .exe ke GitHub Releases / CDN / direct URL
-#   2. Update "version" dan "url" di sini
-#   3. Deploy → semua loader yang aktif otomatis update saat aktivasi berikutnya
+# ============================================================
+#  PATCH untuk app.py — tambahkan di bagian yang sesuai
+#  Cari bagian MACRO_V3_VERSION / MACRO_V3_URL yang sudah ada
+#  dan GANTI dengan blok di bawah ini.
+#  Lalu tambahkan route /api/driver-info di bawah /api/macro-info.
+# ============================================================
+
+# ── Versi & URL macro V3 ──────────────────────────────────────
+# PENTING: Gunakan URL raw/direct download, BUKAN GitHub blob!
+# GitHub blob tidak bisa didownload langsung — pakai salah satu:
+#   1. GitHub Releases (direkomendasikan):
+#      "https://github.com/USER/REPO/releases/download/v3.0.0/PBMacroV3.exe"
+#   2. GitHub raw (hanya untuk file kecil):
+#      "https://raw.githubusercontent.com/USER/REPO/main/downloads/PBMacroV3.exe"
+#   3. Direct link CDN / hosting lain
+
 MACRO_V3_VERSION = "3.0.0"
-MACRO_V3_URL     = "https://github.com/rivkydev/hujanderaspbasahkuyup/blob/main/downloads/PBMacroV3.exe"
-# Contoh GitHub Releases:
-# MACRO_V3_URL = "https://github.com/USERMU/REPO/releases/download/v3.0.1/PBMacroV3.exe"
+MACRO_V3_URL = "https://raw.githubusercontent.com/rivkydev/hujanderaspbasahkuyup/refs/heads/main/downloads/PBMacroV3.exe"
+# ^^^ GANTI dengan URL releases yang sebenarnya setelah upload binary
+
+# ── Versi & URL driver Interception ──────────────────────────
+# Upload install-interception.exe ke GitHub Releases atau hosting lain
+# Setiap kali ada versi baru driver, update dua variabel ini.
+DRIVER_VERSION = "1.0.0"
+DRIVER_URL     = "https://raw.githubusercontent.com/rivkydev/hujanderaspbasahkuyup/refs/heads/main/downloads/install-interception.exe"
+# ^^^ GANTI dengan URL yang benar setelah upload
 
 
+# ============================================================
+#  ROUTE: /api/macro-info  (sudah ada — ini versi yang diperbarui)
+# ============================================================
 @app.route('/api/macro-info', methods=['POST'])
 def macro_info():
     """
     Dipanggil loader setelah validasi berhasil.
-    Return: versi terbaru + URL download.
-    Loader pakai ini untuk cek update — download hanya jika versi beda.
+    Return: versi terbaru + URL download macro.
     """
     try:
         data = request.get_json()
@@ -1046,7 +1065,6 @@ def macro_info():
         if not license_key or not hwid:
             return jsonify({"success": False, "message": "Missing fields"}), 400
 
-        # Validasi ringan — pastikan lisensi masih valid & punya akses V3
         lic = get_license(license_key)
         if not lic:
             return jsonify({"success": False, "message": "License not found"}), 404
@@ -1055,9 +1073,6 @@ def macro_info():
         if not lic.get("is_active"):
             return jsonify({"success": False, "message": "EXPIRED"}), 403
 
-        # Cek tier — V3 hanya untuk macro_full / VIP
-        # Untuk sekarang: macro_v3 memakai tier "macro_full"
-        # Jika nanti ada tier tersendiri, sesuaikan di sini
         allowed = get_allowed_scripts(lic)
         if "macro_full" not in allowed and lic.get("license_tier") != "vip":
             return jsonify({
@@ -1070,9 +1085,31 @@ def macro_info():
             "version":     MACRO_V3_VERSION,
             "url":         MACRO_V3_URL,
             "script_type": "macro_v3",
-            "changelog":   ""   # opsional, bisa isi nanti
+            "changelog":   ""
         }), 200
 
+    except Exception as e:
+        return jsonify({"success": False, "message": str(e)}), 500
+
+
+# ============================================================
+#  ROUTE: /api/driver-info  [NEW]
+#  Dipanggil loader saat startup — tidak butuh auth/license.
+#  Hanya return versi + URL download driver Interception.
+# ============================================================
+@app.route('/api/driver-info', methods=['GET'])
+def driver_info():
+    """
+    Public endpoint — tidak butuh license key.
+    Loader cek versi driver dan download jika perlu.
+    """
+    try:
+        return jsonify({
+            "success": True,
+            "version": DRIVER_VERSION,
+            "url":     DRIVER_URL,
+            "notes":   "Interception driver installer untuk PB Macro"
+        }), 200
     except Exception as e:
         return jsonify({"success": False, "message": str(e)}), 500
 
