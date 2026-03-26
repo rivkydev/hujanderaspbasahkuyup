@@ -1009,7 +1009,71 @@ def logout_license():
 
     except Exception as e:
         return jsonify({"success": False, "message": f"Server Error: {str(e)}"}), 500
+# ============================================================
+#  TAMBAHKAN KE app.py
+#  Letakkan setelah route /api/validate
+#  Edit MACRO_VERSIONS setiap kali ada binary V3 baru
+# ============================================================
 
+# ── Versi & URL download macro V3 ─────────────────────────
+# Setiap kali push binary V3 baru:
+#   1. Upload .exe ke GitHub Releases / CDN / direct URL
+#   2. Update "version" dan "url" di sini
+#   3. Deploy → semua loader yang aktif otomatis update saat aktivasi berikutnya
+MACRO_V3_VERSION = "3.0.1"
+MACRO_V3_URL     = "https://GANTI_DENGAN_URL_DOWNLOAD_V3_EXE"
+# Contoh GitHub Releases:
+# MACRO_V3_URL = "https://github.com/USERMU/REPO/releases/download/v3.0.1/PBMacroV3.exe"
+
+
+@app.route('/api/macro-info', methods=['POST'])
+def macro_info():
+    """
+    Dipanggil loader setelah validasi berhasil.
+    Return: versi terbaru + URL download.
+    Loader pakai ini untuk cek update — download hanya jika versi beda.
+    """
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({"success": False, "message": "Missing data"}), 400
+
+        license_key = (data.get('license_key') or '').strip()
+        hwid        = (data.get('hwid') or '').strip()
+        script_type = (data.get('script_type') or '').strip()
+
+        if not license_key or not hwid:
+            return jsonify({"success": False, "message": "Missing fields"}), 400
+
+        # Validasi ringan — pastikan lisensi masih valid & punya akses V3
+        lic = get_license(license_key)
+        if not lic:
+            return jsonify({"success": False, "message": "License not found"}), 404
+        if lic.get("is_banned"):
+            return jsonify({"success": False, "message": "BANNED"}), 403
+        if not lic.get("is_active"):
+            return jsonify({"success": False, "message": "EXPIRED"}), 403
+
+        # Cek tier — V3 hanya untuk macro_full / VIP
+        # Untuk sekarang: macro_v3 memakai tier "macro_full"
+        # Jika nanti ada tier tersendiri, sesuaikan di sini
+        allowed = get_allowed_scripts(lic)
+        if "macro_full" not in allowed and lic.get("license_tier") != "vip":
+            return jsonify({
+                "success": False,
+                "message": "TIER_DENIED: Upgrade ke VIP untuk akses V3"
+            }), 403
+
+        return jsonify({
+            "success":     True,
+            "version":     MACRO_V3_VERSION,
+            "url":         MACRO_V3_URL,
+            "script_type": "macro_v3",
+            "changelog":   ""   # opsional, bisa isi nanti
+        }), 200
+
+    except Exception as e:
+        return jsonify({"success": False, "message": str(e)}), 500
 
 # ==========================================
 # ENTRY POINT
