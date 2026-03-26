@@ -25,7 +25,7 @@ GENERATE_API_KEY = os.environ.get('GENERATE_API_KEY')
 MONGO_URI = os.environ.get('MONGO_URI')
 
 # Script types yang valid
-VALID_SCRIPT_TYPES = {"rapid_click", "macro_full"}
+VALID_SCRIPT_TYPES = {"rapid_click", "macro_full", "macro_full"}
 
 # ==========================================
 # [FIX] WARNET SESSION TIMEOUT
