@@ -24,8 +24,11 @@ GENERATE_API_KEY = os.environ.get('GENERATE_API_KEY')
 
 MONGO_URI = os.environ.get('MONGO_URI')
 
-# Script types yang valid
-VALID_SCRIPT_TYPES = {"rapid_click", "macro_full", "macro_full"}
+# ── Script types yang valid ───────────────────────────────────
+# [FIX] Hapus duplikat "macro_full", tambah "macro_v3" agar
+#       Loader V3 (yang kirim script_type="macro_v3") tidak
+#       langsung lolos tanpa cek tier.
+VALID_SCRIPT_TYPES = {"rapid_click", "macro_full", "macro_v3"}
 
 # ==========================================
 # [FIX] WARNET SESSION TIMEOUT
@@ -230,10 +233,15 @@ def log_event(lic: dict, event: str, detail: str = ""):
     lic["logs"] = lic["logs"][-50:]
 
 def get_allowed_scripts(lic: dict) -> list:
-    """Return list of scripts this license may use."""
+    """
+    Return list of scripts this license may use.
+    VIP Lifetime → rapid_click + macro_full + macro_v3
+    Standard     → sesuai allowed_scripts (default: rapid_click)
+    """
     tier = lic.get("license_tier", "standard")
     if tier == "vip":
-        return ["rapid_click", "macro_full"]
+        # [FIX] Tambah macro_v3 agar VIP bisa pakai Loader V3
+        return ["rapid_click", "macro_full", "macro_v3"]
     scripts = lic.get("allowed_scripts", ["rapid_click"])
     if not isinstance(scripts, list) or not scripts:
         return ["rapid_click"]
@@ -242,29 +250,21 @@ def get_allowed_scripts(lic: dict) -> list:
 
 
 # ==========================================
-# [NEW] WARNET SESSION TIMEOUT HELPERS
+# WARNET SESSION TIMEOUT HELPERS
 # ==========================================
 
 def is_warnet_session_timed_out(lic: dict, current_time: datetime) -> bool:
-    """
-    Cek apakah sesi warnet sudah timeout berdasarkan warnet_last_seen.
-    Mengembalikan True jika sesi dianggap mati (harus di-clear).
-    """
     if not lic.get("warnet_active_hwid"):
-        return False  # Tidak ada sesi aktif, tidak perlu cek
+        return False
 
     last_seen_str = lic.get("warnet_last_seen")
     if not last_seen_str:
-        # Sesi lama sebelum patch ini diterapkan — tidak ada warnet_last_seen.
-        # Gunakan warnet_session_start sebagai fallback. Jika juga tidak ada,
-        # anggap sesi sudah stale (aman untuk di-clear).
         start_str = lic.get("warnet_session_start")
         if not start_str:
-            return True  # Tidak ada timestamp sama sekali → anggap timeout
+            return True
         try:
             start_dt = parse_dt(start_str)
             elapsed = (current_time - start_dt).total_seconds()
-            # Toleransi lebih besar untuk sesi lama: 2x timeout
             return elapsed > (WARNET_SESSION_TIMEOUT * 2)
         except Exception:
             return True
@@ -274,15 +274,14 @@ def is_warnet_session_timed_out(lic: dict, current_time: datetime) -> bool:
         elapsed = (current_time - last_seen_dt).total_seconds()
         return elapsed > WARNET_SESSION_TIMEOUT
     except Exception:
-        return True  # Parse error → anggap timeout demi keamanan
+        return True
 
 
 def clear_warnet_session(lic: dict, reason: str = "TIMEOUT"):
-    """Helper untuk membersihkan sesi warnet dan mencatat log."""
     old_hwid = lic.get("warnet_active_hwid") or "none"
-    lic["warnet_active_hwid"]  = None
+    lic["warnet_active_hwid"]   = None
     lic["warnet_session_start"] = None
-    lic["warnet_last_seen"]    = None
+    lic["warnet_last_seen"]     = None
     log_event(lic, "WARNET_SESSION_EXPIRED",
               f"Reason: {reason} | Was: {str(old_hwid)[:12]}")
 
@@ -332,10 +331,11 @@ def index():
 @app.route('/download')
 def download_file():
     script = request.args.get('script', 'v1').lower()
+    # [FIX] v3 sebelumnya salah map ke PBMacroV2.exe
     filename_map = {
         'v1': 'PBMacroV1.exe',
         'v2': 'PBMacroV2.exe',
-        'v3': 'PBMacroV2.exe'
+        'v3': 'PBMacroV3.exe'
     }
     filename = filename_map.get(script, 'PBMacroV1.exe')
     return send_from_directory(app.config['DOWNLOAD_FOLDER'], filename)
@@ -370,7 +370,6 @@ def admin_stats():
                               l.get("license_tier") == "vip" and
                               l.get("is_active") and not l.get("is_banned"))
 
-        # [NEW] Hitung sesi warnet yang sedang timeout (stuck)
         warnet_stuck = 0
         for l in licenses:
             if l.get("is_warnet") and l.get("warnet_active_hwid") and l.get("is_active"):
@@ -381,7 +380,7 @@ def admin_stats():
             "total": total, "active": active, "expired": expired, "banned": banned,
             "unbound": unbound, "lifetime": lifetime, "banned_hwids": banned_hwids,
             "activated_today": activated_today, "warnet": warnet, "vip": vip_active,
-            "warnet_stuck": warnet_stuck  # [NEW] info untuk admin
+            "warnet_stuck": warnet_stuck
         })
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -421,7 +420,6 @@ def admin_list_licenses():
                 is_unbound      = (hwid is None) and is_active and not is_banned
                 is_expired_flag = not is_active and not is_banned
 
-                # [NEW] Cek apakah sesi warnet sudah timeout
                 warnet_session_timed_out = (
                     is_warnet and bool(warnet_active_hwid) and
                     is_warnet_session_timed_out(lic, now)
@@ -454,27 +452,27 @@ def admin_list_licenses():
                     continue
 
                 result.append({
-                    "license_key":         license_key,
-                    "hwid_short":          (hwid[:12] + "...") if hwid else None,
-                    "hwid_full":           hwid,
-                    "duration_type":       duration_type,
-                    "created_at":          lic.get("created_at", ""),
-                    "expires_at":          expires_at,
-                    "last_used":           last_used,
-                    "is_active":           is_active and not is_banned,
-                    "is_banned":           is_banned,
-                    "is_unbound":          is_unbound,
-                    "is_warnet":           is_warnet,
-                    "warnet_active_hwid":  warnet_active_hwid,
-                    "warnet_session_start": lic.get("warnet_session_start"),
-                    "warnet_last_seen":    lic.get("warnet_last_seen"),          # [NEW]
-                    "warnet_session_timed_out": warnet_session_timed_out,        # [NEW]
-                    "time_left":           time_left,
-                    "ban_reason":          lic.get("ban_reason", ""),
-                    "note":                lic.get("note", ""),
-                    "log_count":           len(lic.get("logs", [])),
-                    "license_tier":        license_tier,
-                    "allowed_scripts":     allowed_sc,
+                    "license_key":              license_key,
+                    "hwid_short":               (hwid[:12] + "...") if hwid else None,
+                    "hwid_full":                hwid,
+                    "duration_type":            duration_type,
+                    "created_at":               lic.get("created_at", ""),
+                    "expires_at":               expires_at,
+                    "last_used":                last_used,
+                    "is_active":                is_active and not is_banned,
+                    "is_banned":                is_banned,
+                    "is_unbound":               is_unbound,
+                    "is_warnet":                is_warnet,
+                    "warnet_active_hwid":       warnet_active_hwid,
+                    "warnet_session_start":     lic.get("warnet_session_start"),
+                    "warnet_last_seen":         lic.get("warnet_last_seen"),
+                    "warnet_session_timed_out": warnet_session_timed_out,
+                    "time_left":                time_left,
+                    "ban_reason":               lic.get("ban_reason", ""),
+                    "note":                     lic.get("note", ""),
+                    "log_count":                len(lic.get("logs", [])),
+                    "license_tier":             license_tier,
+                    "allowed_scripts":          allowed_sc,
                 })
             except Exception as row_err:
                 print(f"[admin_list] Skipping bad doc: {row_err}")
@@ -524,9 +522,9 @@ def admin_reset_hwid(license_key):
     old = (lic.get("hwid") or "none")
     lic["hwid"] = None
     if lic.get("is_warnet"):
-        lic["warnet_active_hwid"]    = None
-        lic["warnet_session_start"]  = None
-        lic["warnet_last_seen"]      = None  # [NEW]
+        lic["warnet_active_hwid"]   = None
+        lic["warnet_session_start"] = None
+        lic["warnet_last_seen"]     = None
         log_event(lic, "HWID_RESET", f"Old: {old[:12]} | Warnet sesi dibersihkan")
     else:
         log_event(lic, "HWID_RESET", f"Old: {old[:12]} | Sisa waktu dipertahankan")
@@ -544,13 +542,13 @@ def admin_ban_license(license_key):
     if not lic:
         return jsonify({"success": False, "message": "Not found"}), 404
 
-    lic["is_banned"]  = True
-    lic["is_active"]  = False
-    lic["ban_reason"] = reason
-    lic["banned_at"]  = now_iso()
+    lic["is_banned"]            = True
+    lic["is_active"]            = False
+    lic["ban_reason"]           = reason
+    lic["banned_at"]            = now_iso()
     lic["warnet_active_hwid"]   = None
     lic["warnet_session_start"] = None
-    lic["warnet_last_seen"]     = None  # [NEW]
+    lic["warnet_last_seen"]     = None
     log_event(lic, "BANNED", reason)
 
     if ban_hwid and lic.get("hwid"):
@@ -581,10 +579,10 @@ def admin_deactivate(license_key):
     lic = get_license(license_key)
     if not lic:
         return jsonify({"success": False, "message": "Not found"}), 404
-    lic["is_active"] = False
+    lic["is_active"]            = False
     lic["warnet_active_hwid"]   = None
     lic["warnet_session_start"] = None
-    lic["warnet_last_seen"]     = None  # [NEW]
+    lic["warnet_last_seen"]     = None
     log_event(lic, "DEACTIVATED", "Manual by admin")
     save_license(lic)
     return jsonify({"success": True, "message": "Lisensi dinonaktifkan"})
@@ -656,9 +654,10 @@ def admin_set_tier(license_key):
     lic["license_tier"] = new_tier
 
     if new_tier == "vip":
-        lic["allowed_scripts"] = ["rapid_click", "macro_full"]
-        log_event(lic, "TIER_CHANGED", f"{old_tier} → vip | Scripts: V1+V2")
-        msg = "Lisensi berhasil di-upgrade ke Lifetime VIP (V1 + V2)"
+        # [FIX] Tambah macro_v3 agar VIP lifetime bisa akses Loader V3
+        lic["allowed_scripts"] = ["rapid_click", "macro_full", "macro_v3"]
+        log_event(lic, "TIER_CHANGED", f"{old_tier} → vip | Scripts: V1+V2+V3")
+        msg = "Lisensi berhasil di-upgrade ke Lifetime VIP (V1 + V2 + V3)"
     else:
         lic["allowed_scripts"] = ["rapid_click"]
         log_event(lic, "TIER_CHANGED", f"vip → standard | Scripts: V1 only")
@@ -687,12 +686,12 @@ def admin_set_warnet(license_key):
         lic["hwid"]                 = None
         lic["warnet_active_hwid"]   = None
         lic["warnet_session_start"] = None
-        lic["warnet_last_seen"]     = None  # [NEW]
+        lic["warnet_last_seen"]     = None
         log_event(lic, "WARNET_ENABLED", "Mode warnet diaktifkan, HWID lock dihapus")
     else:
         lic["warnet_active_hwid"]   = None
         lic["warnet_session_start"] = None
-        lic["warnet_last_seen"]     = None  # [NEW]
+        lic["warnet_last_seen"]     = None
         log_event(lic, "WARNET_DISABLED", "Mode warnet dinonaktifkan")
 
     save_license(lic)
@@ -711,7 +710,7 @@ def admin_warnet_logout(license_key):
     old_hwid = lic.get("warnet_active_hwid") or "none"
     lic["warnet_active_hwid"]   = None
     lic["warnet_session_start"] = None
-    lic["warnet_last_seen"]     = None  # [NEW]
+    lic["warnet_last_seen"]     = None
     log_event(lic, "WARNET_FORCE_LOGOUT", f"Admin clear sesi. Was: {str(old_hwid)[:12]}")
     save_license(lic)
     return jsonify({"success": True, "message": "Sesi warnet berhasil di-clear"})
@@ -729,18 +728,10 @@ def admin_unban_hwid(hwid_hash):
     delete_banned_hwid(hwid_hash)
     return jsonify({"success": True, "message": "HWID berhasil di-unban"})
 
-
-# ==========================================
-# [NEW] ADMIN: CLEANUP WARNET STUCK SESSIONS
-# Trigger manual untuk bersihkan semua sesi warnet yang sudah timeout.
-# Berguna jika banyak user yang crash sekaligus.
-# ==========================================
 @app.route('/admin/api/cleanup-warnet', methods=['POST'])
 @requires_auth
 def admin_cleanup_warnet():
-    """
-    Bersihkan semua sesi warnet yang sudah timeout (tidak ada validasi > WARNET_SESSION_TIMEOUT detik).
-    """
+    """Bersihkan semua sesi warnet yang sudah timeout."""
     try:
         now      = datetime.now(TIMEZONE)
         cleaned  = 0
@@ -760,9 +751,9 @@ def admin_cleanup_warnet():
                 cleaned += 1
 
         return jsonify({
-            "success": True,
-            "cleaned": cleaned,
-            "message": f"{cleaned} sesi warnet dibersihkan",
+            "success":         True,
+            "cleaned":         cleaned,
+            "message":         f"{cleaned} sesi warnet dibersihkan",
             "timeout_seconds": WARNET_SESSION_TIMEOUT
         })
     except Exception as e:
@@ -802,7 +793,8 @@ def generate_key():
             if duration_type != "lifetime":
                 license_tier    = "standard"
             else:
-                allowed_scripts = ["rapid_click", "macro_full"]
+                # [FIX] VIP Lifetime dapat akses macro_v3
+                allowed_scripts = ["rapid_click", "macro_full", "macro_v3"]
 
         license_key = generate_license_key()
         lic = {
@@ -821,7 +813,7 @@ def generate_key():
             "allowed_scripts":      allowed_scripts,
             "warnet_active_hwid":   None,
             "warnet_session_start": None,
-            "warnet_last_seen":     None,  # [NEW]
+            "warnet_last_seen":     None,
             "logs":                 []
         }
         log_event(lic, "GENERATED",
@@ -874,6 +866,10 @@ def validate_license():
             return jsonify({"success": False, "message": "EXPIRED: License Inactive"}), 403
 
         allowed = get_allowed_scripts(lic)
+
+        # [FIX] Cek TIER_DENIED hanya jika script_type adalah salah satu dari
+        # VALID_SCRIPT_TYPES dan tidak ada di allowed list.
+        # "macro_v3" dari Loader V3 sekarang ter-cover.
         if script_type in VALID_SCRIPT_TYPES and script_type not in allowed:
             log_event(lic, "TIER_DENIED", f"Requested: {script_type} | Allowed: {','.join(allowed)}")
             save_license(lic)
@@ -892,20 +888,16 @@ def validate_license():
         if is_warnet:
             warnet_active = lic.get("warnet_active_hwid")
 
-            # [FIX] Cek apakah sesi yang sedang aktif sudah timeout
-            # Jika ya, clear dulu sebelum cek HWID — sehingga device baru bisa masuk
             if warnet_active and warnet_active != hwid_hash:
                 if is_warnet_session_timed_out(lic, current_time):
-                    # Sesi lama sudah mati (crash/kill), otomatis bebaskan slot
                     clear_warnet_session(
                         lic,
                         reason=f"AUTO_TIMEOUT >{WARNET_SESSION_TIMEOUT}s | New: {hwid_hash[:12]}"
                     )
-                    warnet_active = None  # Sesi sudah di-clear, lanjut ke blok di bawah
+                    warnet_active = None
                     log_event(lic, "WARNET_AUTO_FREED",
                               f"Session expired, slot freed for new device: {hwid_hash[:12]}")
                 else:
-                    # Sesi masih aktif dan valid → tolak device lain
                     log_event(lic, "WARNET_LOCKED", f"Active: {str(warnet_active)[:12]} | Blocked: {hwid_hash[:12]}")
                     save_license(lic)
                     return jsonify({
@@ -914,10 +906,9 @@ def validate_license():
                     }), 403
 
             if not warnet_active:
-                # Mulai sesi baru
                 lic["warnet_active_hwid"]   = hwid_hash
                 lic["warnet_session_start"] = current_time.isoformat()
-                lic["warnet_last_seen"]     = current_time.isoformat()  # [NEW]
+                lic["warnet_last_seen"]     = current_time.isoformat()
 
                 if not expires_at_str and lic.get("duration_type") != "lifetime":
                     expires_at_str    = calculate_expires_at(lic["duration_type"], current_time)
@@ -927,8 +918,7 @@ def validate_license():
                 else:
                     log_event(lic, "WARNET_SESSION_START", f"HWID: {hwid_hash[:12]}")
             else:
-                # Sesi milik HWID yang sama → update last_seen (heartbeat)
-                lic["warnet_last_seen"] = current_time.isoformat()  # [NEW] ← kunci utama fix ini
+                lic["warnet_last_seen"] = current_time.isoformat()
                 log_event(lic, "WARNET_REVALIDATED", f"HWID: {hwid_hash[:12]}")
 
         # ── MODE NORMAL ──────────────────────────────────────────────────
@@ -957,7 +947,7 @@ def validate_license():
                 if is_warnet:
                     lic["warnet_active_hwid"]   = None
                     lic["warnet_session_start"] = None
-                    lic["warnet_last_seen"]     = None  # [NEW]
+                    lic["warnet_last_seen"]     = None
                 log_event(lic, "AUTO_EXPIRED")
                 save_license(lic)
                 return jsonify({"success": False, "message": "EXPIRED: Duration Ended"}), 403
@@ -974,7 +964,7 @@ def validate_license():
             "mode":            "warnet" if is_warnet else "normal",
             "license_tier":    lic.get("license_tier", "standard"),
             "allowed_scripts": allowed,
-            "session_timeout": WARNET_SESSION_TIMEOUT,  # [NEW] info ke client (opsional)
+            "session_timeout": WARNET_SESSION_TIMEOUT,
         }), 200
 
     except Exception as e:
@@ -1002,7 +992,7 @@ def logout_license():
         if lic.get("warnet_active_hwid") == hwid_hash:
             lic["warnet_active_hwid"]   = None
             lic["warnet_session_start"] = None
-            lic["warnet_last_seen"]     = None  # [NEW]
+            lic["warnet_last_seen"]     = None
             log_event(lic, "WARNET_LOGOUT", f"HWID: {hwid_hash[:12]}")
             save_license(lic)
 
@@ -1010,49 +1000,35 @@ def logout_license():
 
     except Exception as e:
         return jsonify({"success": False, "message": f"Server Error: {str(e)}"}), 500
-# ============================================================
-#  TAMBAHKAN KE app.py
-#  Letakkan setelah route /api/validate
-#  Edit MACRO_VERSIONS setiap kali ada binary V3 baru
-# ============================================================
+
 
 # ============================================================
-#  PATCH untuk app.py — tambahkan di bagian yang sesuai
-#  Cari bagian MACRO_V3_VERSION / MACRO_V3_URL yang sudah ada
-#  dan GANTI dengan blok di bawah ini.
-#  Lalu tambahkan route /api/driver-info di bawah /api/macro-info.
+#  VERSI & URL — EDIT BAGIAN INI SETIAP ADA BINARY BARU
 # ============================================================
 
-# ── Versi & URL macro V3 ──────────────────────────────────────
-# PENTING: Gunakan URL raw/direct download, BUKAN GitHub blob!
-# GitHub blob tidak bisa didownload langsung — pakai salah satu:
-#   1. GitHub Releases (direkomendasikan):
-#      "https://github.com/USER/REPO/releases/download/v3.0.0/PBMacroV3.exe"
-#   2. GitHub raw (hanya untuk file kecil):
-#      "https://raw.githubusercontent.com/USER/REPO/main/downloads/PBMacroV3.exe"
-#   3. Direct link CDN / hosting lain
-
+# Macro V3
+# WAJIB pakai GitHub Releases, BUKAN raw.githubusercontent.com!
+# raw.githubusercontent.com tidak support binary .exe dengan benar.
+# Format URL Releases: https://github.com/USER/REPO/releases/download/TAG/FILE
 MACRO_V3_VERSION = "3.0.0"
-MACRO_V3_URL = "https://raw.githubusercontent.com/rivkydev/hujanderaspbasahkuyup/refs/heads/main/downloads/PBMacroV3.exe"
-# ^^^ GANTI dengan URL releases yang sebenarnya setelah upload binary
+MACRO_V3_URL     = "https://github.com/rivkydev/hujanderaspbasahkuyup/releases/download/v3.0.0/PBMacroV3.exe"
 
-# ── Versi & URL driver Interception ──────────────────────────
-# Upload install-interception.exe ke GitHub Releases atau hosting lain
-# Setiap kali ada versi baru driver, update dua variabel ini.
+# Driver Interception (install-interception.exe)
 DRIVER_VERSION = "1.0.0"
-DRIVER_URL     = "https://raw.githubusercontent.com/rivkydev/hujanderaspbasahkuyup/refs/heads/main/downloads/install-interception.exe"
-# ^^^ GANTI dengan URL yang benar setelah upload
+DRIVER_URL     = "https://github.com/rivkydev/hujanderaspbasahkuyup/releases/download/v1.0.0/install-interception.exe"
+
+# interception.dll — di-download Loader bersamaan dengan driver
+# Upload ke Releases yang sama atau hosting terpisah
+INTERCEPTION_DLL_VERSION = "1.0.0"
+INTERCEPTION_DLL_URL     = "https://github.com/rivkydev/hujanderaspbasahkuyup/releases/download/v1.0.0/interception.dll"
 
 
 # ============================================================
-#  ROUTE: /api/macro-info  (sudah ada — ini versi yang diperbarui)
+#  ROUTE: /api/macro-info
+#  Dipanggil Loader setelah validasi. Return versi + URL macro.
 # ============================================================
 @app.route('/api/macro-info', methods=['POST'])
 def macro_info():
-    """
-    Dipanggil loader setelah validasi berhasil.
-    Return: versi terbaru + URL download macro.
-    """
     try:
         data = request.get_json()
         if not data:
@@ -1060,7 +1036,6 @@ def macro_info():
 
         license_key = (data.get('license_key') or '').strip()
         hwid        = (data.get('hwid') or '').strip()
-        script_type = (data.get('script_type') or '').strip()
 
         if not license_key or not hwid:
             return jsonify({"success": False, "message": "Missing fields"}), 400
@@ -1074,7 +1049,8 @@ def macro_info():
             return jsonify({"success": False, "message": "EXPIRED"}), 403
 
         allowed = get_allowed_scripts(lic)
-        if "macro_full" not in allowed and lic.get("license_tier") != "vip":
+        # [FIX] Cek macro_v3 (bukan hanya macro_full) agar konsisten dengan validate
+        if "macro_v3" not in allowed and lic.get("license_tier") != "vip":
             return jsonify({
                 "success": False,
                 "message": "TIER_DENIED: Upgrade ke VIP untuk akses V3"
@@ -1093,25 +1069,25 @@ def macro_info():
 
 
 # ============================================================
-#  ROUTE: /api/driver-info  [NEW]
-#  Dipanggil loader saat startup — tidak butuh auth/license.
-#  Hanya return versi + URL download driver Interception.
+#  ROUTE: /api/driver-info
+#  Public endpoint — tidak butuh license key.
+#  Loader cek versi driver & interception.dll, download jika perlu.
 # ============================================================
 @app.route('/api/driver-info', methods=['GET'])
 def driver_info():
-    """
-    Public endpoint — tidak butuh license key.
-    Loader cek versi driver dan download jika perlu.
-    """
     try:
         return jsonify({
             "success": True,
             "version": DRIVER_VERSION,
             "url":     DRIVER_URL,
-            "notes":   "Interception driver installer untuk PB Macro"
+            # [NEW] dll_url — dipakai Loader untuk download interception.dll
+            # bersamaan dengan driver, sebelum PBMacroV3.exe di-launch
+            "dll_url": INTERCEPTION_DLL_URL,
+            "notes":   "Interception driver + DLL untuk PB Macro V3"
         }), 200
     except Exception as e:
         return jsonify({"success": False, "message": str(e)}), 500
+
 
 # ==========================================
 # ENTRY POINT
