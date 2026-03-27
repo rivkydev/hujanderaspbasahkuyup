@@ -1093,72 +1093,114 @@ function doCopyTemplate(){
 // TEMPLATE BUILDER — v3.1 (V1/V2/V3 Integrated)
 // ==========================================
 function _buildTemplate(key, dur, isWarnet, lang, buyer, plat, scripts, type) {
-  const isID = lang === 'id', isNew = buyer === 'new';
-  const hasV1 = scripts.includes('rapid_click'),
-        hasV2 = scripts.includes('macro_full'),
-        hasV3 = scripts.includes('macro_v3');
-  
-  // V3 dianggap setara VIP atau bagian dari paket VIP
-  const isVip = (hasV1 && hasV2) || hasV3;
+  // ==========================================
+// TEMPLATE BUILDER — v4 (V1 / V2 only, hotkey fix)
+// Hotkey: 1/2/3 = ON Script, 4/5/6 = OFF Script
+// ==========================================
 
-  // --- LABEL DURASI ---
-  const durLabelID = { lifetime: 'Lifetime (Permanen)', '1month': '1 Bulan', '2weeks': '2 Minggu', trial_6hours: 'Trial 6 Jam', demo_1min: 'Demo 1 Menit' };
-  const durLabelEN = { lifetime: 'Lifetime (Permanent)', '1month': '1 Month', '2weeks': '2 Weeks', trial_6hours: '6-Hour Trial', demo_1min: '1-Minute Demo' };
+// --- HOTKEY BLOCKS ---
+
+const hotkeysV1_ID = `🎮 HOTKEY V1:\n• F1 — Toggle Macro ON / OFF\n• 1 / 2 / 3 — Auto ON (Slot senjata utama)\n• 4 / 5 / 6 — Auto OFF (Aman: Bom / C-4 / Granat)`;
+const hotkeysV1_EN = `🎮 HOTKEYS V1:\n• F1 — Toggle Macro ON / OFF\n• 1 / 2 / 3 — Auto ON (Weapon slots)\n• 4 / 5 / 6 — Auto OFF (Safe: Bomb / C-4 / Grenade)`;
+
+const hotkeysV2_ID = `🎮 HOTKEY V2:\n• F1 — Toggle Macro ON / OFF\n• 1 / 2 / 3 — Auto ON (Slot senjata utama)\n• 4 / 5 / 6 — Auto OFF (Aman: Bom / C-4 / Granat)\n• Q / Klik Kanan — Scope Bind (ADS / Zoom)\n• F6 — Load / Save Config\n• F7 — Toggle Overlay In-Game`;
+const hotkeysV2_EN = `🎮 HOTKEYS V2:\n• F1 — Toggle Macro ON / OFF\n• 1 / 2 / 3 — Auto ON (Weapon slots)\n• 4 / 5 / 6 — Auto OFF (Safe: Bomb / C-4 / Grenade)\n• Q / Right Click — Scope Bind (ADS / Zoom)\n• F6 — Load / Save Config\n• F7 — Toggle In-Game Overlay`;
+
+const hotkeysVIP_ID = hotkeysV2_ID;
+const hotkeysVIP_EN = hotkeysV2_EN;
+
+// --- SETUP BLOCKS ---
+
+const setupV1_ID = `⚙️ CARA SETUP V1:\n1. Download V1 → Run as Administrator\n2. Jika ada warning antivirus → More Info → Run Anyway\n3. Masukkan License Key → klik ACTIVATE\n4. Buka PB, atur delay (1–10ms), tekan F1 untuk ON`;
+const setupV1_EN = `⚙️ SETUP V1:\n1. Download V1 → Run as Administrator\n2. If antivirus warns → More Info → Run Anyway\n3. Enter License Key → click ACTIVATE\n4. Open PB, set delay (1–10ms), press F1 to toggle ON`;
+
+const setupV2_ID = `⚙️ CARA SETUP V2:\n1. Download V2 → Run as Administrator\n2. Jika ada warning antivirus → More Info → Run Anyway\n3. Masukkan License Key → klik ACTIVATE\n4. Buka PB, F7 untuk buka Overlay setting\n5. Tekan F1 untuk ON/OFF macro`;
+const setupV2_EN = `⚙️ SETUP V2:\n1. Download V2 → Run as Administrator\n2. If antivirus warns → More Info → Run Anyway\n3. Enter License Key → click ACTIVATE\n4. Open PB, press F7 for Overlay settings\n5. Press F1 to toggle macro ON/OFF`;
+
+const setupVIP_ID = setupV2_ID;
+const setupVIP_EN = setupV2_EN;
+
+// --- FEATURE BLOCKS ---
+
+const featV1_ID = `✅ Fitur V1:\n• Rapid Click Custom Delay\n• HWID Lock (1 PC)\n• Ringan & stabil`;
+const featV1_EN = `✅ V1 Features:\n• Rapid Click Custom Delay\n• HWID Lock (1 PC)\n• Lightweight & stable`;
+
+const featV2_ID = `✅ Fitur V2:\n• Rapid Click + Smart Mode\n• In-Game Overlay (F7)\n• Load / Save Config (F6)\n• Scope Bind\n• Multi-language (ID/EN/PT)\n• HWID Lock`;
+const featV2_EN = `✅ V2 Features:\n• Rapid Click + Smart Mode\n• In-Game Overlay (F7)\n• Load / Save Config (F6)\n• Scope Bind\n• Multi-language (ID/EN/PT)\n• HWID Lock`;
+
+// ==========================================
+// MAIN BUILDER
+// ==========================================
+function _buildTemplate(key, dur, isWarnet, lang, buyer, plat, scripts, type) {
+  const isID = lang === 'id', isNew = buyer === 'new';
+  const hasV1 = scripts.includes('rapid_click');
+  const hasV2 = scripts.includes('macro_full');
+  const isVip = hasV1 && hasV2;
+
+  // --- DURASI LABEL ---
+  const durLabelID = {
+    lifetime: 'Lifetime (Permanen)', '1month': '1 Bulan',
+    '2weeks': '2 Minggu', trial_6hours: 'Trial 6 Jam', demo_1min: 'Demo 1 Menit'
+  };
+  const durLabelEN = {
+    lifetime: 'Lifetime (Permanent)', '1month': '1 Month',
+    '2weeks': '2 Weeks', trial_6hours: '6-Hour Trial', demo_1min: '1-Minute Demo'
+  };
   const dL = isID ? (durLabelID[dur] || dur) : (durLabelEN[dur] || dur);
 
-  // --- LABEL SCRIPT ---
-  const scriptLabelID = hasV3 ? 'Script V3 — Ultimate Macro' : (isVip ? 'Script V1 + V2 (Lifetime VIP)' : (hasV2 ? 'Script V2 — Smart Macro' : 'Script V1 — Rapid Click'));
-  const scriptLabelEN = hasV3 ? 'Script V3 — Ultimate Macro' : (isVip ? 'Script V1 + V2 (Lifetime VIP)' : (hasV2 ? 'Script V2 — Smart Macro' : 'Script V1 — Rapid Click'));
+  // --- SCRIPT LABEL ---
+  const scriptLabelID = isVip
+    ? 'Script V1 + V2 (VIP)'
+    : (hasV2 ? 'Script V2 — Smart Macro' : 'Script V1 — Rapid Click');
+  const scriptLabelEN = isVip
+    ? 'Script V1 + V2 (VIP)'
+    : (hasV2 ? 'Script V2 — Smart Macro' : 'Script V1 — Rapid Click');
 
-  // --- LINK DOWNLOAD ---
-  const dlLineID = hasV3 
-    ? `📥 Download V3: ${DL_BASE}?script=v3` 
-    : (isVip ? `📥 Download V1: ${DL_V1}\n📥 Download V2: ${DL_V2}` : (hasV2 ? `📥 Download V2: ${DL_V2}` : `📥 Download V1: ${DL_V1}`));
+  // --- DOWNLOAD LINKS ---
+  const DL_V1 = 'https://hujanderaspbasahkuyup.vercel.app/download?script=v1';
+  const DL_V2 = 'https://hujanderaspbasahkuyup.vercel.app/download?script=v2';
+
+  const dlLineID = isVip
+    ? `📥 Download V1: ${DL_V1}\n📥 Download V2: ${DL_V2}`
+    : (hasV2 ? `📥 Download V2: ${DL_V2}` : `📥 Download V1: ${DL_V1}`);
   const dlLineEN = dlLineID;
 
   const keyLine = `🔑 License Key: \`${key}\``;
 
-  // --- HOTKEYS & SETUP PER VERSI ---
-  const hotkeysV3_ID = `🎮 HOTKEY V3 (ULTIMATE):\n• F1 — Toggle Macro ON / OFF\n• F7 — Buka In-Game Overlay\n• F6 — Load / Save Config\n• Q / Klik Kanan — Scope Bind\n\n🔢 Smart Mode (Auto Detect):\n• Deteksi otomatis semua slot senjata (1-6)\n• Driver Interception (Lebih halus & aman)`;
-  const hotkeysV3_EN = `🎮 HOTKEYS V3 (ULTIMATE):\n• F1 — Toggle Macro ON / OFF\n• F7 — Open In-Game Overlay\n• F6 — Load / Save Config\n• Q / Right Click — Scope Bind\n\n🔢 Smart Mode (Auto Detect):\n• Auto detect weapon slots (1-6)\n• Interception Driver (Smoother & Safer)`;
+  // --- PILIH BLOK BERDASARKAN SCRIPT ---
+  const hk  = isID ? (isVip ? hotkeysVIP_ID  : (hasV2 ? hotkeysV2_ID  : hotkeysV1_ID))
+                   : (isVip ? hotkeysVIP_EN  : (hasV2 ? hotkeysV2_EN  : hotkeysV1_EN));
+  const setup = isID ? (isVip ? setupVIP_ID  : (hasV2 ? setupV2_ID   : setupV1_ID))
+                     : (isVip ? setupVIP_EN  : (hasV2 ? setupV2_EN   : setupV1_EN));
+  const feat  = isID ? (isVip ? `${featV2_ID}\n• Bonus: Script V1 juga bisa dipakai`
+                               : (hasV2 ? featV2_ID : featV1_ID))
+                     : (isVip ? `${featV2_EN}\n• Bonus: Script V1 included`
+                               : (hasV2 ? featV2_EN : featV1_EN));
 
-  const setupV3_ID = `⚙️ CARA SETUP V3:\n1. Download V3 → Run as Administrator\n2. Masukkan License Key\n3. Install Driver (jika diminta) lalu RESTART PC\n4. Buka PB & tekan F1 untuk aktivasi di dalam room`;
-  const setupV3_EN = `⚙️ SETUP V3:\n1. Download V3 → Run as Administrator\n2. Enter License Key\n3. Install Driver (if prompted) then RESTART PC\n4. Open PB & press F1 to toggle inside the match`;
-
-  // --- LOGIKA PEMILIHAN INSTRUKSI ---
-  const hk = isID 
-    ? (hasV3 ? hotkeysV3_ID : (isVip ? hotkeysVIP_ID : (hasV2 ? hotkeysV2_ID : hotkeysV1_ID))) 
-    : (hasV3 ? hotkeysV3_EN : (isVip ? hotkeysVIP_EN : (hasV2 ? hotkeysV2_EN : hotkeysV1_EN)));
-
-  const setup = isID 
-    ? (hasV3 ? setupV3_ID : (isVip ? setupVIP_ID : (hasV2 ? setupV2_ID : setupV1_ID))) 
-    : (hasV3 ? setupV3_EN : (isVip ? setupVIP_EN : (hasV2 ? setupV2_EN : setupV1_EN)));
-
-  const featV3_ID = `✅ Benefit V3:\n• Driver Interception (Kernel Level)\n• In-Game Overlay Menu\n• Auto Weapon Slot Detection\n• Anti-Cheat Safe`;
-  const featV3_EN = `✅ V3 Benefits:\n• Interception Driver (Kernel Level)\n• In-Game Overlay Menu\n• Auto Weapon Slot Detection\n• Anti-Cheat Safe`;
-
-  const feat = isID 
-    ? (hasV3 ? featV3_ID : (isVip ? `${featV2_ID}\n• Bonus: Script V1 juga bisa dipakai` : (hasV2 ? featV2_ID : featV1_ID))) 
-    : (hasV3 ? featV3_EN : (isVip ? `${featV2_EN}\n• Bonus: Script V1 included` : (hasV2 ? featV2_EN : featV1_EN)));
-
-  // --- RETURN TEMPLATE BERDASARKAN TIPE ---
+  // --- TIPE: UPGRADE ---
   if (type === 'upgrade') {
-    if (isID) return `👑 SELAMAT! Lisensi kamu berhasil di-UPGRADE ke *Lifetime VIP* 🔥\n\n*Hujan Deras PB Macro*\n\n${keyLine}\n\n✅ Akses penuh terbuka:\n• 🔷 Script V1 & V2 (Live)\n• 🔥 Script V3 Ultimate (New!)\n\n${dlLineID}\n\nKey tetap sama. Enjoy the power! 🚀`;
-    return `👑 Congrats! Your license is UPGRADED to *Lifetime VIP* 🔥\n\n*Hujan Deras PB Macro*\n\n${keyLine}\n\n✅ Full access unlocked:\n• 🔷 Script V1 & V2\n• 🔥 Script V3 Ultimate (New!)\n\n${dlLineEN}\n\nSame key. Enjoy! 🚀`;
+    if (isID) return `👑 SELAMAT! Lisensi kamu berhasil di-UPGRADE ke *Lifetime VIP* 🔥\n\n*Hujan Deras PB Macro*\n\n${keyLine}\n\n✅ Akses penuh terbuka:\n• 🔷 Script V1 (Rapid Click)\n• 🔶 Script V2 (Smart Macro + Overlay)\n\n${dlLineID}\n\nKey tetap sama. Selamat menikmati! 🚀`;
+    return `👑 Congrats! Your license is UPGRADED to *Lifetime VIP* 🔥\n\n*Hujan Deras PB Macro*\n\n${keyLine}\n\n✅ Full access unlocked:\n• 🔷 Script V1 (Rapid Click)\n• 🔶 Script V2 (Smart Macro + Overlay)\n\n${dlLineEN}\n\nSame key. Enjoy! 🚀`;
   }
 
+  // --- TIPE: V2 RELEASE NOTIF ---
   if (type === 'v2release') {
-    // Template ini bisa diadaptasi untuk V3 release jika diperlukan
-    if (isID) return `🚀 UPDATE TERBARU! Script V3 Ultimate *sudah RILIS*! 🎉\n\n${keyLine}\n\nSebagai VIP, kamu dapat akses GRATIS.\n\n📥 Download V3:\n${DL_BASE}?script=v3\n\n${hotkeysV3_ID}`;
-    return `🚀 NEW UPDATE! Script V3 Ultimate is *LIVE*! 🎉\n\n${keyLine}\n\nAs a VIP, you get FREE access.\n\n📥 Download V3:\n${DL_BASE}?script=v3\n\n${hotkeysV3_EN}`;
+    if (isID) return `🚀 UPDATE! Script V2 *sudah RILIS*! 🎉\n\n*Hujan Deras PB Macro*\n\n${keyLine}\n\nSebagai VIP, kamu dapat akses GRATIS.\n\n📥 Download V2: ${DL_V2}\n\n${hotkeysV2_ID}\n\nAda pertanyaan? Chat saya! 🔥`;
+    return `🚀 UPDATE! Script V2 is *LIVE*! 🎉\n\n*Hujan Deras PB Macro*\n\n${keyLine}\n\nAs a VIP, you get FREE access.\n\n📥 Download V2: ${DL_V2}\n\n${hotkeysV2_EN}\n\nAny questions? Message me! 🔥`;
   }
 
-  // Template Penjualan Standar
+  // --- TIPE: PENJUALAN STANDAR ---
+  const warnetNote = isWarnet
+    ? (isID ? '\n\n⚡ *Mode Warnet aktif* — key bisa dipakai bergantian di banyak PC (satu sesi per waktu).'
+            : '\n\n⚡ *Warnet mode active* — key can be shared across PCs (one session at a time).')
+    : '';
+
   if (isID) {
-    return `${isNew ? '🔮' : '🔄'} *Lisensi ${dL} — Hujan Deras PB Macro* 🌧️\n\n${isNew ? 'Terima kasih! Lisensi kamu sudah aktif.' : 'Renewal berhasil! Key baru kamu siap.'}\n\n${dlLineID}\n${keyLine}\n\nScript: ${scriptLabelID}\n\n${setup}\n\n${feat}\n\n${hk}\n\n📌 HWID Lock ke PC ini. Ada kendala? Chat saya! 🔥`;
+    return `${isNew ? '🔮' : '🔄'} *Lisensi ${dL} — Hujan Deras PB Macro* 🌧️\n\n${isNew ? 'Terima kasih sudah beli! Lisensi kamu sudah aktif.' : 'Renewal berhasil! Key baru kamu siap dipakai.'}\n\n${dlLineID}\n${keyLine}\n\nScript: ${scriptLabelID}${warnetNote}\n\n${setup}\n\n${feat}\n\n${hk}\n\n📌 HWID Lock ke PC ini. Ada kendala? Chat saya! 🔥`;
   } else {
-    return `${isNew ? '🔮' : '🔄'} *${dL} License — Hujan Deras PB Macro* 🌧️\n\n${isNew ? 'Thank you! Your license is active.' : 'Renewal success! Your new key is ready.'}\n\n${dlLineEN}\n${keyLine}\n\nScript: ${scriptLabelEN}\n\n${setup}\n\n${feat}\n\n${hk}\n\n📌 HWID Locked to this PC. Need help? Message me! 🔥`;
+    return `${isNew ? '🔮' : '🔄'} *${dL} License — Hujan Deras PB Macro* 🌧️\n\n${isNew ? 'Thank you for your purchase! Your license is now active.' : 'Renewal success! Your new key is ready.'}\n\n${dlLineEN}\n${keyLine}\n\nScript: ${scriptLabelEN}${warnetNote}\n\n${setup}\n\n${feat}\n\n${hk}\n\n📌 HWID Locked to this PC. Need help? Message me! 🔥`;
   }
+}
 }
 
 // ==========================================
