@@ -1010,8 +1010,8 @@ def logout_license():
 # WAJIB pakai GitHub Releases, BUKAN raw.githubusercontent.com!
 # raw.githubusercontent.com tidak support binary .exe dengan benar.
 # Format URL Releases: https://github.com/USER/REPO/releases/download/TAG/FILE
-MACRO_V3_VERSION = "3.0.0"
-MACRO_V3_URL     = "https://github.com/rivkydev/hujanderaspbasahkuyup/releases/download/v3.0.0/PBMacroV3.exe"
+MACRO_V3_VERSION = "3.0.2"
+MACRO_V3_URL     = "https://github.com/rivkydev/hujanderaspbasahkuyup/releases/download/v3.0.2/PBMacroV3.exe"
 
 # Driver Interception (install-interception.exe)
 DRIVER_VERSION = "1.0.0"
