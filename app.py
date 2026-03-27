@@ -1015,7 +1015,7 @@ MACRO_V3_URL     = "https://github.com/rivkydev/hujanderaspbasahkuyup/releases/d
 
 # Driver Interception (install-interception.exe)
 DRIVER_VERSION = "1.0.0"
-DRIVER_URL     = "https://github.com/rivkydev/hujanderaspbasahkuyup/releases/download/v1.0.0/install-interception.exe"
+DRIVER_URL     = "https://github.com/rivkydev/hujanderaspbasahkuyup/releases/download/v1/install-interception.exe"
 
 # interception.dll — di-download Loader bersamaan dengan driver
 # Upload ke Releases yang sama atau hosting terpisah
