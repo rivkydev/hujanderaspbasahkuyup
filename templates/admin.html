@@ -380,12 +380,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
             <div class="tier-option-desc">Rapid Click + Smart Mode + Overlay + Load/Save Config + Multi-language.</div>
           </div>
           <div class="tier-option" id="opt-vip" onclick="selectScript('vip')" style="display:none">
-            <div class="tier-option-title" style="color:var(--purple)">👑 VIP — Script V1 + V2 + V3</div>
-            <div class="tier-option-desc">Akses penuh Lifetime VIP: V1, V2, dan V3 saat tersedia.</div>
-          </div>
-          <div class="tier-option" id="opt-v1v2" onclick="selectScript('vip-v1v2')" style="display:none">
             <div class="tier-option-title" style="color:var(--purple)">👑 VIP V1+V2</div>
-            <div class="tier-option-desc">Akses Script V1 dan V2 sekaligus dalam satu lisensi Lifetime.</div>
+            <div class="tier-option-desc">Akses Script V1 dan V2 dalam satu lisensi Lifetime. V3 dijual terpisah.</div>
           </div>
           <div class="tier-option" id="opt-v2v3" onclick="selectScript('vip-v2v3')" style="display:none">
             <div class="tier-option-title" style="color:var(--orange)">👑 VIP V2+V3</div>
@@ -900,16 +896,14 @@ function selectScript(val){
   else if(val === 'macro_full') document.getElementById('opt-v2').classList.add('active-v2');
   else if(val === 'macro_v3') document.getElementById('opt-v3').classList.add('active-v2');
   else if(val === 'vip') document.getElementById('opt-vip').classList.add('active');
-  else if(val === 'vip-v1v2') document.getElementById('opt-v1v2').classList.add('active');
   else if(val === 'vip-v2v3') document.getElementById('opt-v2v3').classList.add('active');
 }
 function updateGenOptions(){
   const dur=document.getElementById('genDuration').value;
   const isLifetime=dur==='lifetime';
   document.getElementById('opt-vip').style.display=isLifetime?'block':'none';
-  document.getElementById('opt-v1v2').style.display=isLifetime?'block':'none';
   document.getElementById('opt-v2v3').style.display=isLifetime?'block':'none';
-  if(!isLifetime && (_selectedScript==='vip' || _selectedScript==='vip-v1v2' || _selectedScript==='vip-v2v3')){selectScript('rapid_click');}
+  if(!isLifetime && (_selectedScript==='vip' || _selectedScript==='vip-v2v3')){selectScript('rapid_click');}
 }
 
 async function generateKey(){
@@ -923,7 +917,7 @@ async function generateKey(){
 
   if (script === 'vip') {
     license_tier = 'vip';
-    allowed_scripts = ['rapid_click', 'macro_full', 'macro_v3'];
+    allowed_scripts = ['rapid_click', 'macro_full'];
   } else if (script === 'vip-v1v2') {
     license_tier = 'vip-v1v2';
     allowed_scripts = ['rapid_click', 'macro_full'];

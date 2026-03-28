@@ -235,7 +235,7 @@ def log_event(lic: dict, event: str, detail: str = ""):
 def get_allowed_scripts(lic: dict) -> list:
     """
     Return list of scripts this license may use.
-    VIP Lifetime → rapid_click + macro_full + macro_v3 (or subset VIP combos)
+    VIP Lifetime → rapid_click + macro_full for vip and vip-v1v2, or macro_full + macro_v3 for vip-v2v3.
     Standard     → sesuai allowed_scripts (default: rapid_click)
     """
     tier = lic.get("license_tier", "standard")
@@ -243,7 +243,7 @@ def get_allowed_scripts(lic: dict) -> list:
         scripts = lic.get("allowed_scripts", [])
         if not isinstance(scripts, list) or not scripts:
             if tier == "vip":
-                return ["rapid_click", "macro_full", "macro_v3"]
+                return ["rapid_click", "macro_full"]
             if tier == "vip-v1v2":
                 return ["rapid_click", "macro_full"]
             if tier == "vip-v2v3":
@@ -253,7 +253,7 @@ def get_allowed_scripts(lic: dict) -> list:
         if valid:
             return valid
         if tier == "vip":
-            return ["rapid_click", "macro_full", "macro_v3"]
+            return ["rapid_click", "macro_full"]
         if tier == "vip-v1v2":
             return ["rapid_click", "macro_full"]
         if tier == "vip-v2v3":
@@ -671,10 +671,9 @@ def admin_set_tier(license_key):
     lic["license_tier"] = new_tier
 
     if new_tier == "vip":
-        # [FIX] Tambah macro_v3 agar VIP lifetime bisa akses Loader V3
-        lic["allowed_scripts"] = ["rapid_click", "macro_full", "macro_v3"]
-        log_event(lic, "TIER_CHANGED", f"{old_tier} → vip | Scripts: V1+V2+V3")
-        msg = "Lisensi berhasil di-upgrade ke Lifetime VIP (V1 + V2 + V3)"
+        lic["allowed_scripts"] = ["rapid_click", "macro_full"]
+        log_event(lic, "TIER_CHANGED", f"{old_tier} → vip | Scripts: V1+V2")
+        msg = "Lisensi berhasil di-upgrade ke Lifetime VIP (V1 + V2)"
     else:
         lic["allowed_scripts"] = ["rapid_click"]
         log_event(lic, "TIER_CHANGED", f"vip → standard | Scripts: V1 only")
@@ -812,14 +811,14 @@ def generate_key():
             else:
                 if not allowed_scripts:
                     if license_tier == "vip":
-                        allowed_scripts = ["rapid_click", "macro_full", "macro_v3"]
+                        allowed_scripts = ["rapid_click", "macro_full"]
                     elif license_tier == "vip-v1v2":
                         allowed_scripts = ["rapid_click", "macro_full"]
                     elif license_tier == "vip-v2v3":
                         allowed_scripts = ["macro_full", "macro_v3"]
                 elif license_tier == "vip":
-                    # Preserve full VIP scope if explicit selection is missing or broad.
-                    allowed_scripts = ["rapid_click", "macro_full", "macro_v3"]
+                    # Preserve lifetime VIP V1+V2 scope if explicit selection is missing or broad.
+                    allowed_scripts = ["rapid_click", "macro_full"]
 
         license_key = generate_license_key()
         lic = {
