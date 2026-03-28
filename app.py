@@ -235,13 +235,30 @@ def log_event(lic: dict, event: str, detail: str = ""):
 def get_allowed_scripts(lic: dict) -> list:
     """
     Return list of scripts this license may use.
-    VIP Lifetime → rapid_click + macro_full + macro_v3
+    VIP Lifetime → rapid_click + macro_full + macro_v3 (or subset VIP combos)
     Standard     → sesuai allowed_scripts (default: rapid_click)
     """
     tier = lic.get("license_tier", "standard")
-    if tier == "vip":
-        # [FIX] Tambah macro_v3 agar VIP bisa pakai Loader V3
-        return ["rapid_click", "macro_full", "macro_v3"]
+    if tier.startswith("vip"):
+        scripts = lic.get("allowed_scripts", [])
+        if not isinstance(scripts, list) or not scripts:
+            if tier == "vip":
+                return ["rapid_click", "macro_full", "macro_v3"]
+            if tier == "vip-v1v2":
+                return ["rapid_click", "macro_full"]
+            if tier == "vip-v2v3":
+                return ["macro_full", "macro_v3"]
+            return ["rapid_click"]
+        valid = [s for s in scripts if s in VALID_SCRIPT_TYPES]
+        if valid:
+            return valid
+        if tier == "vip":
+            return ["rapid_click", "macro_full", "macro_v3"]
+        if tier == "vip-v1v2":
+            return ["rapid_click", "macro_full"]
+        if tier == "vip-v2v3":
+            return ["macro_full", "macro_v3"]
+        return ["rapid_click"]
     scripts = lic.get("allowed_scripts", ["rapid_click"])
     if not isinstance(scripts, list) or not scripts:
         return ["rapid_click"]
@@ -367,7 +384,7 @@ def admin_stats():
         banned_hwids    = len(get_all_banned_hwids())
         activated_today = sum(1 for l in licenses if (l.get("last_used") or "").startswith(today))
         vip_active      = sum(1 for l in licenses if
-                              l.get("license_tier") == "vip" and
+                              str(l.get("license_tier", "")).startswith("vip") and
                               l.get("is_active") and not l.get("is_banned"))
 
         warnet_stuck = 0
@@ -444,7 +461,7 @@ def admin_list_licenses():
                 if status == 'banned'  and not is_banned:                      continue
                 if status == 'unbound' and not is_unbound:                     continue
                 if status == 'warnet'  and not (is_warnet and is_active and not is_banned): continue
-                if status == 'vip'     and not (license_tier == 'vip' and is_active and not is_banned): continue
+                if status == 'vip'     and not (str(license_tier).startswith('vip') and is_active and not is_banned): continue
 
                 if duration != 'all' and duration_type != duration:
                     continue
@@ -779,7 +796,7 @@ def generate_key():
 
         is_warnet    = bool(data.get("is_warnet", False))
         license_tier = data.get("license_tier", "standard")
-        if license_tier not in ("standard", "vip"):
+        if license_tier not in ("standard", "vip", "vip-v1v2", "vip-v2v3"):
             license_tier = "standard"
 
         allowed_scripts = data.get("allowed_scripts", ["rapid_click"])
@@ -787,14 +804,22 @@ def generate_key():
             allowed_scripts = ["rapid_click"]
         allowed_scripts = [s for s in allowed_scripts if s in VALID_SCRIPT_TYPES]
         if not allowed_scripts:
-            allowed_scripts = ["rapid_click"]
+            allowed_scripts = []
 
-        if license_tier == "vip":
+        if license_tier.startswith("vip"):
             if duration_type != "lifetime":
-                license_tier    = "standard"
+                license_tier = "standard"
             else:
-                # [FIX] VIP Lifetime dapat akses macro_v3
-                allowed_scripts = ["rapid_click", "macro_full", "macro_v3"]
+                if not allowed_scripts:
+                    if license_tier == "vip":
+                        allowed_scripts = ["rapid_click", "macro_full", "macro_v3"]
+                    elif license_tier == "vip-v1v2":
+                        allowed_scripts = ["rapid_click", "macro_full"]
+                    elif license_tier == "vip-v2v3":
+                        allowed_scripts = ["macro_full", "macro_v3"]
+                elif license_tier == "vip":
+                    # Preserve full VIP scope if explicit selection is missing or broad.
+                    allowed_scripts = ["rapid_click", "macro_full", "macro_v3"]
 
         license_key = generate_license_key()
         lic = {
