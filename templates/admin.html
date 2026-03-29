@@ -820,12 +820,10 @@ async function showDetail(key){
   ${l.is_banned?`<div class="detail-row"><span class="detail-key">Alasan Ban</span><span class="detail-val" style="color:var(--red)">${escHtml(l.ban_reason||'—')}</span></div>`:''}
   <div class="modal-actions">
     <button class="btn btn-ghost" onclick="closeModal()">Tutup</button>
-    <button class="btn btn-ghost" onclick="showLogs('${escHtml(key)}')">📋 Log</button>
-    <button class="btn btn-teal" onclick="closeModal();openCopyModal('${escHtml(key)}','${l.duration_type}',${!!l.is_warnet},'${tier}',${JSON.stringify(scripts)})">💬 Template</button>
-    <button class="btn btn-accent" onclick="showActions('${escHtml(key)}',${l.is_banned},${l.is_active},'${l.duration_type}',${!!l.hwid_full},${!!l.is_warnet},'${tier}',${JSON.stringify(scripts)})">⚙️ Aksi</button>
+    <button class="btn btn-teal" onclick="closeModal();openCopyModal('${escHtml(key)}','${l.duration_type}',${!!l.is_warnet},'${tier}','${btoa(JSON.stringify(scripts))}')">💬 Template</button>
+    <button class="btn btn-accent" onclick="showActions('${escHtml(key)}',${l.is_banned},${l.is_active},'${l.duration_type}',${!!l.hwid_full},${!!l.is_warnet},'${tier}','${btoa(JSON.stringify(scripts))}')">⚙️ Aksi</button>
   </div>`);
 }
-
 async function showLogs(key){
   _activeKey=key;
   openModal(`<div class="modal-title"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>Activity Logs</div>
@@ -846,7 +844,18 @@ async function showLogs(key){
 function showActions(key,isBanned,isActive,durationType,hasHwid,isWarnet,tier,scripts){
   _activeKey=key;
   const isVip=tier.startsWith('vip');
-  const scriptsArr=typeof scripts==='string'?JSON.parse(scripts):scripts;
+  let scriptsArr = scripts;
+  if(typeof scripts === 'string'){
+    try {
+      scriptsArr = JSON.parse(atob(scripts));
+    } catch(e){
+      try {
+        scriptsArr = JSON.parse(scripts);
+      } catch(e2){
+        scriptsArr = ['rapid_click'];
+      }
+    }
+  }
   const short=key.length>32?key.substring(0,32)+'…':key;
   let s='';
   if(isBanned){
@@ -863,7 +872,7 @@ function showActions(key,isBanned,isActive,durationType,hasHwid,isWarnet,tier,sc
             <button class="btn btn-vip" style="width:100%;justify-content:center;margin-bottom:4px;padding:10px" onclick="doSetTier('vip-v1v2')">👑 Ubah ke VIP V1+V2</button>
             <button class="btn btn-ghost" style="width:100%;justify-content:center;margin-bottom:4px" onclick="doSetTier('standard')">⬇️ Downgrade ke Standard</button>`;
       } else {
-        s+=`<button class="btn btn-vip" style="width:100%;justify-content:center;margin-bottom:4px;padding:10px" onclick="showTierModal('${escHtml(key)}','${tier}',${JSON.stringify(scriptsArr)})">👑 Upgrade ke Lifetime VIP</button>`;
+        s+=`<button class="btn btn-vip" style="width:100%;justify-content:center;margin-bottom:4px;padding:10px" onclick="showTierModal('${escHtml(key)}','${tier}','${btoa(JSON.stringify(scriptsArr))}')">👑 Upgrade ke Lifetime VIP</button>`;
       }
       s+=`</div>`;
     }
