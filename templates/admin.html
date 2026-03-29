@@ -688,19 +688,19 @@ function gotoPage(p){if(p<1||p>totalPages)return;currentPage=p;loadLicenses();}
 // TIER MODAL — v1v2 / v2v3 TERPISAH
 // ==========================================
 function showTierModal(key, currentTier, scripts){
-  _activeKey=key;
-  const scriptsArr=typeof scripts==='string'?JSON.parse(scripts):scripts;
-  const isVip=currentTier.startsWith('vip');
+  _activeKey = key;  // ← pastikan ini set PERTAMA
+  const scriptsArr = typeof scripts === 'string' ? JSON.parse(scripts) : scripts;
+  const isVip = currentTier.startsWith('vip');
 
-  let currentInfo='';
-  if(currentTier==='vip-v1v2'||currentTier==='vip'){
-    currentInfo=`<div class="purple-box" style="margin-bottom:12px;font-size:10px">👑 <strong>VIP V1+V2 Aktif</strong> — akses Rapid Click (V1) + Smart Macro (V2)</div>`;
-  } else if(currentTier==='vip-v2v3'){
-    currentInfo=`<div class="orange-box" style="margin-bottom:12px;font-size:10px">🔥 <strong>VIP V2+V3 Aktif</strong> — akses Smart Macro (V2) + Ultimate (V3)</div>`;
+  let currentInfo = '';
+  if(currentTier === 'vip-v1v2' || currentTier === 'vip'){
+    currentInfo = `<div class="purple-box" style="margin-bottom:12px;font-size:10px">👑 <strong>VIP V1+V2 Aktif</strong> — akses Rapid Click (V1) + Smart Macro (V2)</div>`;
+  } else if(currentTier === 'vip-v2v3'){
+    currentInfo = `<div class="orange-box" style="margin-bottom:12px;font-size:10px">🔥 <strong>VIP V2+V3 Aktif</strong> — akses Smart Macro (V2) + Ultimate (V3)</div>`;
   }
 
-  const downBtn=isVip?`<div class="divider"></div><div class="action-section-title">⬇️ Downgrade</div>
-    <button class="btn btn-ghost" style="width:100%;justify-content:center" onclick="doSetTier('standard')">↩ Kembali ke Standard (V1 saja)</button>`:'';
+  const downBtn = isVip ? `<div class="divider"></div><div class="action-section-title">⬇️ Downgrade</div>
+    <button class="btn btn-ghost" style="width:100%;justify-content:center" data-set-tier="standard">↩ Kembali ke Standard (V1 saja)</button>` : '';
 
   openModal(`<div class="modal-title" style="color:var(--purple)">
     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
@@ -710,7 +710,7 @@ function showTierModal(key, currentTier, scripts){
   ${currentInfo}
 
   <div class="tier-pick-grid">
-    <div class="tier-pick-card ${currentTier==='vip-v1v2'||currentTier==='vip'?'selected-v12':''}" onclick="doSetTier('vip-v1v2')">
+    <div class="tier-pick-card ${currentTier==='vip-v1v2'||currentTier==='vip'?'selected-v12':''}" data-set-tier="vip-v1v2" style="cursor:pointer">
       <div class="tier-pick-title" style="color:var(--purple)">👑 VIP V1 + V2 — Paket Duo Klasik</div>
       <div class="tier-pick-desc">
         • <span style="color:var(--v1)">Script V1</span> — Rapid Click Custom Delay<br>
@@ -718,7 +718,7 @@ function showTierModal(key, currentTier, scripts){
         <span style="color:var(--muted);margin-top:4px;display:block">Cocok untuk user yang butuh keduanya tapi belum pakai V3.</span>
       </div>
     </div>
-    <div class="tier-pick-card ${currentTier==='vip-v2v3'?'selected-v23':''}" onclick="doSetTier('vip-v2v3')">
+    <div class="tier-pick-card ${currentTier==='vip-v2v3'?'selected-v23':''}" data-set-tier="vip-v2v3" style="cursor:pointer">
       <div class="tier-pick-title" style="color:var(--v3)">🔥 VIP V2 + V3 — Paket Duo Pro</div>
       <div class="tier-pick-desc">
         • <span style="color:var(--v2)">Script V2</span> — Smart Mode + Overlay + Multi-language<br>
@@ -728,21 +728,32 @@ function showTierModal(key, currentTier, scripts){
     </div>
   </div>
 
-  ${isVip?`<div class="warn-box" style="margin-bottom:12px;font-size:10px">⚠️ Mengganti tier akan mengubah akses script secara langsung.</div>`:''}
+  ${isVip ? `<div class="warn-box" style="margin-bottom:12px;font-size:10px">⚠️ Mengganti tier akan mengubah akses script secara langsung.</div>` : ''}
   ${downBtn}
   <div class="modal-actions" style="margin-top:12px">
     <button class="btn btn-ghost" onclick="closeModal()">Batal</button>
   </div>`);
+
+  // ← EVENT DELEGATION — ini yang fix bug klik tidak berfungsi
+  document.getElementById('modalContent').addEventListener('click', function handler(e){
+    const card = e.target.closest('[data-set-tier]');
+    if(card){
+      const tier = card.getAttribute('data-set-tier');
+      document.getElementById('modalContent').removeEventListener('click', handler);
+      doSetTier(tier);
+    }
+  });
 }
 
 async function doSetTier(newTier){
-  const key=_activeKey;if(!key)return;
-  const labels={standard:'Standard','vip-v1v2':'VIP V1+V2','vip-v2v3':'VIP V2+V3',vip:'VIP V1+V2'};
-  const label=labels[newTier]||newTier;
-  if(!confirm(`Set tier ke ${label}?\n\nKey: ${key}`))return;
-  const data=await api('POST',`/admin/api/licenses/${encodeURIComponent(key)}/set-tier`,{tier:newTier});
-  toast(data.message||(data.success?`Tier diubah ke ${label}`:'Gagal'),data.success?'success':'error');
-  if(data.success){closeModal();loadLicenses();refreshStats();}
+  const key = _activeKey;
+  if(!key){ toast('Error: key tidak ditemukan','error'); return; }
+  const labels = {standard:'Standard','vip-v1v2':'VIP V1+V2','vip-v2v3':'VIP V2+V3',vip:'VIP V1+V2'};
+  const label = labels[newTier] || newTier;
+  if(!confirm(`Set tier ke ${label}?\n\nKey: ${key}`)) return;
+  const data = await api('POST', `/admin/api/licenses/${encodeURIComponent(key)}/set-tier`, {tier: newTier});
+  toast(data.message || (data.success ? `Tier diubah ke ${label}` : 'Gagal'), data.success ? 'success' : 'error');
+  if(data.success){ closeModal(); loadLicenses(); refreshStats(); }
 }
 
 // ==========================================
