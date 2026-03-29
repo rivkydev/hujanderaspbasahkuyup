@@ -722,7 +722,7 @@ function showTierModal(key, currentTier, scripts){
       <div class="tier-pick-title" style="color:var(--v3)">🔥 VIP V2 + V3 — Paket Duo Pro</div>
       <div class="tier-pick-desc">
         • <span style="color:var(--v2)">Script V2</span> — Smart Mode + Overlay + Multi-language<br>
-        • <span style="color:var(--v3)">Script V3</span> — Driver Interception + Auto Update + Super Precision<br>
+        • <span style="color:var(--v3)">Script V3</span> — Driver Interception + Auto Update<br>
         <span style="color:var(--muted);margin-top:4px;display:block">Cocok untuk user yang mau upgrade performa dengan V3.</span>
       </div>
     </div>
@@ -1196,8 +1196,10 @@ const HK={
   v1_en:`🎮 HOTKEYS V1:\n• F1 — Toggle Macro ON / OFF\n• 1 / 2 / 3 — Auto ON (Weapon slots)\n• 4 / 5 / 6 — Auto OFF (Safe: Bomb / C-4 / Grenade)`,
   v2_id:`🎮 HOTKEY V2:\n• F1 — Toggle Macro ON / OFF\n• 1 / 2 / 3 — Auto ON (Slot senjata utama)\n• 4 / 5 / 6 — Auto OFF (Aman: Bom / C-4 / Granat)\n• Q / Klik Kanan — Scope Bind (ADS / Zoom)\n• F6 — Load / Save Config\n• F7 — Toggle Overlay In-Game`,
   v2_en:`🎮 HOTKEYS V2:\n• F1 — Toggle Macro ON / OFF\n• 1 / 2 / 3 — Auto ON (Weapon slots)\n• 4 / 5 / 6 — Auto OFF (Safe: Bomb / C-4 / Grenade)\n• Q / Right Click — Scope Bind (ADS / Zoom)\n• F6 — Load / Save Config\n• F7 — Toggle In-Game Overlay`,
-  v3_id:`🎮 HOTKEY V3:\n• F1 — Toggle Macro ON / OFF\n• 1 / 2 / 3 — Auto ON (Slot senjata utama)\n• 4 / 5 / 6 — Auto OFF (Aman: Bom / C-4 / Granat)\n• Q / Klik Kanan — Scope Bind (ADS / Zoom)\n• F6 — Load / Save Config\n• F7 — Toggle Overlay In-Game\n• F8 — Mode Super Precision`,
-  v3_en:`🎮 HOTKEYS V3:\n• F1 — Toggle Macro ON / OFF\n• 1 / 2 / 3 — Auto ON (Weapon slots)\n• 4 / 5 / 6 — Auto OFF (Safe: Bomb / C-4 / Grenade)\n• Q / Right Click — Scope Bind (ADS / Zoom)\n• F6 — Load / Save Config\n• F7 — Toggle In-Game Overlay\n• F8 — Super Precision Mode`,
+  v3_id:`🎮 HOTKEY V3:\n• F1 — Toggle Macro ON / OFF\n• 1 / 2 / 3 — Auto ON (Slot senjata utama)\n• 4 / 5 / 6 — Auto OFF (Aman: Bom / C-4 / Granat)\n• Q / Klik Kanan — Scope Bind (ADS / Zoom)\n• [ AWP ] DERAS/RAPID \\ SG\n• 2 RB (jika diaktifkan)\n• F7 — Show UI\n• F6 — Load / Save Config\n• Tidak ada Super Precision Mode (F8)`,
+
+  v3_en:`🎮 HOTKEYS V3:\n• F1 — Toggle Macro ON / OFF\n• 1 / 2 / 3 — Auto ON (Weapon slots)\n• 4 / 5 / 6 — Auto OFF (Safe: Bomb / C-4 / Grenade)\n• Q / Right Click — Scope Bind (ADS / Zoom)\n• [ AWP ] DERAS/RAPID \\ SG\n• 2 RB (if enabled)\n• F7 — Show UI\n• F6 — Load / Save Config\n• No Super Precision Mode (F8)`,
+
 };
 
 // ── SETUP ──
@@ -1206,8 +1208,8 @@ const SETUP={
   v1_en:`⚙️ SETUP V1:\n1. Download V1 → Run as Administrator\n2. If antivirus warns → More Info → Run Anyway\n3. Enter License Key → click ACTIVATE\n4. Open PB, set delay (1–10ms), press F1 to toggle ON`,
   v2_id:`⚙️ CARA SETUP V2:\n1. Download V2 → Run as Administrator\n2. Jika ada warning antivirus → More Info → Run Anyway\n3. Masukkan License Key → klik ACTIVATE\n4. Buka PB, F7 untuk buka Overlay setting\n5. Tekan F1 untuk ON/OFF macro`,
   v2_en:`⚙️ SETUP V2:\n1. Download V2 → Run as Administrator\n2. If antivirus warns → More Info → Run Anyway\n3. Enter License Key → click ACTIVATE\n4. Open PB, press F7 for Overlay settings\n5. Press F1 to toggle macro ON/OFF`,
-  v3_id:`⚙️ CARA SETUP V3:\n1. Download V3 → Run as Administrator\n2. Jika ada warning antivirus → More Info → Run Anyway\n3. Masukkan License Key → klik ACTIVATE\n4. App otomatis install driver & cek update\n5. Buka PB, F7 untuk Overlay, F1 ON/OFF\n6. F8 untuk Super Precision Mode`,
-  v3_en:`⚙️ SETUP V3:\n1. Download V3 → Run as Administrator\n2. If antivirus warns → More Info → Run Anyway\n3. Enter License Key → click ACTIVATE\n4. App auto-installs driver & checks update\n5. Open PB, F7 Overlay, F1 ON/OFF\n6. F8 for Super Precision Mode`,
+  v3_id:`⚙️ CARA SETUP V3:\n1. Download V3 → Run as Administrator\n2. Jika ada warning antivirus → More Info → Run Anyway\n3. Masukkan License Key → klik ACTIVATE\n4. App otomatis install driver & cek update\n5. Buka PB, F7 untuk Overlay, F1 ON/OFF`,
+  v3_en:`⚙️ SETUP V3:\n1. Download V3 → Run as Administrator\n2. If antivirus warns → More Info → Run Anyway\n3. Enter License Key → click ACTIVATE\n4. App auto-installs driver & checks update\n5. Open PB, F7 Overlay, F1 ON/OFF`,
 };
 
 // ── FEATURES ──
@@ -1216,8 +1218,8 @@ const FEAT={
   v1_en:`✅ V1 Features:\n• Rapid Click Custom Delay\n• HWID Lock (1 PC)\n• Lightweight & stable`,
   v2_id:`✅ Fitur V2:\n• Rapid Click + Smart Mode\n• In-Game Overlay (F7)\n• Load / Save Config (F6)\n• Scope Bind (ADS)\n• Multi-language ID/EN/PT\n• HWID Lock`,
   v2_en:`✅ V2 Features:\n• Rapid Click + Smart Mode\n• In-Game Overlay (F7)\n• Load / Save Config (F6)\n• Scope Bind (ADS)\n• Multi-language ID/EN/PT\n• HWID Lock`,
-  v3_id:`✅ Fitur V3 — Ultimate:\n• Semua fitur V2 ✅\n• Driver Interception (anti-detect)\n• Auto Update otomatis\n• Super Precision Mode (F8)\n• Priority Desktop Override\n• Lebih stabil di mode fullscreen`,
-  v3_en:`✅ V3 Features — Ultimate:\n• All V2 features ✅\n• Driver Interception (anti-detect)\n• Auto Update\n• Super Precision Mode (F8)\n• Priority Desktop Override\n• More stable in fullscreen mode`,
+  v3_id:`✅ Fitur V3 — Ultimate:\n• Semua fitur V2 ✅\n• Driver Interception (anti-detect)\n• Auto Update otomatis\n• Priority Desktop Override\n• Lebih stabil di mode fullscreen`,
+  v3_en:`✅ V3 Features — Ultimate:\n• All V2 features ✅\n• Driver Interception (anti-detect)\n• Auto Update\n• Priority Desktop Override\n• More stable in fullscreen mode`,
 };
 
 function _buildTemplate(key,dur,isWarnet,lang,buyer,plat,scripts,type){
