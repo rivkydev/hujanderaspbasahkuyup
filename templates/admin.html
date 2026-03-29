@@ -60,6 +60,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
 .btn-success{background:rgba(0,255,136,.12);color:var(--green);border:1px solid rgba(0,255,136,.3)}.btn-success:hover{background:rgba(0,255,136,.22)}
 .btn-teal{background:rgba(0,229,204,.12);color:var(--teal);border:1px solid rgba(0,229,204,.3)}.btn-teal:hover{background:rgba(0,229,204,.22)}
 .btn-vip{background:rgba(170,102,255,.18);color:var(--purple);border:1px solid rgba(170,102,255,.4)}.btn-vip:hover{background:rgba(170,102,255,.3);transform:translateY(-1px);box-shadow:0 4px 15px rgba(170,102,255,.3)}
+.btn-v3{background:rgba(251,146,60,.15);color:var(--v3);border:1px solid rgba(251,146,60,.35)}.btn-v3:hover{background:rgba(251,146,60,.25);transform:translateY(-1px);box-shadow:0 4px 15px rgba(251,146,60,.25)}
 .table-wrap{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden}
 .table-header{display:grid;grid-template-columns:2.5fr .9fr 1.1fr 1fr 1fr 170px;padding:11px 18px;background:var(--surface);border-bottom:1px solid var(--border);font-family:var(--mono);font-size:9px;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase}
 .table-row{display:grid;grid-template-columns:2.5fr .9fr 1.1fr 1fr 1fr 170px;padding:12px 18px;border-bottom:1px solid var(--border);align-items:center;transition:background .15s}
@@ -74,7 +75,6 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
 .badge-vip{background:rgba(170,102,255,.2);color:var(--purple);border:1px solid rgba(170,102,255,.4)}
 .badge-warnet{background:rgba(0,229,204,.12);color:var(--teal);border:1px solid rgba(0,229,204,.3)}
 .badge-warnet-busy{background:rgba(255,170,0,.18);color:var(--orange);border:1px solid rgba(255,170,0,.4)}
-/* [NEW] badge untuk sesi warnet yang stuck/timeout */
 .badge-warnet-stuck{background:rgba(255,68,102,.15);color:#ff6b6b;border:1px solid rgba(255,68,102,.4);animation:pulse-badge 2s infinite}
 @keyframes pulse-badge{0%,100%{border-color:rgba(255,68,102,.4)}50%{border-color:rgba(255,68,102,.8)}}
 .badge-dot{width:5px;height:5px;border-radius:50%;background:currentColor;flex-shrink:0}
@@ -123,7 +123,6 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
 .log-event.ev-extended,.log-event.ev-hwid_reset,.log-event.ev-tier_changed{color:var(--orange)}
 .log-event.ev-auto_expired,.log-event.ev-deactivated{color:var(--red)}
 .log-event.ev-warnet_logout,.log-event.ev-warnet_force_logout,.log-event.ev-warnet_enabled,.log-event.ev-warnet_disabled{color:var(--teal)}
-/* [NEW] warna log event untuk auto timeout */
 .log-event.ev-warnet_auto_freed,.log-event.ev-warnet_session_expired{color:var(--orange)}
 .hwid-list{display:flex;flex-direction:column;gap:10px}
 .hwid-item{background:var(--surface);border:1px solid rgba(255,68,102,.2);border-radius:10px;padding:16px;display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
@@ -132,12 +131,26 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
 .warnet-session-title{font-family:var(--mono);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal);margin-bottom:8px}
 .vip-box{background:rgba(170,102,255,.06);border:1px solid rgba(170,102,255,.3);border-radius:8px;padding:14px;margin-bottom:12px}
 .vip-box-title{font-family:var(--mono);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--purple);margin-bottom:8px}
+/* Tier option cards */
 .tier-option{background:var(--surface);border:2px solid var(--border);border-radius:12px;padding:16px;cursor:pointer;transition:all .2s;margin-bottom:8px}
-.tier-option:hover{border-color:var(--border)}.tier-option.active{border-color:var(--purple);background:rgba(170,102,255,.06)}
+.tier-option:hover{border-color:#334155}.tier-option.active{border-color:var(--purple);background:rgba(170,102,255,.06)}
 .tier-option.active-v1{border-color:var(--v1);background:rgba(34,211,238,.04)}
 .tier-option.active-v2{border-color:var(--v2);background:rgba(168,85,247,.06)}
+.tier-option.active-v3{border-color:var(--v3);background:rgba(251,146,60,.06)}
+.tier-option.active-vip12{border-color:var(--purple);background:rgba(170,102,255,.07)}
+.tier-option.active-vip23{border-color:var(--orange);background:rgba(251,146,60,.06)}
 .tier-option-title{font-family:var(--mono);font-size:12px;font-weight:700;margin-bottom:4px}
 .tier-option-desc{font-family:var(--mono);font-size:10px;color:var(--muted);line-height:1.5}
+/* Tier picker in modal */
+.tier-pick-grid{display:grid;grid-template-columns:1fr;gap:8px;margin-bottom:16px}
+.tier-pick-card{border:2px solid var(--border);border-radius:12px;padding:14px 16px;cursor:pointer;transition:all .2s;background:var(--surface)}
+.tier-pick-card:hover{border-color:#334155}
+.tier-pick-card.selected-std{border-color:var(--cyan);background:rgba(0,212,255,.05)}
+.tier-pick-card.selected-v12{border-color:var(--purple);background:rgba(170,102,255,.07)}
+.tier-pick-card.selected-v23{border-color:var(--orange);background:rgba(251,146,60,.06)}
+.tier-pick-card.selected-v3{border-color:var(--v3);background:rgba(251,146,60,.05)}
+.tier-pick-title{font-family:var(--mono);font-size:12px;font-weight:700;margin-bottom:3px}
+.tier-pick-desc{font-family:var(--mono);font-size:10px;color:var(--muted);line-height:1.5}
 .gen-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:28px;max-width:560px}
 .result-box{background:var(--surface);border:2px solid var(--cyan);border-radius:8px;padding:16px;font-family:var(--mono);font-size:14px;color:var(--cyan);word-break:break-all;cursor:pointer;position:relative;transition:background .2s}.result-box:hover{background:rgba(0,212,255,.05)}
 .result-box::after{content:'CLICK TO COPY';position:absolute;top:8px;right:10px;font-size:9px;color:var(--muted);letter-spacing:1px;font-family:var(--mono)}
@@ -156,6 +169,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
 .danger-box{background:rgba(255,68,102,.07);border:1px solid rgba(255,68,102,.25);border-radius:8px;padding:12px 14px;font-family:var(--mono);font-size:11px;color:var(--red)}
 .teal-box{background:rgba(0,229,204,.06);border:1px solid rgba(0,229,204,.25);border-radius:8px;padding:12px 14px;font-family:var(--mono);font-size:11px;color:var(--teal)}
 .purple-box{background:rgba(170,102,255,.06);border:1px solid rgba(170,102,255,.3);border-radius:8px;padding:12px 14px;font-family:var(--mono);font-size:11px;color:var(--purple)}
+.orange-box{background:rgba(251,146,60,.06);border:1px solid rgba(251,146,60,.3);border-radius:8px;padding:12px 14px;font-family:var(--mono);font-size:11px;color:var(--v3)}
 .action-section{margin-bottom:12px}.action-section-title{font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:8px}
 
 /* COPY TEMPLATE MODAL */
@@ -172,12 +186,13 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
 .cm-close:hover{color:#e2e8f0;border-color:#334155}
 .cm-body{padding:18px 24px}
 .cm-type-row{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
-.cm-type-btn{flex:1;min-width:120px;padding:9px 12px;border-radius:10px;border:2px solid #1e2736;background:#0d1117;color:#5a6a82;font-size:12px;font-weight:700;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:6px;text-align:center}
+.cm-type-btn{flex:1;min-width:110px;padding:9px 10px;border-radius:10px;border:2px solid #1e2736;background:#0d1117;color:#5a6a82;font-size:11px;font-weight:700;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:5px;text-align:center}
 .cm-type-btn:hover{border-color:#334155;color:#94a3b8}
 .cm-type-btn.active-sale{border-color:var(--v1);background:rgba(34,211,238,.06);color:var(--v1)}
 .cm-type-btn.active-upgrade{border-color:var(--v2);background:rgba(168,85,247,.06);color:var(--v2)}
 .cm-type-btn.active-v2release{border-color:var(--orange);background:rgba(251,146,60,.06);color:var(--orange)}
-.cm-type-btn.active-v3release{border-color:var(--v3);background:rgba(251,146,60,.06);color:var(--orange)}
+.cm-type-btn.active-v3release{border-color:var(--v3);background:rgba(251,146,60,.06);color:var(--v3)}
+.cm-type-btn.active-v3sale{border-color:var(--v3);background:rgba(251,146,60,.08);color:var(--v3)}
 .cm-controls-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
 .cm-control-label{font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#475569;display:block;margin-bottom:5px}
 .cm-seg{display:flex;background:#0d1117;border:1px solid #1e2736;border-radius:8px;padding:3px;gap:3px}
@@ -194,12 +209,15 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
 .bk-trial{background:rgba(251,191,36,.12);color:#fbbf24}
 .bk-premium{background:rgba(74,222,128,.12);color:#4ade80}
 .bk-lifetime{background:rgba(167,139,250,.12);color:#a78bfa}
-.bk-lifetime-vip{background:rgba(170,102,255,.2);color:#c084fc;border:1px solid rgba(170,102,255,.4)}
+.bk-lifetime-vip12{background:rgba(170,102,255,.2);color:#c084fc;border:1px solid rgba(170,102,255,.4)}
+.bk-lifetime-vip23{background:rgba(251,146,60,.2);color:#fb923c;border:1px solid rgba(251,146,60,.4)}
+.bk-lifetime-v3{background:rgba(251,146,60,.15);color:#fdba74;border:1px solid rgba(251,146,60,.35)}
 .bk-warnet{background:rgba(0,229,204,.12);color:#00e5cc}
 .cm-info-strip{border-radius:8px;padding:10px 12px;margin-bottom:10px;display:flex;align-items:center;gap:8px;font-size:11px;font-family:var(--mono)}
 .cm-info-strip.orange{background:rgba(251,146,60,.06);border:1px solid rgba(251,146,60,.2);color:var(--orange)}
 .cm-info-strip.purple{background:rgba(170,102,255,.06);border:1px solid rgba(170,102,255,.2);color:var(--purple)}
 .cm-info-strip.cyan{background:rgba(34,211,238,.05);border:1px solid rgba(34,211,238,.15);color:var(--cyan)}
+.cm-info-strip.v3{background:rgba(251,146,60,.06);border:1px solid rgba(251,146,60,.25);color:var(--v3)}
 .cm-wa-preview-wrap{position:relative;border-radius:12px;overflow:hidden;margin-bottom:14px}
 .cm-wa-bg{position:absolute;inset:0;background-color:#0a1014;border:1px solid #1a2030;border-radius:12px}
 .wa-status-bar{background:#1f2c34;padding:6px 12px;display:flex;align-items:center;gap:8px;border-bottom:1px solid #0d1117}
@@ -236,7 +254,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
 <aside class="sidebar">
   <div class="logo">
     <div class="logo-title">⚡ DERAS</div>
-    <div class="logo-sub">ADMIN PANEL v3.6</div>
+    <div class="logo-sub">ADMIN PANEL v3.7</div>
   </div>
   <nav>
     <div class="nav-section">Menu</div>
@@ -282,11 +300,10 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
       <div class="stat-card c-orange"><div class="stat-label">Unbound</div><div class="stat-value" id="s-unbound">—</div><div class="stat-sub">Belum aktivasi</div></div>
       <div class="stat-card c-red"><div class="stat-label">Expired</div><div class="stat-value" id="s-expired">—</div></div>
       <div class="stat-card c-red"><div class="stat-label">Banned</div><div class="stat-value" id="s-banned">—</div></div>
-      <div class="stat-card c-purple"><div class="stat-label">👑 VIP Aktif</div><div class="stat-value" id="s-vip">—</div><div class="stat-sub">V1 + V2 akses</div></div>
+      <div class="stat-card c-purple"><div class="stat-label">👑 VIP Aktif</div><div class="stat-value" id="s-vip">—</div><div class="stat-sub">V1+V2 / V2+V3</div></div>
       <div class="stat-card c-teal"><div class="stat-label">Warnet</div><div class="stat-value" id="s-warnet">—</div></div>
       <div class="stat-card c-blue"><div class="stat-label">HWID Ban</div><div class="stat-value" id="s-bannedHwid">—</div></div>
       <div class="stat-card c-green"><div class="stat-label">Aktif Hari Ini</div><div class="stat-value" id="s-today">—</div></div>
-      <!-- [NEW] stat card warnet stuck -->
       <div class="stat-card c-red"><div class="stat-label">⏰ Warnet Stuck</div><div class="stat-value" id="s-warnetStuck">—</div><div class="stat-sub">Sesi timeout</div></div>
     </div>
     <div style="display:flex;gap:12px;flex-wrap:wrap">
@@ -295,7 +312,6 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
         Generate Key Baru
       </button>
       <button class="btn btn-ghost" onclick="showPage('licenses')">Lihat Semua Lisensi</button>
-      <!-- [NEW] tombol cleanup stuck sessions, muncul otomatis jika ada yang stuck -->
       <button class="btn btn-teal" onclick="cleanupWarnet()" id="btnCleanup" style="display:none">🧹 Cleanup Stuck Sessions</button>
     </div>
   </div>
@@ -335,6 +351,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
         <option value="all">Semua Tier</option>
         <option value="standard">Standard</option>
         <option value="vip">👑 VIP</option>
+        <option value="vip-v1v2">👑 VIP V1+V2</option>
+        <option value="vip-v2v3">🔥 VIP V2+V3</option>
       </select>
       <button class="btn btn-ghost" onclick="loadLicenses()">
         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:14px;height:14px"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
@@ -373,23 +391,24 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
         <div id="scriptOptions">
           <div class="tier-option active-v1" id="opt-v1" onclick="selectScript('rapid_click')">
             <div class="tier-option-title" style="color:var(--v1)">🔷 Script V1 — Rapid Click Only</div>
-            <div class="tier-option-desc">Custom delay, HWID Lock. Ringan &amp; simpel.</div>
+            <div class="tier-option-desc">Custom delay, HWID Lock. Ringan & simpel.</div>
           </div>
           <div class="tier-option" id="opt-v2" onclick="selectScript('macro_full')">
             <div class="tier-option-title" style="color:var(--v2)">🔶 Script V2 — Smart Macro</div>
             <div class="tier-option-desc">Rapid Click + Smart Mode + Overlay + Load/Save Config + Multi-language.</div>
           </div>
-          <div class="tier-option" id="opt-vip" onclick="selectScript('vip')" style="display:none">
-            <div class="tier-option-title" style="color:var(--purple)">👑 VIP V1+V2</div>
-            <div class="tier-option-desc">Akses Script V1 dan V2 dalam satu lisensi Lifetime. V3 dijual terpisah.</div>
-          </div>
-          <div class="tier-option" id="opt-v2v3" onclick="selectScript('vip-v2v3')" style="display:none">
-            <div class="tier-option-title" style="color:var(--orange)">👑 VIP V2+V3</div>
-            <div class="tier-option-desc">Akses Script V2 dan V3 dalam satu lisensi Lifetime.</div>
-          </div>
           <div class="tier-option" id="opt-v3" onclick="selectScript('macro_v3')">
             <div class="tier-option-title" style="color:var(--v3)">🔥 Script V3 — Ultimate Macro</div>
             <div class="tier-option-desc">All-in-One: Rapid Click + Smart Mode + Driver Interception + Auto Update.</div>
+          </div>
+          <!-- Lifetime only options -->
+          <div class="tier-option" id="opt-vip12" onclick="selectScript('vip-v1v2')" style="display:none">
+            <div class="tier-option-title" style="color:var(--purple)">👑 VIP V1 + V2 — Paket Duo</div>
+            <div class="tier-option-desc">Akses Script V1 (Rapid Click) <strong>dan</strong> V2 (Smart Macro + Overlay) dalam satu lisensi Lifetime.</div>
+          </div>
+          <div class="tier-option" id="opt-vip23" onclick="selectScript('vip-v2v3')" style="display:none">
+            <div class="tier-option-title" style="color:var(--orange)">🔥 VIP V2 + V3 — Paket Duo</div>
+            <div class="tier-option-desc">Akses Script V2 (Smart Macro) <strong>dan</strong> V3 (Ultimate + Driver) dalam satu lisensi Lifetime.</div>
           </div>
         </div>
         <input type="hidden" id="genScriptChoice" value="rapid_click">
@@ -413,7 +432,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
         <label class="form-label">✅ Key Berhasil Dibuat</label>
         <div class="result-box" id="genResultKey" onclick="copyKey(this)"></div>
         <div class="result-meta" id="genResultMeta"></div>
-        <button class="btn btn-ghost" style="width:100%;justify-content:center;margin-top:12px" id="genCopyTemplate" onclick="">💬 Buat Template Chat</button>
+        <button class="btn btn-ghost" style="width:100%;justify-content:center;margin-top:12px" id="genCopyTemplate">💬 Buat Template Chat</button>
       </div>
     </div>
   </div>
@@ -449,10 +468,11 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
     <div class="cm-body">
       <label class="cm-control-label">Jenis Template</label>
       <div class="cm-type-row" id="cmTypeRow">
-        <button class="cm-type-btn active-sale" id="ttype-sale" onclick="setCmType('sale')">🛒 Penjualan / Aktivasi</button>
-        <button class="cm-type-btn" id="ttype-upgrade" onclick="setCmType('upgrade')">👑 Upgrade ke VIP</button>
-        <button class="cm-type-btn" id="ttype-v2release" onclick="setCmType('v2release')">🚀 Notif V2 Rilis</button>
-        <button class="cm-type-btn" id="ttype-v3release" onclick="setCmType('v3release')">🚀 Notif V3 Rilis</button>
+        <button class="cm-type-btn active-sale" id="ttype-sale" onclick="setCmType('sale')">🛒 Penjualan</button>
+        <button class="cm-type-btn" id="ttype-v3sale" onclick="setCmType('v3sale')" style="display:none">🔥 V3 Sale</button>
+        <button class="cm-type-btn" id="ttype-upgrade" onclick="setCmType('upgrade')" style="display:none">👑 Upgrade VIP</button>
+        <button class="cm-type-btn" id="ttype-v2release" onclick="setCmType('v2release')" style="display:none">🚀 Notif V2</button>
+        <button class="cm-type-btn" id="ttype-v3release" onclick="setCmType('v3release')" style="display:none">🔥 Notif V3</button>
       </div>
       <div id="cmInfoStrip" class="cm-info-strip cyan" style="display:none"></div>
       <div class="cm-controls-row">
@@ -506,7 +526,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
 // ==========================================
 const DL_V1='https://hujanderaspbasahkuyup.vercel.app/download?script=v1';
 const DL_V2='https://hujanderaspbasahkuyup.vercel.app/download?script=v2';
-const DL_BASE='https://hujanderaspbasahkuyup.vercel.app/download';
+const DL_V3='https://hujanderaspbasahkuyup.vercel.app/download?script=v3';
 
 // ==========================================
 // STATE
@@ -554,7 +574,6 @@ async function refreshStats(){
   document.getElementById('s-bannedHwid').textContent=d.banned_hwids??'—';
   document.getElementById('s-today').textContent=d.activated_today??'—';
   document.getElementById('s-warnet').textContent=d.warnet??'—';
-  // [NEW] warnet stuck count + show/hide cleanup buttons
   const stuck=d.warnet_stuck??0;
   document.getElementById('s-warnetStuck').textContent=stuck;
   const show=stuck>0;
@@ -587,23 +606,30 @@ async function loadLicenses(){
   body.innerHTML=data.licenses.map(l=>buildRow(l)).join('');
 }
 
+function _tierLabel(tier, scripts){
+  if(tier==='vip-v2v3') return '🔥V2+V3';
+  if(tier==='vip-v1v2'||tier==='vip') return '👑V1+V2';
+  return '';
+}
+
 function buildRow(l){
   let sb;
   if(l.is_banned)sb=`<span class="badge badge-banned"><span class="badge-dot"></span>BANNED</span>`;
   else if(!l.is_active)sb=`<span class="badge badge-expired"><span class="badge-dot"></span>EXPIRED</span>`;
   else if(l.is_unbound)sb=`<span class="badge badge-unbound"><span class="badge-dot"></span>UNBOUND</span>`;
-  // [NEW] cek stuck dulu sebelum busy biasa
   else if(l.is_warnet&&l.warnet_active_hwid&&l.warnet_session_timed_out)sb=`<span class="badge badge-warnet-stuck"><span class="badge-dot"></span>⏰ STUCK</span>`;
   else if(l.is_warnet&&l.warnet_active_hwid)sb=`<span class="badge badge-warnet-busy"><span class="badge-dot"></span>WARNET BUSY</span>`;
   else if(l.is_warnet)sb=`<span class="badge badge-warnet"><span class="badge-dot"></span>WARNET</span>`;
   else sb=`<span class="badge badge-active"><span class="badge-dot"></span>AKTIF</span>`;
 
-  const isVip=String(l.license_tier||'').startsWith('vip');
+  const tier=l.license_tier||'standard';
+  const isVip=tier.startsWith('vip');
   const scripts=l.allowed_scripts||['rapid_click'];
   const scriptBadges=scripts.map(s=>{
     if(s==='rapid_click')return `<span class="sbadge sbadge-v1">V1</span>`;
     if(s==='macro_full')return `<span class="sbadge sbadge-v2">V2</span>`;
-    return `<span class="sbadge" style="background:rgba(251,146,60,.1);border-color:rgba(251,146,60,.3);color:var(--v3)">${s}</span>`;
+    if(s==='macro_v3')return `<span class="sbadge sbadge-v3">V3</span>`;
+    return `<span class="sbadge">${s}</span>`;
   }).join('');
 
   let tl='—',tc='var(--muted)';
@@ -615,10 +641,13 @@ function buildRow(l){
   const sk=l.license_key.length>26?l.license_key.substring(0,26)+'…':l.license_key;
   const ek=l.license_key.replace(/'/g,"\\'");
   const ib=l.is_banned,ia=l.is_active,iw=l.is_warnet,hh=!!l.hwid_full;
-  const dt=l.duration_type,tier=l.license_tier||'standard';
+  const dt=l.duration_type;
   const wt=l.is_warnet?`<span style="color:var(--teal);font-size:9px;background:rgba(0,229,204,.1);border:1px solid rgba(0,229,204,.2);padding:1px 5px;border-radius:3px;margin-left:4px">⚡W</span>`:'';
-  const vipTag=isVip?`<span style="color:var(--purple);font-size:9px;background:rgba(170,102,255,.1);border:1px solid rgba(170,102,255,.2);padding:1px 5px;border-radius:3px;margin-left:3px">👑</span>`:'';
-  const canUpgrade=(dt==='lifetime'&&tier!=='vip'&&!l.is_banned&&l.is_active);
+  let vipTag='';
+  if(tier==='vip-v2v3')vipTag=`<span style="color:var(--v3);font-size:9px;background:rgba(251,146,60,.1);border:1px solid rgba(251,146,60,.2);padding:1px 5px;border-radius:3px;margin-left:3px">🔥V2+V3</span>`;
+  else if(isVip)vipTag=`<span style="color:var(--purple);font-size:9px;background:rgba(170,102,255,.1);border:1px solid rgba(170,102,255,.2);padding:1px 5px;border-radius:3px;margin-left:3px">👑V1+V2</span>`;
+
+  const canUpgrade=(dt==='lifetime'&&!tier.startsWith('vip')&&!l.is_banned&&l.is_active);
 
   return `<div class="table-row ${l.is_banned?'is-banned':''}">
     <div>
@@ -627,14 +656,14 @@ function buildRow(l){
       ${l.last_used?`<div class="key-meta">🕐 ${l.last_used.substring(0,16).replace('T',' ')}</div>`:''}
     </div>
     <div>${sb}</div>
-    <div>${scriptBadges}${isVip?'<br><span style="font-family:var(--mono);font-size:9px;color:var(--purple)">👑VIP</span>':''}</div>
+    <div>${scriptBadges}${isVip?`<br><span style="font-family:var(--mono);font-size:9px;color:${tier==='vip-v2v3'?'var(--v3)':'var(--purple)'}">${tier==='vip-v2v3'?'🔥VIP':'👑VIP'}</span>`:''}</div>
     <div class="col-duration"><span class="dur-tag">${dt}</span></div>
     <div style="font-family:var(--mono);font-size:12px;color:${tc}">${tl}</div>
     <div class="action-group">
       <button class="icon-btn" title="Template Chat" onclick="openCopyModal('${ek}','${dt}',${iw},'${tier}',${JSON.stringify(scripts).replace(/"/g,'&quot;')})">
         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
       </button>
-      ${canUpgrade?`<button class="icon-btn purple" title="Upgrade ke VIP" onclick="showTierModal('${ek}','standard',${JSON.stringify(scripts).replace(/"/g,'&quot;')})"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg></button>`:''}
+      ${canUpgrade?`<button class="icon-btn purple" title="Upgrade VIP" onclick="showTierModal('${ek}','${tier}',${JSON.stringify(scripts).replace(/"/g,'&quot;')})"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg></button>`:''}
       <button class="icon-btn" title="Aksi" onclick="showActions('${ek}',${ib},${ia},'${dt}',${hh},${iw},'${tier}',${JSON.stringify(scripts).replace(/"/g,'&quot;')})">
         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"/></svg>
       </button>
@@ -656,35 +685,51 @@ function renderPagination(){
 function gotoPage(p){if(p<1||p>totalPages)return;currentPage=p;loadLicenses();}
 
 // ==========================================
-// TIER MODAL
+// TIER MODAL — v1v2 / v2v3 TERPISAH
 // ==========================================
-function showTierModal(key,currentTier,scripts){
+function showTierModal(key, currentTier, scripts){
   _activeKey=key;
-  const isVip=currentTier==='vip';
   const scriptsArr=typeof scripts==='string'?JSON.parse(scripts):scripts;
+  const isVip=currentTier.startsWith('vip');
+
+  let currentInfo='';
+  if(currentTier==='vip-v1v2'||currentTier==='vip'){
+    currentInfo=`<div class="purple-box" style="margin-bottom:12px;font-size:10px">👑 <strong>VIP V1+V2 Aktif</strong> — akses Rapid Click (V1) + Smart Macro (V2)</div>`;
+  } else if(currentTier==='vip-v2v3'){
+    currentInfo=`<div class="orange-box" style="margin-bottom:12px;font-size:10px">🔥 <strong>VIP V2+V3 Aktif</strong> — akses Smart Macro (V2) + Ultimate (V3)</div>`;
+  }
+
+  const downBtn=isVip?`<div class="divider"></div><div class="action-section-title">⬇️ Downgrade</div>
+    <button class="btn btn-ghost" style="width:100%;justify-content:center" onclick="doSetTier('standard')">↩ Kembali ke Standard (V1 saja)</button>`:'';
+
   openModal(`<div class="modal-title" style="color:var(--purple)">
     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
-    Kelola Tier — 👑 VIP
+    Kelola Tier — Lifetime VIP
   </div>
   <div class="modal-sub">${escHtml(key)}</div>
-  <div class="vip-box">
-    <div class="vip-box-title">👑 Apa itu Lifetime VIP?</div>
-    <div style="font-family:var(--mono);font-size:11px;color:var(--muted);line-height:1.7">
-      Tier VIP = akses ke <strong style="color:var(--purple)">Script V1 + Script V2</strong> sekaligus.<br>
-      • <span style="color:var(--v1)">Script V1</span> — Rapid Click Only (live)<br>
-      • <span style="color:var(--v2)">Script V2</span> — Smart Mode, Overlay, Load/Save (live)<br>
-      • Script V3 — All-in-One (coming soon) — otomatis include<br><br>
-      User tidak perlu beli ulang saat update baru rilis.
+  ${currentInfo}
+
+  <div class="tier-pick-grid">
+    <div class="tier-pick-card ${currentTier==='vip-v1v2'||currentTier==='vip'?'selected-v12':''}" onclick="doSetTier('vip-v1v2')">
+      <div class="tier-pick-title" style="color:var(--purple)">👑 VIP V1 + V2 — Paket Duo Klasik</div>
+      <div class="tier-pick-desc">
+        • <span style="color:var(--v1)">Script V1</span> — Rapid Click Custom Delay<br>
+        • <span style="color:var(--v2)">Script V2</span> — Smart Mode + Overlay + Load/Save Config<br>
+        <span style="color:var(--muted);margin-top:4px;display:block">Cocok untuk user yang butuh keduanya tapi belum pakai V3.</span>
+      </div>
+    </div>
+    <div class="tier-pick-card ${currentTier==='vip-v2v3'?'selected-v23':''}" onclick="doSetTier('vip-v2v3')">
+      <div class="tier-pick-title" style="color:var(--v3)">🔥 VIP V2 + V3 — Paket Duo Pro</div>
+      <div class="tier-pick-desc">
+        • <span style="color:var(--v2)">Script V2</span> — Smart Mode + Overlay + Multi-language<br>
+        • <span style="color:var(--v3)">Script V3</span> — Driver Interception + Auto Update + Super Precision<br>
+        <span style="color:var(--muted);margin-top:4px;display:block">Cocok untuk user yang mau upgrade performa dengan V3.</span>
+      </div>
     </div>
   </div>
-  <div style="margin-bottom:12px;font-family:var(--mono);font-size:11px;color:var(--muted)">
-    Script saat ini: ${(scriptsArr||[]).map(s=>s==='rapid_click'?'<span style="color:var(--v1)">V1</span>':'<span style="color:var(--v2)">V2</span>').join(' + ')}
-  </div>
-  ${isVip
-    ?`<div class="warn-box" style="margin-bottom:12px">⚠️ Downgrade akan mencabut akses salah satu script.</div>
-      <button class="btn btn-ghost" style="width:100%;justify-content:center" onclick="doSetTier('standard')">⬇️ Downgrade ke Standard (V1 saja)</button>`
-    :`<button class="btn btn-vip" style="width:100%;justify-content:center;padding:12px;font-size:13px" onclick="doSetTier('vip')">👑 Upgrade ke Lifetime VIP (V1 + V2)</button>`
-  }
+
+  ${isVip?`<div class="warn-box" style="margin-bottom:12px;font-size:10px">⚠️ Mengganti tier akan mengubah akses script secara langsung.</div>`:''}
+  ${downBtn}
   <div class="modal-actions" style="margin-top:12px">
     <button class="btn btn-ghost" onclick="closeModal()">Batal</button>
   </div>`);
@@ -692,10 +737,11 @@ function showTierModal(key,currentTier,scripts){
 
 async function doSetTier(newTier){
   const key=_activeKey;if(!key)return;
-  const label=newTier==='vip'?'Upgrade ke VIP':'Downgrade ke Standard';
-  if(!confirm(`${label}?\n\nKey: ${key}`))return;
+  const labels={standard:'Standard','vip-v1v2':'VIP V1+V2','vip-v2v3':'VIP V2+V3',vip:'VIP V1+V2'};
+  const label=labels[newTier]||newTier;
+  if(!confirm(`Set tier ke ${label}?\n\nKey: ${key}`))return;
   const data=await api('POST',`/admin/api/licenses/${encodeURIComponent(key)}/set-tier`,{tier:newTier});
-  toast(data.message||(data.success?label+' berhasil':'Gagal'),data.success?'success':'error');
+  toast(data.message||(data.success?`Tier diubah ke ${label}`:'Gagal'),data.success?'success':'error');
   if(data.success){closeModal();loadLicenses();refreshStats();}
 }
 
@@ -709,17 +755,25 @@ async function showDetail(key){
   const l=data.licenses&&data.licenses[0];
   if(!l){toast('Data tidak ditemukan','error');return;}
   const st=l.is_banned?'BANNED':!l.is_active?'EXPIRED/INACTIVE':l.is_unbound?'UNBOUND':'AKTIF';
-  const isVip=l.license_tier==='vip';
+  const tier=l.license_tier||'standard';
+  const isVip=tier.startsWith('vip');
   const scripts=l.allowed_scripts||['rapid_click'];
+
+  let vipBoxHtml='';
+  if(isVip){
+    const tierColor=tier==='vip-v2v3'?'var(--v3)':'var(--purple)';
+    const tierName=tier==='vip-v2v3'?'🔥 VIP V2+V3':'👑 VIP V1+V2';
+    vipBoxHtml=`<div class="vip-box"><div class="vip-box-title">${tierName}</div><div style="font-family:var(--mono);font-size:10px;color:var(--muted)">Scripts: ${scripts.join(', ')}</div></div>`;
+  }
+
   let wb='';
   if(l.is_warnet){
     if(l.warnet_active_hwid){
-      // [NEW] tampilkan last_seen dan warning jika stuck
       const isStuck=l.warnet_session_timed_out||false;
-      const lastSeenStr=l.warnet_last_seen?(l.warnet_last_seen.substring(0,19).replace('T',' ')):'— (sesi lama, belum ada data)';
-      const stuckWarn=isStuck?`<div class="danger-box" style="margin:8px 0;padding:8px 12px;font-size:10px">⏰ Sesi ini kemungkinan STUCK — tidak ada heartbeat dalam 5 menit terakhir. Auto-logout akan terjadi saat user lain mencoba login, atau gunakan Force Logout sekarang.</div>`:'';
+      const lastSeenStr=l.warnet_last_seen?(l.warnet_last_seen.substring(0,19).replace('T',' ')):'— (sesi lama)';
+      const stuckWarn=isStuck?`<div class="danger-box" style="margin:8px 0;padding:8px 12px;font-size:10px">⏰ Sesi ini kemungkinan STUCK — tidak ada heartbeat dalam 5 menit terakhir.</div>`:'';
       wb=`<div class="warnet-session-box" style="${isStuck?'border-color:rgba(255,68,102,.4);background:rgba(255,68,102,.04)':''}">
-        <div class="warnet-session-title" style="${isStuck?'color:var(--red)':''}">⚡ Sesi Warnet ${isStuck?'⏰ (POSSIBLE STUCK)':'Aktif'}</div>
+        <div class="warnet-session-title" style="${isStuck?'color:var(--red)':''}">⚡ Sesi Warnet ${isStuck?'⏰ (STUCK)':'Aktif'}</div>
         <div style="font-family:var(--mono);font-size:11px;color:var(--text);word-break:break-all">${escHtml(l.warnet_active_hwid)}</div>
         <div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:4px">Mulai: ${(l.warnet_session_start||'—').substring(0,19).replace('T',' ')}</div>
         <div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:2px">Last seen: ${lastSeenStr}</div>
@@ -730,13 +784,14 @@ async function showDetail(key){
       wb=`<div class="teal-box" style="margin-bottom:12px">⚡ Mode Warnet — Tidak ada sesi aktif.</div>`;
     }
   }
-  if(isVip){wb+=`<div class="vip-box"><div class="vip-box-title">👑 Lifetime VIP</div><div style="font-family:var(--mono);font-size:10px;color:var(--muted)">Scripts: ${scripts.join(', ')}</div></div>`;}
+  wb+=vipBoxHtml;
+
   openModal(`<div class="modal-title"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/></svg>Detail Lisensi</div>
   ${wb}
   <div class="detail-row"><span class="detail-key">Key</span><span class="detail-val" style="font-size:10px">${escHtml(l.license_key)}</span></div>
   <div class="detail-row"><span class="detail-key">Status</span><span class="detail-val">${st}</span></div>
-  <div class="detail-row"><span class="detail-key">Tier</span><span class="detail-val" style="color:${isVip?'var(--purple)':'var(--muted)'}">${isVip?'👑 VIP':'Standard'}</span></div>
-  <div class="detail-row"><span class="detail-key">Scripts</span><span class="detail-val" style="font-size:10px">${scripts.map(s=>s==='rapid_click'?'<span style="color:var(--v1)">V1 (Rapid Click)</span>':'<span style="color:var(--v2)">V2 (Smart Macro)</span>').join(', ')}</span></div>
+  <div class="detail-row"><span class="detail-key">Tier</span><span class="detail-val" style="color:${tier==='vip-v2v3'?'var(--v3)':isVip?'var(--purple)':'var(--muted)'}">${tier==='vip-v2v3'?'🔥 VIP V2+V3':tier==='vip-v1v2'||tier==='vip'?'👑 VIP V1+V2':'Standard'}</span></div>
+  <div class="detail-row"><span class="detail-key">Scripts</span><span class="detail-val" style="font-size:10px">${scripts.map(s=>s==='rapid_click'?'<span style="color:var(--v1)">V1</span>':s==='macro_full'?'<span style="color:var(--v2)">V2</span>':'<span style="color:var(--v3)">V3</span>').join(', ')}</span></div>
   <div class="detail-row"><span class="detail-key">Durasi</span><span class="detail-val">${l.duration_type}</span></div>
   <div class="detail-row"><span class="detail-key">Created</span><span class="detail-val">${(l.created_at||'—').substring(0,19).replace('T',' ')}</span></div>
   <div class="detail-row"><span class="detail-key">Expires</span><span class="detail-val">${l.expires_at?l.expires_at.substring(0,19).replace('T',' '):l.is_unbound?'Belum dimulai':'Never'}</span></div>
@@ -747,8 +802,8 @@ async function showDetail(key){
   <div class="modal-actions">
     <button class="btn btn-ghost" onclick="closeModal()">Tutup</button>
     <button class="btn btn-ghost" onclick="showLogs('${escHtml(key)}')">📋 Log</button>
-    <button class="btn btn-teal" onclick="closeModal();openCopyModal('${escHtml(key)}','${l.duration_type}',${!!l.is_warnet},'${l.license_tier||'standard'}',${JSON.stringify(scripts)})">💬 Template</button>
-    <button class="btn btn-accent" onclick="showActions('${escHtml(key)}',${l.is_banned},${l.is_active},'${l.duration_type}',${!!l.hwid_full},${!!l.is_warnet},'${l.license_tier||'standard'}',${JSON.stringify(scripts)})">⚙️ Aksi</button>
+    <button class="btn btn-teal" onclick="closeModal();openCopyModal('${escHtml(key)}','${l.duration_type}',${!!l.is_warnet},'${tier}',${JSON.stringify(scripts)})">💬 Template</button>
+    <button class="btn btn-accent" onclick="showActions('${escHtml(key)}',${l.is_banned},${l.is_active},'${l.duration_type}',${!!l.hwid_full},${!!l.is_warnet},'${tier}',${JSON.stringify(scripts)})">⚙️ Aksi</button>
   </div>`);
 }
 
@@ -771,7 +826,7 @@ async function showLogs(key){
 
 function showActions(key,isBanned,isActive,durationType,hasHwid,isWarnet,tier,scripts){
   _activeKey=key;
-  const isVip=tier==='vip';
+  const isVip=tier.startsWith('vip');
   const scriptsArr=typeof scripts==='string'?JSON.parse(scripts):scripts;
   const short=key.length>32?key.substring(0,32)+'…':key;
   let s='';
@@ -780,11 +835,16 @@ function showActions(key,isBanned,isActive,durationType,hasHwid,isWarnet,tier,sc
   }else{
     if(durationType==='lifetime'){
       s+=`<div class="action-section"><div class="action-section-title">👑 Tier Lisensi</div>`;
-      if(isVip){
-        s+=`<div class="purple-box" style="margin-bottom:8px;font-size:10px">👑 VIP Aktif — akses: ${(scriptsArr||[]).join(', ')}</div>
+      if(tier==='vip-v1v2'||tier==='vip'){
+        s+=`<div class="purple-box" style="margin-bottom:8px;font-size:10px">👑 VIP V1+V2 aktif</div>
+            <button class="btn btn-v3" style="width:100%;justify-content:center;margin-bottom:4px;padding:10px" onclick="doSetTier('vip-v2v3')">🔥 Ubah ke VIP V2+V3</button>
             <button class="btn btn-ghost" style="width:100%;justify-content:center;margin-bottom:4px" onclick="doSetTier('standard')">⬇️ Downgrade ke Standard</button>`;
-      }else{
-        s+=`<button class="btn btn-vip" style="width:100%;justify-content:center;margin-bottom:4px;padding:10px" onclick="doSetTier('vip')">👑 Upgrade ke Lifetime VIP (V1 + V2)</button>`;
+      } else if(tier==='vip-v2v3'){
+        s+=`<div class="orange-box" style="margin-bottom:8px;font-size:10px">🔥 VIP V2+V3 aktif</div>
+            <button class="btn btn-vip" style="width:100%;justify-content:center;margin-bottom:4px;padding:10px" onclick="doSetTier('vip-v1v2')">👑 Ubah ke VIP V1+V2</button>
+            <button class="btn btn-ghost" style="width:100%;justify-content:center;margin-bottom:4px" onclick="doSetTier('standard')">⬇️ Downgrade ke Standard</button>`;
+      } else {
+        s+=`<button class="btn btn-vip" style="width:100%;justify-content:center;margin-bottom:4px;padding:10px" onclick="showTierModal('${escHtml(key)}','${tier}',${JSON.stringify(scriptsArr)})">👑 Upgrade ke Lifetime VIP</button>`;
       }
       s+=`</div>`;
     }
@@ -888,86 +948,72 @@ async function submitNote(){
 let _selectedScript='rapid_click';
 
 function selectScript(val){
-  _selectedScript = val;
-  document.getElementById('genScriptChoice').value = val;
-  document.querySelectorAll('.tier-option').forEach(el => el.className = 'tier-option');
-  
-  if(val === 'rapid_click') document.getElementById('opt-v1').classList.add('active-v1');
-  else if(val === 'macro_full') document.getElementById('opt-v2').classList.add('active-v2');
-  else if(val === 'macro_v3') document.getElementById('opt-v3').classList.add('active-v2');
-  else if(val === 'vip') document.getElementById('opt-vip').classList.add('active');
-  else if(val === 'vip-v2v3') document.getElementById('opt-v2v3').classList.add('active');
+  _selectedScript=val;
+  document.getElementById('genScriptChoice').value=val;
+  document.querySelectorAll('.tier-option').forEach(el=>el.className='tier-option');
+  if(val==='rapid_click')document.getElementById('opt-v1').classList.add('active-v1');
+  else if(val==='macro_full')document.getElementById('opt-v2').classList.add('active-v2');
+  else if(val==='macro_v3')document.getElementById('opt-v3').classList.add('active-v3');
+  else if(val==='vip-v1v2')document.getElementById('opt-vip12').classList.add('active-vip12');
+  else if(val==='vip-v2v3')document.getElementById('opt-vip23').classList.add('active-vip23');
 }
 function updateGenOptions(){
   const dur=document.getElementById('genDuration').value;
   const isLifetime=dur==='lifetime';
-  document.getElementById('opt-vip').style.display=isLifetime?'block':'none';
-  document.getElementById('opt-v2v3').style.display=isLifetime?'block':'none';
-  if(!isLifetime && (_selectedScript==='vip' || _selectedScript==='vip-v2v3')){selectScript('rapid_click');}
+  document.getElementById('opt-vip12').style.display=isLifetime?'block':'none';
+  document.getElementById('opt-vip23').style.display=isLifetime?'block':'none';
+  if(!isLifetime&&(_selectedScript==='vip-v1v2'||_selectedScript==='vip-v2v3')){selectScript('rapid_click');}
 }
 
 async function generateKey(){
-  const duration = document.getElementById('genDuration').value;
-  const note = document.getElementById('genNote').value;
-  const is_warnet = document.getElementById('genWarnet').checked;
-  const script = _selectedScript;
-  
-  let license_tier = 'standard';
-  let allowed_scripts = [];
+  const duration=document.getElementById('genDuration').value;
+  const note=document.getElementById('genNote').value;
+  const is_warnet=document.getElementById('genWarnet').checked;
+  const script=_selectedScript;
 
-  if (script === 'vip') {
-    license_tier = 'vip';
-    allowed_scripts = ['rapid_click', 'macro_full'];
-  } else if (script === 'vip-v1v2') {
-    license_tier = 'vip-v1v2';
-    allowed_scripts = ['rapid_click', 'macro_full'];
-  } else if (script === 'vip-v2v3') {
-    license_tier = 'vip-v2v3';
-    allowed_scripts = ['macro_full', 'macro_v3'];
-  } else if (script === 'macro_v3') {
-    allowed_scripts = ['macro_v3'];
-  } else if (script === 'macro_full') {
-    allowed_scripts = ['macro_full'];
+  let license_tier='standard';
+  let allowed_scripts=[];
+
+  if(script==='vip-v1v2'){
+    license_tier='vip-v1v2';allowed_scripts=['rapid_click','macro_full'];
+  } else if(script==='vip-v2v3'){
+    license_tier='vip-v2v3';allowed_scripts=['macro_full','macro_v3'];
+  } else if(script==='macro_v3'){
+    allowed_scripts=['macro_v3'];
+  } else if(script==='macro_full'){
+    allowed_scripts=['macro_full'];
   } else {
-    allowed_scripts = ['rapid_click'];
+    allowed_scripts=['rapid_click'];
   }
 
-  const btn = document.querySelector('#page-generate .btn-accent');
+  const btn=document.querySelector('#page-generate .btn-accent');
   if(btn){btn.disabled=true;btn.textContent='Generating...';}
 
-  const data = await api('POST', '/api/generate-key', {
-    duration_type: duration,
-    note: note,
-    is_warnet: is_warnet,
-    license_tier: license_tier,
-    allowed_scripts: allowed_scripts
+  const data=await api('POST','/api/generate-key',{
+    duration_type:duration,note,is_warnet,
+    license_tier,allowed_scripts
   });
 
   if(btn){btn.disabled=false;btn.innerHTML=`<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:14px;height:14px"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg> GENERATE KEY`;}
-  
+
   if(data.success){
-    _genKey=data.license_key; _genDuration=data.duration_type; _genIsWarnet=data.is_warnet;
+    _genKey=data.license_key;_genDuration=data.duration_type;_genIsWarnet=data.is_warnet;
     document.getElementById('genResult').style.display='block';
     document.getElementById('genResultKey').textContent=data.license_key;
-    
-    const scriptsArr = (data.allowed_scripts || ['rapid_click']);
-    const scriptLabel = scriptsArr.map(s => {
-        if(s === 'rapid_click') return 'V1';
-        if(s === 'macro_full') return 'V2';
-        if(s === 'macro_v3') return 'V3';
-        return s;
-    }).join('+');
-    
-    const tierLabel = data.license_tier.startsWith('vip') ? '👑 VIP' : 'Standard';
-    document.getElementById('genResultMeta').innerHTML = `Durasi: <strong>${data.duration_type}</strong> · Tier: <strong>${tierLabel}</strong> · Script: <strong>${scriptLabel}</strong> · Mode: <strong>${data.is_warnet?'⚡ Warnet':'🔒 Normal'}</strong>`;
-    
-    const ctaBtn = document.getElementById('genCopyTemplate');
-    ctaBtn.onclick = () => openCopyModal(data.license_key, data.duration_type, data.is_warnet, data.license_tier, data.allowed_scripts);
-    
-    toast('Key dibuat!', 'success');
+
+    const scriptsArr=(data.allowed_scripts||['rapid_click']);
+    const scriptLabel=scriptsArr.map(s=>s==='rapid_click'?'V1':s==='macro_full'?'V2':s==='macro_v3'?'V3':s).join('+');
+    const tierLabel=data.license_tier.startsWith('vip')?
+      (data.license_tier==='vip-v2v3'?'🔥 VIP V2+V3':'👑 VIP V1+V2'):'Standard';
+
+    document.getElementById('genResultMeta').innerHTML=`Durasi: <strong>${data.duration_type}</strong> · Tier: <strong>${tierLabel}</strong> · Script: <strong>${scriptLabel}</strong> · Mode: <strong>${data.is_warnet?'⚡ Warnet':'🔒 Normal'}</strong>`;
+
+    const ctaBtn=document.getElementById('genCopyTemplate');
+    ctaBtn.onclick=()=>openCopyModal(data.license_key,data.duration_type,data.is_warnet,data.license_tier,data.allowed_scripts);
+    toast('Key dibuat!','success');
     refreshStats();
   } else {
-    toast(data.message || 'Gagal', 'error');
+    toast(data.message||'Gagal','error');
   }
 }
 function copyKey(el){
@@ -995,10 +1041,10 @@ async function unbanHwid(hash){
 }
 
 // ==========================================
-// [NEW] CLEANUP WARNET STUCK SESSIONS
+// CLEANUP WARNET
 // ==========================================
 async function cleanupWarnet(){
-  if(!confirm('Bersihkan semua sesi warnet yang stuck/timeout?\n\nSesi yang tidak mengirim heartbeat lebih dari 5 menit akan di-clear otomatis.\nUser yang appnya sudah ditutup/crash akan dibebaskan.'))return;
+  if(!confirm('Bersihkan semua sesi warnet yang stuck/timeout?'))return;
   const btns=[document.getElementById('btnCleanup'),document.getElementById('btnCleanupLic')];
   btns.forEach(b=>{if(b){b.disabled=true;b.textContent='⏳ Membersihkan...';}});
   const data=await api('POST','/admin/api/cleanup-warnet');
@@ -1032,12 +1078,19 @@ function openCopyModal(key,duration,isWarnet,tier,scripts){
   document.getElementById('copyModal').classList.add('show');
   _resetSeg('buyerSeg','buyer-new');_resetSeg('platSeg','plat-wa');
   document.getElementById('btnLangID').classList.add('active');document.getElementById('btnLangEN').classList.remove('active');
+
   const isLifetime=duration==='lifetime';
-  const hasV3 = _cmAllowedScripts.includes('macro_v3');
-  document.getElementById('ttype-upgrade').style.display=isLifetime?'':'none';
-  document.getElementById('ttype-v2release').style.display=isLifetime?'':'none';
-  document.getElementById('ttype-v3release').style.display=(isLifetime && hasV3)?'':'none';
-  document.querySelectorAll('.cm-type-btn').forEach(b=>b.classList.remove('active-sale','active-upgrade','active-v2release','active-v3release'));
+  const hasV3=_cmAllowedScripts.includes('macro_v3');
+  const isVip=tier.startsWith('vip');
+
+  // show/hide template type buttons
+  document.getElementById('ttype-upgrade').style.display=isLifetime&&isVip?'':'none';
+  document.getElementById('ttype-v2release').style.display=isLifetime&&isVip?'':'none';
+  document.getElementById('ttype-v3release').style.display=(isLifetime&&hasV3)?'':'none';
+  // V3 sale button: show when key has macro_v3 access (either standalone or VIP V2+V3)
+  document.getElementById('ttype-v3sale').style.display=hasV3?'':'none';
+
+  document.querySelectorAll('.cm-type-btn').forEach(b=>b.classList.remove('active-sale','active-upgrade','active-v2release','active-v3release','active-v3sale'));
   document.getElementById('ttype-sale').classList.add('active-sale');
   const cb=document.getElementById('cmCopyBtn');cb.classList.remove('copied');cb.innerHTML='📋 Copy Template';
   _renderCopyModal();
@@ -1045,29 +1098,61 @@ function openCopyModal(key,duration,isWarnet,tier,scripts){
 function closeCopyModal(){document.getElementById('copyModal').classList.remove('show');}
 document.getElementById('copyModal').addEventListener('click',e=>{if(e.target===document.getElementById('copyModal'))closeCopyModal();});
 function _resetSeg(segId,activeClass){document.querySelectorAll(`#${segId} .cm-seg-btn`).forEach(b=>b.classList.remove('active'));document.querySelector(`#${segId} .${activeClass}`)?.classList.add('active');}
-function setCmType(type){_cmType=type;document.querySelectorAll('.cm-type-btn').forEach(b=>b.classList.remove('active-sale','active-upgrade','active-v2release'));document.getElementById('ttype-'+type).classList.add('active-'+type);_resetCopyBtn();_renderCopyModal();}
+
+function setCmType(type){
+  _cmType=type;
+  document.querySelectorAll('.cm-type-btn').forEach(b=>b.classList.remove('active-sale','active-upgrade','active-v2release','active-v3release','active-v3sale'));
+  document.getElementById('ttype-'+type).classList.add('active-'+type);
+  _resetCopyBtn();_renderCopyModal();
+}
 function setBuyer(type){_cmBuyer=type;document.querySelectorAll('#buyerSeg .cm-seg-btn').forEach(b=>b.classList.remove('active'));document.querySelector(`#buyerSeg .buyer-${type}`)?.classList.add('active');_resetCopyBtn();_renderCopyModal();}
 function setPlatform(plat){_cmPlat=plat;document.querySelectorAll('#platSeg .cm-seg-btn').forEach(b=>b.classList.remove('active'));document.querySelector(`#platSeg .plat-${plat}`)?.classList.add('active');_resetCopyBtn();_renderCopyModal();}
 function setLang(lang){_cmLang=lang;document.getElementById('btnLangID').classList.toggle('active',lang==='id');document.getElementById('btnLangEN').classList.toggle('active',lang==='en');_resetCopyBtn();_renderCopyModal();}
 function _resetCopyBtn(){const b=document.getElementById('cmCopyBtn');b.classList.remove('copied');b.innerHTML='📋 Copy Template';}
 
 function _renderCopyModal(){
-  const isVip=_cmAllowedScripts.length>=2;
+  const tier=_cmAllowedScripts.includes('macro_v3')&&_cmAllowedScripts.includes('macro_full')?'vip-v2v3':
+             _cmAllowedScripts.includes('rapid_click')&&_cmAllowedScripts.includes('macro_full')?'vip-v1v2':'standard';
+  const isVipV23=_cmAllowedScripts.includes('macro_v3')&&_cmAllowedScripts.includes('macro_full');
+  const isVipV12=_cmAllowedScripts.includes('rapid_click')&&_cmAllowedScripts.includes('macro_full');
+  const hasV3=_cmAllowedScripts.includes('macro_v3');
+
   document.getElementById('cmHeaderSub').textContent=_cmKey.length>38?_cmKey.substring(0,38)+'…':_cmKey;
-  const badgeMap={lifetime:isVip?['Lifetime VIP 👑','bk-lifetime-vip']:['Lifetime 🔮','bk-lifetime'],'1month':['1 Bulan 🗓️','bk-premium'],'2weeks':['2 Minggu 📅','bk-premium'],trial_6hours:['Trial 6h ⏳','bk-trial'],demo_1min:['Demo 1m ⚡','bk-trial']};
-  const[bl,bc]=badgeMap[_cmDuration]||['Unknown','bk-trial'];
+
+  // Badge
   const badgeEl=document.getElementById('cmKeyBadge');
-  badgeEl.textContent=_cmWarnet?bl+' • Warnet':bl;
-  badgeEl.className='cm-key-badge '+(_cmWarnet?'bk-warnet':bc);
+  let badgeText,badgeClass;
+  if(_cmDuration==='lifetime'){
+    if(isVipV23){badgeText='Lifetime VIP V2+V3 🔥';badgeClass='bk-lifetime-vip23';}
+    else if(isVipV12){badgeText='Lifetime VIP V1+V2 👑';badgeClass='bk-lifetime-vip12';}
+    else if(hasV3){badgeText='Lifetime V3 🔥';badgeClass='bk-lifetime-v3';}
+    else{badgeText='Lifetime 🔮';badgeClass='bk-lifetime';}
+  } else {
+    const m={'1month':'1 Bulan 🗓️','2weeks':'2 Minggu 📅','trial_6hours':'Trial 6h ⏳','demo_1min':'Demo 1m ⚡'};
+    badgeText=m[_cmDuration]||_cmDuration;badgeClass='bk-premium';
+  }
+  if(_cmWarnet){badgeText+=' • Warnet';badgeClass='bk-warnet';}
+  badgeEl.textContent=badgeText;badgeEl.className='cm-key-badge '+badgeClass;
   document.getElementById('cmKeyVal').textContent=_cmKey;
+
+  // Info strip
   const strip=document.getElementById('cmInfoStrip');
-  if(_cmType==='upgrade'){strip.style.display='flex';strip.className='cm-info-strip purple';strip.textContent='👑 Template untuk memberitahu user bahwa lisensi mereka berhasil di-upgrade ke VIP.';}
-  else if(_cmType==='v2release'){strip.style.display='flex';strip.className='cm-info-strip orange';strip.textContent='🚀 Template pemberitahuan bahwa Script V2 sudah tersedia — khusus user VIP.';}
+  const stripCfg={
+    upgrade:{show:true,cls:'purple',text:'👑 Template untuk user yang lisensinya di-upgrade ke VIP.'},
+    v2release:{show:true,cls:'orange',text:'🚀 Pemberitahuan bahwa Script V2 sudah tersedia untuk user VIP.'},
+    v3release:{show:true,cls:'v3',text:'🔥 Pemberitahuan bahwa Script V3 sudah tersedia.'},
+    v3sale:{show:true,cls:'v3',text:'🔥 Template penjualan khusus Script V3 — highlight fitur Driver & Auto Update.'},
+  };
+  const sc=stripCfg[_cmType];
+  if(sc&&sc.show){strip.style.display='flex';strip.className='cm-info-strip '+sc.cls;strip.textContent=sc.text;}
   else{strip.style.display='none';}
+
+  // Chat header platform
   const hdr=document.getElementById('cmChatHeader');
   hdr.className='wa-status-bar';
   if(_cmPlat==='tg')hdr.classList.add('tg-header');
   else if(_cmPlat==='dc')hdr.classList.add('dc-header');
+
   const templateText=_buildTemplate(_cmKey,_cmDuration,_cmWarnet,_cmLang,_cmBuyer,_cmPlat,_cmAllowedScripts,_cmType);
   _renderBubble(templateText);
 }
@@ -1078,7 +1163,7 @@ function _renderBubble(text){
   const lines=text.trim().split('\n');const chunks=[];let cur=[];
   lines.forEach(line=>{
     cur.push(line);
-    if(cur.length>=5&&(line===''||line.startsWith('⚙️')||line.startsWith('🎮')||line.startsWith('📌')||line.startsWith('📥')||line.startsWith('👑')||line.startsWith('🚀')||line.startsWith('✅')||line.startsWith('🔢'))){chunks.push(cur.join('\n').trim());cur=[];}
+    if(cur.length>=5&&(line===''||line.startsWith('⚙️')||line.startsWith('🎮')||line.startsWith('📌')||line.startsWith('📥')||line.startsWith('👑')||line.startsWith('🚀')||line.startsWith('✅')||line.startsWith('🔢')||line.startsWith('🔥'))){chunks.push(cur.join('\n').trim());cur=[];}
   });
   if(cur.length)chunks.push(cur.join('\n').trim());
   const now=new Date();const ts=now.getHours().toString().padStart(2,'0')+':'+now.getMinutes().toString().padStart(2,'0');
@@ -1102,145 +1187,127 @@ function doCopyTemplate(){
 }
 
 // ==========================================
-// TEMPLATE BUILDER — v3 (V1/V2 separated)
-// ==========================================
-// ==========================================
-// TEMPLATE BUILDER — v3.1 (V1/V2/V3 Integrated)
-// ==========================================
-function _buildTemplate(key, dur, isWarnet, lang, buyer, plat, scripts, type) {
-  // ==========================================
-// TEMPLATE BUILDER — v4 (V1 / V2 only, hotkey fix)
-// Hotkey: 1/2/3 = ON Script, 4/5/6 = OFF Script
+// TEMPLATE BUILDER — Lengkap V1/V2/V3
 // ==========================================
 
-// --- HOTKEY BLOCKS ---
+// ── HOTKEYS ──
+const HK={
+  v1_id:`🎮 HOTKEY V1:\n• F1 — Toggle Macro ON / OFF\n• 1 / 2 / 3 — Auto ON (Slot senjata utama)\n• 4 / 5 / 6 — Auto OFF (Aman: Bom / C-4 / Granat)`,
+  v1_en:`🎮 HOTKEYS V1:\n• F1 — Toggle Macro ON / OFF\n• 1 / 2 / 3 — Auto ON (Weapon slots)\n• 4 / 5 / 6 — Auto OFF (Safe: Bomb / C-4 / Grenade)`,
+  v2_id:`🎮 HOTKEY V2:\n• F1 — Toggle Macro ON / OFF\n• 1 / 2 / 3 — Auto ON (Slot senjata utama)\n• 4 / 5 / 6 — Auto OFF (Aman: Bom / C-4 / Granat)\n• Q / Klik Kanan — Scope Bind (ADS / Zoom)\n• F6 — Load / Save Config\n• F7 — Toggle Overlay In-Game`,
+  v2_en:`🎮 HOTKEYS V2:\n• F1 — Toggle Macro ON / OFF\n• 1 / 2 / 3 — Auto ON (Weapon slots)\n• 4 / 5 / 6 — Auto OFF (Safe: Bomb / C-4 / Grenade)\n• Q / Right Click — Scope Bind (ADS / Zoom)\n• F6 — Load / Save Config\n• F7 — Toggle In-Game Overlay`,
+  v3_id:`🎮 HOTKEY V3:\n• F1 — Toggle Macro ON / OFF\n• 1 / 2 / 3 — Auto ON (Slot senjata utama)\n• 4 / 5 / 6 — Auto OFF (Aman: Bom / C-4 / Granat)\n• Q / Klik Kanan — Scope Bind (ADS / Zoom)\n• F6 — Load / Save Config\n• F7 — Toggle Overlay In-Game\n• F8 — Mode Super Precision`,
+  v3_en:`🎮 HOTKEYS V3:\n• F1 — Toggle Macro ON / OFF\n• 1 / 2 / 3 — Auto ON (Weapon slots)\n• 4 / 5 / 6 — Auto OFF (Safe: Bomb / C-4 / Grenade)\n• Q / Right Click — Scope Bind (ADS / Zoom)\n• F6 — Load / Save Config\n• F7 — Toggle In-Game Overlay\n• F8 — Super Precision Mode`,
+};
 
-const hotkeysV1_ID = `🎮 HOTKEY V1:\n• F1 — Toggle Macro ON / OFF\n• 1 / 2 / 3 — Auto ON (Slot senjata utama)\n• 4 / 5 / 6 — Auto OFF (Aman: Bom / C-4 / Granat)`;
-const hotkeysV1_EN = `🎮 HOTKEYS V1:\n• F1 — Toggle Macro ON / OFF\n• 1 / 2 / 3 — Auto ON (Weapon slots)\n• 4 / 5 / 6 — Auto OFF (Safe: Bomb / C-4 / Grenade)`;
+// ── SETUP ──
+const SETUP={
+  v1_id:`⚙️ CARA SETUP V1:\n1. Download V1 → Run as Administrator\n2. Jika ada warning antivirus → More Info → Run Anyway\n3. Masukkan License Key → klik ACTIVATE\n4. Buka PB, atur delay (1–10ms), tekan F1 untuk ON`,
+  v1_en:`⚙️ SETUP V1:\n1. Download V1 → Run as Administrator\n2. If antivirus warns → More Info → Run Anyway\n3. Enter License Key → click ACTIVATE\n4. Open PB, set delay (1–10ms), press F1 to toggle ON`,
+  v2_id:`⚙️ CARA SETUP V2:\n1. Download V2 → Run as Administrator\n2. Jika ada warning antivirus → More Info → Run Anyway\n3. Masukkan License Key → klik ACTIVATE\n4. Buka PB, F7 untuk buka Overlay setting\n5. Tekan F1 untuk ON/OFF macro`,
+  v2_en:`⚙️ SETUP V2:\n1. Download V2 → Run as Administrator\n2. If antivirus warns → More Info → Run Anyway\n3. Enter License Key → click ACTIVATE\n4. Open PB, press F7 for Overlay settings\n5. Press F1 to toggle macro ON/OFF`,
+  v3_id:`⚙️ CARA SETUP V3:\n1. Download V3 → Run as Administrator\n2. Jika ada warning antivirus → More Info → Run Anyway\n3. Masukkan License Key → klik ACTIVATE\n4. App otomatis install driver & cek update\n5. Buka PB, F7 untuk Overlay, F1 ON/OFF\n6. F8 untuk Super Precision Mode`,
+  v3_en:`⚙️ SETUP V3:\n1. Download V3 → Run as Administrator\n2. If antivirus warns → More Info → Run Anyway\n3. Enter License Key → click ACTIVATE\n4. App auto-installs driver & checks update\n5. Open PB, F7 Overlay, F1 ON/OFF\n6. F8 for Super Precision Mode`,
+};
 
-const hotkeysV2_ID = `🎮 HOTKEY V2:\n• F1 — Toggle Macro ON / OFF\n• 1 / 2 / 3 — Auto ON (Slot senjata utama)\n• 4 / 5 / 6 — Auto OFF (Aman: Bom / C-4 / Granat)\n• Q / Klik Kanan — Scope Bind (ADS / Zoom)\n• F6 — Load / Save Config\n• F7 — Toggle Overlay In-Game`;
-const hotkeysV2_EN = `🎮 HOTKEYS V2:\n• F1 — Toggle Macro ON / OFF\n• 1 / 2 / 3 — Auto ON (Weapon slots)\n• 4 / 5 / 6 — Auto OFF (Safe: Bomb / C-4 / Grenade)\n• Q / Right Click — Scope Bind (ADS / Zoom)\n• F6 — Load / Save Config\n• F7 — Toggle In-Game Overlay`;
+// ── FEATURES ──
+const FEAT={
+  v1_id:`✅ Fitur V1:\n• Rapid Click Custom Delay\n• HWID Lock (1 PC)\n• Ringan & stabil`,
+  v1_en:`✅ V1 Features:\n• Rapid Click Custom Delay\n• HWID Lock (1 PC)\n• Lightweight & stable`,
+  v2_id:`✅ Fitur V2:\n• Rapid Click + Smart Mode\n• In-Game Overlay (F7)\n• Load / Save Config (F6)\n• Scope Bind (ADS)\n• Multi-language ID/EN/PT\n• HWID Lock`,
+  v2_en:`✅ V2 Features:\n• Rapid Click + Smart Mode\n• In-Game Overlay (F7)\n• Load / Save Config (F6)\n• Scope Bind (ADS)\n• Multi-language ID/EN/PT\n• HWID Lock`,
+  v3_id:`✅ Fitur V3 — Ultimate:\n• Semua fitur V2 ✅\n• Driver Interception (anti-detect)\n• Auto Update otomatis\n• Super Precision Mode (F8)\n• Priority Desktop Override\n• Lebih stabil di mode fullscreen`,
+  v3_en:`✅ V3 Features — Ultimate:\n• All V2 features ✅\n• Driver Interception (anti-detect)\n• Auto Update\n• Super Precision Mode (F8)\n• Priority Desktop Override\n• More stable in fullscreen mode`,
+};
 
-const hotkeysVIP_ID = hotkeysV2_ID;
-const hotkeysVIP_EN = hotkeysV2_EN;
+function _buildTemplate(key,dur,isWarnet,lang,buyer,plat,scripts,type){
+  const id=lang==='id';
+  const isNew=buyer==='new';
+  const hasV1=scripts.includes('rapid_click');
+  const hasV2=scripts.includes('macro_full');
+  const hasV3=scripts.includes('macro_v3');
+  const isVipV12=hasV1&&hasV2;
+  const isVipV23=hasV2&&hasV3;
 
-const hotkeysV3_ID = `🎮 HOTKEY V3:\n• F1 — Toggle Macro ON / OFF\n• 1 / 2 / 3 — Auto ON (Slot senjata utama)\n• 4 / 5 / 6 — Auto OFF (Aman: Bom / C-4 / Granat)\n• Q / Klik Kanan — Scope Bind (ADS / Zoom)\n• F6 — Load / Save Config\n• F7 — Toggle Overlay In-Game\n• F8 — Mode Super Precision`;
-const hotkeysV3_EN = `🎮 HOTKEYS V3:\n• F1 — Toggle Macro ON / OFF\n• 1 / 2 / 3 — Auto ON (Weapon slots)\n• 4 / 5 / 6 — Auto OFF (Safe: Bomb / C-4 / Grenade)\n• Q / Right Click — Scope Bind (ADS / Zoom)\n• F6 — Load / Save Config\n• F7 — Toggle In-Game Overlay\n• F8 — Super Precision Mode`;
+  // Duration labels
+  const durLbl=id?
+    {lifetime:'Lifetime (Permanen)','1month':'1 Bulan','2weeks':'2 Minggu',trial_6hours:'Trial 6 Jam',demo_1min:'1 Menit'}:
+    {lifetime:'Lifetime (Permanent)','1month':'1 Month','2weeks':'2 Weeks',trial_6hours:'6-Hour Trial',demo_1min:'1-Minute Demo'};
+  const dL=durLbl[dur]||dur;
 
-// --- SETUP BLOCKS ---
+  const keyLine=`🔑 License Key: \`${key}\``;
+  const l=id?'id':'en';
 
-const setupV1_ID = `⚙️ CARA SETUP V1:\n1. Download V1 → Run as Administrator\n2. Jika ada warning antivirus → More Info → Run Anyway\n3. Masukkan License Key → klik ACTIVATE\n4. Buka PB, atur delay (1–10ms), tekan F1 untuk ON`;
-const setupV1_EN = `⚙️ SETUP V1:\n1. Download V1 → Run as Administrator\n2. If antivirus warns → More Info → Run Anyway\n3. Enter License Key → click ACTIVATE\n4. Open PB, set delay (1–10ms), press F1 to toggle ON`;
-
-const setupV2_ID = `⚙️ CARA SETUP V2:\n1. Download V2 → Run as Administrator\n2. Jika ada warning antivirus → More Info → Run Anyway\n3. Masukkan License Key → klik ACTIVATE\n4. Buka PB, F7 untuk buka Overlay setting\n5. Tekan F1 untuk ON/OFF macro`;
-const setupV2_EN = `⚙️ SETUP V2:\n1. Download V2 → Run as Administrator\n2. If antivirus warns → More Info → Run Anyway\n3. Enter License Key → click ACTIVATE\n4. Open PB, press F7 for Overlay settings\n5. Press F1 to toggle macro ON/OFF`;
-
-const setupV3_ID = `⚙️ CARA SETUP V3:\n1. Download V3 → Run as Administrator\n2. Jika ada warning antivirus → More Info → Run Anyway\n3. Masukkan License Key → klik ACTIVATE\n4. Buka PB, F7 untuk Overlay setting\n5. Tekan F1 untuk ON/OFF macro\n6. Gunakan F8 untuk Super Precision Mode`;
-const setupV3_EN = `⚙️ SETUP V3:\n1. Download V3 → Run as Administrator\n2. If antivirus warns → More Info → Run Anyway\n3. Enter License Key → click ACTIVATE\n4. Open PB, press F7 for Overlay settings\n5. Press F1 to toggle macro ON/OFF\n6. Use F8 for Super Precision Mode`;
-
-const setupVIP_ID = setupV3_ID;
-const setupVIP_EN = setupV3_EN;
-
-// --- FEATURE BLOCKS ---
-
-const featV1_ID = `✅ Fitur V1:\n• Rapid Click Custom Delay\n• HWID Lock (1 PC)\n• Ringan & stabil`;
-const featV1_EN = `✅ V1 Features:\n• Rapid Click Custom Delay\n• HWID Lock (1 PC)\n• Lightweight & stable`;
-
-const featV2_ID = `✅ Fitur V2:\n• Rapid Click + Smart Mode\n• In-Game Overlay (F7)\n• Load / Save Config (F6)\n• Scope Bind\n• Multi-language (ID/EN/PT)\n• HWID Lock`;
-const featV2_EN = `✅ V2 Features:\n• Rapid Click + Smart Mode\n• In-Game Overlay (F7)\n• Load / Save Config (F6)\n• Scope Bind\n• Multi-language (ID/EN/PT)\n• HWID Lock`;
-
-const featV3_ID = `✅ Fitur V3:\n• Semua fitur V2\n• Auto Update\n• Driver Interception\n• Super Precision Mode\n• Prioritas Desktop Override`;
-const featV3_EN = `✅ V3 Features:\n• All V2 features\n• Auto Update\n• Driver Interception\n• Super Precision Mode\n• Priority Desktop Override`;
-
-// ==========================================
-// MAIN BUILDER
-// ==========================================
-function _buildTemplate(key, dur, isWarnet, lang, buyer, plat, scripts, type) {
-  const isID = lang === 'id', isNew = buyer === 'new';
-  const hasV1 = scripts.includes('rapid_click');
-  const hasV2 = scripts.includes('macro_full');
-  const hasV3 = scripts.includes('macro_v3');
-  const isVip = (hasV1 && hasV2) || (hasV2 && hasV3) || (hasV1 && hasV3);
-
-  // --- DURASI LABEL ---
-  const durLabelID = {
-    lifetime: 'Lifetime (Permanen)', '1month': '1 Bulan',
-    '2weeks': '2 Minggu', trial_6hours: 'Trial 6 Jam', demo_1min: '1 Menit'
-  };
-  const durLabelEN = {
-    lifetime: 'Lifetime (Permanent)', '1month': '1 Month',
-    '2weeks': '2 Weeks', trial_6hours: '6-Hour Trial', demo_1min: '1-Minute Demo'
-  };
-  const dL = isID ? (durLabelID[dur] || dur) : (durLabelEN[dur] || dur);
-
-  // --- SCRIPT LABEL ---
-  const scriptParts = [];
-  if (hasV1) scriptParts.push('V1');
-  if (hasV2) scriptParts.push('V2');
-  if (hasV3) scriptParts.push('V3');
-  const scriptLabelID = isVip
-    ? `Script ${scriptParts.join(' + ')} (VIP)`
-    : hasV3
-      ? 'Script V3 — Ultimate Macro'
-      : (hasV2 ? 'Script V2 — Smart Macro' : 'Script V1 — Rapid Click');
-  const scriptLabelEN = isVip
-    ? `Script ${scriptParts.join(' + ')} (VIP)`
-    : hasV3
-      ? 'Script V3 — Ultimate Macro'
-      : (hasV2 ? 'Script V2 — Smart Macro' : 'Script V1 — Rapid Click');
-
-  // --- DOWNLOAD LINKS ---
-  const DL_V1 = 'https://hujanderaspbasahkuyup.vercel.app/download?script=v1';
-  const DL_V2 = 'https://hujanderaspbasahkuyup.vercel.app/download?script=v2';
-  const DL_V3 = 'https://hujanderaspbasahkuyup.vercel.app/download?script=v3';
-
-  const dlLines = [];
-  if (hasV1) dlLines.push(`📥 Download V1: ${DL_V1}`);
-  if (hasV2) dlLines.push(`📥 Download V2: ${DL_V2}`);
-  if (hasV3) dlLines.push(`📥 Download V3: ${DL_V3}`);
-  const dlLineID = dlLines.join('\n');
-  const dlLineEN = dlLineID;
-
-  const keyLine = `🔑 License Key: \`${key}\``;
-
-  // --- PILIH BLOK BERDASARKAN SCRIPT ---
-  const hk  = isID ? (hasV3 ? hotkeysV3_ID : (isVip ? hotkeysVIP_ID : (hasV2 ? hotkeysV2_ID : hotkeysV1_ID)))
-                   : (hasV3 ? hotkeysV3_EN : (isVip ? hotkeysVIP_EN : (hasV2 ? hotkeysV2_EN : hotkeysV1_EN)));
-  const setup = isID ? (hasV3 ? setupV3_ID : (isVip ? setupVIP_ID : (hasV2 ? setupV2_ID : setupV1_ID)))
-                     : (hasV3 ? setupV3_EN : (isVip ? setupVIP_EN : (hasV2 ? setupV2_EN : setupV1_EN)));
-  const feat  = isID ? (hasV3 ? featV3_ID : (isVip ? `${featV2_ID}\n• Bonus: Script V1 juga bisa dipakai` : (hasV2 ? featV2_ID : featV1_ID)))
-                     : (hasV3 ? featV3_EN : (isVip ? `${featV2_EN}\n• Bonus: Script V1 included` : (hasV2 ? featV2_EN : featV1_EN)));
-
-  // --- TIPE: UPGRADE ---
-  if (type === 'upgrade') {
-    if (isID) return `👑 SELAMAT! Lisensi kamu berhasil di-UPGRADE ke *Lifetime VIP* 🔥\n\n*Hujan Deras PB Macro*\n\n${keyLine}\n\n✅ Akses penuh terbuka:\n• 🔷 Script V1 (Rapid Click)\n• 🔶 Script V2 (Smart Macro + Overlay)\n\n${dlLineID}\n\nKey tetap sama. Selamat menikmati! 🚀`;
-    return `👑 Congrats! Your license is UPGRADED to *Lifetime VIP* 🔥\n\n*Hujan Deras PB Macro*\n\n${keyLine}\n\n✅ Full access unlocked:\n• 🔷 Script V1 (Rapid Click)\n• 🔶 Script V2 (Smart Macro + Overlay)\n\n${dlLineEN}\n\nSame key. Enjoy! 🚀`;
+  // ── TEMPLATE: V3 SALE ────────────────────────────
+  if(type==='v3sale'){
+    if(id) return `🔥 *Script V3 — Ultimate Macro* | Hujan Deras PB Macro 🌧️\n\n${isNew?'Makasih udah beli! Ini key V3 kamu 👇':'Renewal sukses! Key baru V3 kamu 👇'}\n\n📥 Download V3: ${DL_V3}\n${keyLine}\n\nDurasi: *${dL}*${isWarnet?'\n⚡ Mode Warnet — bisa di banyak PC (bergantian)':''}\n\n${FEAT.v3_id}\n\n${SETUP.v3_id}\n\n${HK.v3_id}\n\n📌 HWID Lock ke PC pertama yang aktivasi.\nAda kendala setup? Chat saya! 🔥`;
+    return `🔥 *Script V3 — Ultimate Macro* | Hujan Deras PB Macro 🌧️\n\n${isNew?'Thanks for your purchase! Here is your V3 key 👇':'Renewal success! Your new V3 key 👇'}\n\n📥 Download V3: ${DL_V3}\n${keyLine}\n\nDuration: *${dL}*${isWarnet?'\n⚡ Warnet mode — sharable across PCs (one at a time)':''}\n\n${FEAT.v3_en}\n\n${SETUP.v3_en}\n\n${HK.v3_en}\n\n📌 HWID locked to first PC that activates.\nNeed help? Message me! 🔥`;
   }
 
-  // --- TIPE: V2 RELEASE NOTIF ---
-  if (type === 'v2release') {
-    if (isID) return `🚀 UPDATE! Script V2 *sudah RILIS*! 🎉\n\n*Hujan Deras PB Macro*\n\n${keyLine}\n\nSebagai VIP, kamu dapat akses GRATIS.\n\n📥 Download V2: ${DL_V2}\n\n${hotkeysV2_ID}\n\nAda pertanyaan? Chat saya! 🔥`;
-    return `🚀 UPDATE! Script V2 is *LIVE*! 🎉\n\n*Hujan Deras PB Macro*\n\n${keyLine}\n\nAs a VIP, you get FREE access.\n\n📥 Download V2: ${DL_V2}\n\n${hotkeysV2_EN}\n\nAny questions? Message me! 🔥`;
+  // ── TEMPLATE: UPGRADE VIP ────────────────────────
+  if(type==='upgrade'){
+    const tierName=isVipV23?(id?'VIP V2+V3 🔥':'VIP V2+V3 🔥'):(id?'VIP V1+V2 👑':'VIP V1+V2 👑');
+    const scripts_id=isVipV23?`• 🔶 Script V2 — Smart Macro + Overlay\n• 🔥 Script V3 — Ultimate + Driver Interception`:`• 🔷 Script V1 — Rapid Click\n• 🔶 Script V2 — Smart Macro + Overlay`;
+    const scripts_en=isVipV23?`• 🔶 Script V2 — Smart Macro + Overlay\n• 🔥 Script V3 — Ultimate + Driver Interception`:`• 🔷 Script V1 — Rapid Click\n• 🔶 Script V2 — Smart Macro + Overlay`;
+    const dl_id=isVipV23?`📥 Download V2: ${DL_V2}\n📥 Download V3: ${DL_V3}`:`📥 Download V1: ${DL_V1}\n📥 Download V2: ${DL_V2}`;
+    const dl_en=dl_id;
+    if(id) return `👑 SELAMAT! Lisensi kamu berhasil di-UPGRADE ke *Lifetime ${tierName}* 🎉\n\n*Hujan Deras PB Macro*\n\n${keyLine}\n\n✅ Akses terbuka:\n${scripts_id}\n\n${dl_id}\n\nKey tetap sama. Nikmati! 🚀`;
+    return `👑 Congrats! Your license is UPGRADED to *Lifetime ${tierName}* 🎉\n\n*Hujan Deras PB Macro*\n\n${keyLine}\n\n✅ Access unlocked:\n${scripts_en}\n\n${dl_en}\n\nSame key. Enjoy! 🚀`;
   }
 
-  // --- TIPE: V3 RELEASE NOTIF ---
-  if (type === 'v3release') {
-    if (isID) return `🚀 UPDATE! Script V3 *sudah RILIS*! 🎉\n\n*Hujan Deras PB Macro*\n\n${keyLine}\n\nSebagai VIP, kamu dapat akses GRATIS.\n\n📥 Download V3: ${DL_V3}\n\n${hotkeysV3_ID}\n\nAda pertanyaan? Chat saya! 🔥`;
-    return `🚀 UPDATE! Script V3 is *LIVE*! 🎉\n\n*Hujan Deras PB Macro*\n\n${keyLine}\n\nAs a VIP, you get FREE access.\n\n📥 Download V3: ${DL_V3}\n\n${hotkeysV3_EN}\n\nAny questions? Message me! 🔥`;
+  // ── TEMPLATE: V2 RELEASE NOTIF ──────────────────
+  if(type==='v2release'){
+    if(id) return `🚀 UPDATE! Script V2 *sudah RILIS*! 🎉\n\n*Hujan Deras PB Macro*\n\n${keyLine}\n\nSebagai VIP, kamu dapat akses GRATIS.\n\n📥 Download V2: ${DL_V2}\n\n${HK.v2_id}\n\nAda pertanyaan? Chat saya! 🔥`;
+    return `🚀 UPDATE! Script V2 is *LIVE*! 🎉\n\n*Hujan Deras PB Macro*\n\n${keyLine}\n\nAs a VIP, you get FREE access.\n\n📥 Download V2: ${DL_V2}\n\n${HK.v2_en}\n\nAny questions? Message me! 🔥`;
   }
 
-  // --- TIPE: PENJUALAN STANDAR ---
-  const warnetNote = isWarnet
-    ? (isID ? '\n\n⚡ *Mode Warnet aktif* — key bisa dipakai bergantian di banyak PC (satu sesi per waktu).'
-            : '\n\n⚡ *Warnet mode active* — key can be shared across PCs (one session at a time).')
-    : '';
+  // ── TEMPLATE: V3 RELEASE NOTIF ──────────────────
+  if(type==='v3release'){
+    if(id) return `🔥 UPDATE! Script V3 *sudah RILIS*! 🎉\n\n*Hujan Deras PB Macro*\n\n${keyLine}\n\nSebagai VIP, kamu dapat akses GRATIS.\n\n📥 Download V3: ${DL_V3}\n\n${HK.v3_id}\n\nAda pertanyaan? Chat saya! 🔥`;
+    return `🔥 UPDATE! Script V3 is *LIVE*! 🎉\n\n*Hujan Deras PB Macro*\n\n${keyLine}\n\nAs a VIP, you get FREE access.\n\n📥 Download V3: ${DL_V3}\n\n${HK.v3_en}\n\nAny questions? Message me! 🔥`;
+  }
 
-  if (isID) {
-    return `${isNew ? '🔮' : '🔄'} *Lisensi ${dL} — Hujan Deras PB Macro* 🌧️\n\n${isNew ? 'Terima kasih sudah beli! Lisensi kamu sudah aktif.' : 'Renewal berhasil! Key baru kamu siap dipakai.'}\n\n${dlLineID}\n${keyLine}\n\nScript: ${scriptLabelID}${warnetNote}\n\n${setup}\n\n${feat}\n\n${hk}\n\n📌 HWID Lock ke PC ini. Ada kendala? Chat saya! 🔥`;
+  // ── TEMPLATE: PENJUALAN STANDAR ─────────────────
+  const warnetNote=isWarnet?
+    (id?'\n\n⚡ *Mode Warnet aktif* — key bisa dipakai bergantian di banyak PC (satu sesi per waktu).':
+        '\n⚡ *Warnet mode active* — key can be shared across PCs (one session at a time).'):'';
+
+  // Determine which script block to use
+  let dlLines='',feat='',setup='',hk='';
+  if(isVipV23){
+    dlLines=`📥 Download V2: ${DL_V2}\n📥 Download V3: ${DL_V3}`;
+    feat=id?`${FEAT.v2_id}\n\n${FEAT.v3_id}`:` ${FEAT.v2_en}\n\n${FEAT.v3_en}`;
+    setup=id?SETUP.v3_id:SETUP.v3_en;
+    hk=id?HK.v3_id:HK.v3_en;
+  } else if(isVipV12){
+    dlLines=`📥 Download V1: ${DL_V1}\n📥 Download V2: ${DL_V2}`;
+    feat=id?`${FEAT.v1_id}\n\n${FEAT.v2_id}`:`${FEAT.v1_en}\n\n${FEAT.v2_en}`;
+    setup=id?SETUP.v2_id:SETUP.v2_en;
+    hk=id?HK.v2_id:HK.v2_en;
+  } else if(hasV3){
+    dlLines=`📥 Download V3: ${DL_V3}`;
+    feat=id?FEAT.v3_id:FEAT.v3_en;
+    setup=id?SETUP.v3_id:SETUP.v3_en;
+    hk=id?HK.v3_id:HK.v3_en;
+  } else if(hasV2){
+    dlLines=`📥 Download V2: ${DL_V2}`;
+    feat=id?FEAT.v2_id:FEAT.v2_en;
+    setup=id?SETUP.v2_id:SETUP.v2_en;
+    hk=id?HK.v2_id:HK.v2_en;
   } else {
-    return `${isNew ? '🔮' : '🔄'} *${dL} License — Hujan Deras PB Macro* 🌧️\n\n${isNew ? 'Thank you for your purchase! Your license is now active.' : 'Renewal success! Your new key is ready.'}\n\n${dlLineEN}\n${keyLine}\n\nScript: ${scriptLabelEN}${warnetNote}\n\n${setup}\n\n${feat}\n\n${hk}\n\n📌 HWID Locked to this PC. Need help? Message me! 🔥`;
+    dlLines=`📥 Download V1: ${DL_V1}`;
+    feat=id?FEAT.v1_id:FEAT.v1_en;
+    setup=id?SETUP.v1_id:SETUP.v1_en;
+    hk=id?HK.v1_id:HK.v1_en;
   }
-}
+
+  const scriptLbl=isVipV23?'V2 + V3 (VIP)':isVipV12?'V1 + V2 (VIP)':hasV3?'V3 — Ultimate':hasV2?'V2 — Smart Macro':'V1 — Rapid Click';
+
+  if(id){
+    return `${isNew?'🔮':'🔄'} *Lisensi ${dL} — Hujan Deras PB Macro* 🌧️\n\n${isNew?'Terima kasih sudah beli! Lisensi kamu sudah aktif.':'Renewal berhasil! Key baru kamu siap dipakai.'}\n\n${dlLines}\n${keyLine}\n\nScript: ${scriptLbl}${warnetNote}\n\n${setup}\n\n${feat}\n\n${hk}\n\n📌 HWID Lock ke PC ini. Ada kendala? Chat saya! 🔥`;
+  } else {
+    return `${isNew?'🔮':'🔄'} *${dL} License — Hujan Deras PB Macro* 🌧️\n\n${isNew?'Thank you for your purchase! Your license is now active.':'Renewal success! Your new key is ready.'}\n\n${dlLines}\n${keyLine}\n\nScript: ${scriptLbl}${warnetNote}\n\n${setup}\n\n${feat}\n\n${hk}\n\n📌 HWID Locked to this PC. Need help? Message me! 🔥`;
+  }
 }
 
 // ==========================================
