@@ -748,6 +748,7 @@ function showTierModal(key, currentTier, scripts){
 async function doSetTier(newTier){
   const key = _activeKey;
   if(!key){ toast('Error: key tidak ditemukan','error'); return; }
+  console.log('doSetTier called:', newTier, 'key:', key); // ← debug
   const labels = {standard:'Standard','vip-v1v2':'VIP V1+V2','vip-v2v3':'VIP V2+V3',vip:'VIP V1+V2'};
   const label = labels[newTier] || newTier;
   if(!confirm(`Set tier ke ${label}?\n\nKey: ${key}`)) return;

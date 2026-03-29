@@ -651,8 +651,9 @@ def admin_set_tier(license_key):
     data     = request.get_json() or {}
     new_tier = data.get("tier", "").lower()
 
-    if new_tier not in ("standard", "vip"):
-        return jsonify({"success": False, "message": "Tier tidak valid. Gunakan 'standard' atau 'vip'"}), 400
+    VALID_TIERS = ("standard", "vip", "vip-v1v2", "vip-v2v3")
+    if new_tier not in VALID_TIERS:
+        return jsonify({"success": False, "message": f"Tier tidak valid. Gunakan: {VALID_TIERS}"}), 400
 
     lic = get_license(license_key)
     if not lic:
@@ -670,14 +671,21 @@ def admin_set_tier(license_key):
 
     lic["license_tier"] = new_tier
 
-    if new_tier == "vip":
+    if new_tier == "vip-v1v2" or new_tier == "vip":
+        lic["license_tier"] = "vip-v1v2"
         lic["allowed_scripts"] = ["rapid_click", "macro_full"]
-        log_event(lic, "TIER_CHANGED", f"{old_tier} → vip | Scripts: V1+V2")
-        msg = "Lisensi berhasil di-upgrade ke Lifetime VIP (V1 + V2)"
-    else:
-        lic["allowed_scripts"] = ["rapid_click"]
-        log_event(lic, "TIER_CHANGED", f"vip → standard | Scripts: V1 only")
-        msg = "Lisensi di-downgrade ke Standard V1"
+        log_event(lic, "TIER_CHANGED", f"{old_tier} → vip-v1v2 | Scripts: V1+V2")
+        msg = "Lisensi berhasil di-upgrade ke Lifetime VIP V1+V2"
+    elif new_tier == "vip-v2v3":
+        lic["license_tier"] = "vip-v2v3"
+        lic["allowed_scripts"] = ["macro_full", "macro_v3"]
+        log_event(lic, "TIER_CHANGED", f"{old_tier} → vip-v2v3 | Scripts: V2+V3")
+        msg = "Lisensi berhasil di-upgrade ke Lifetime VIP V2+V3"
+    else:  # standard
+        lic["license_tier"] = "standard"
+        lic["allowed_scripts"] = ["macro_full"]  # pertahankan V2 saat downgrade dari V2
+        log_event(lic, "TIER_CHANGED", f"{old_tier} → standard | Scripts: V2")
+        msg = "Lisensi di-downgrade ke Standard"
 
     save_license(lic)
     return jsonify({
