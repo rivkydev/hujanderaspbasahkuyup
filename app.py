@@ -248,7 +248,7 @@ def parse_dt(iso_str: str) -> datetime:
 def now_iso() -> str:
     return datetime.now(TIMEZONE).isoformat()
 
-def is_expiring_soon(lic: dict, current_time: datetime) -> bool:
+def is_license_expiring_soon(lic: dict, current_time: datetime) -> bool:
     expires_at = lic.get("expires_at")
     if not expires_at or lic.get("duration_type") == "lifetime":
         return False
@@ -416,7 +416,7 @@ def admin_stats():
         unbound  = sum(1 for l in licenses if l.get("hwid") is None and l.get("is_active"))
         lifetime = sum(1 for l in licenses if l.get("duration_type") == "lifetime")
         warnet   = sum(1 for l in licenses if l.get("is_warnet") and l.get("is_active") and not l.get("is_banned"))
-        expiring_soon = sum(1 for l in licenses if l.get("is_active") and not l.get("is_banned") and is_expiring_soon(l, now))
+        expiring_soon = sum(1 for l in licenses if l.get("is_active") and not l.get("is_banned") and is_license_expiring_soon(l, now))
         banned_hwids    = len(get_all_banned_hwids())
         activated_today = sum(1 for l in licenses if (l.get("last_used") or "").startswith(today))
         vip_active      = sum(1 for l in licenses if
@@ -477,6 +477,7 @@ def admin_list_licenses():
                     is_warnet and bool(warnet_active_hwid) and
                     is_warnet_session_timed_out(lic, now)
                 )
+                is_expiring_soon = is_license_expiring_soon(lic, now)
 
                 time_left = None
                 if expires_at and is_active and not is_unbound:
