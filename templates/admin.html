@@ -442,6 +442,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
     <div class="topbar">
       <div class="page-title">Banned HWID</div>
       <div class="topbar-right">
+        <button class="btn btn-danger" onclick="banTrialOnlyHwids()">🚫 Ban Trial-only HWID</button>
         <button class="btn btn-ghost" onclick="loadBannedHwids()">Refresh</button>
       </div>
     </div>
@@ -1060,6 +1061,16 @@ async function loadBannedHwids(){
   const list=data.banned_hwids||[];
   if(!list.length){c.innerHTML=`<div class="empty-state"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Tidak ada HWID yang di-ban</div>`;return;}
   c.innerHTML=list.map(h=>`<div class="hwid-item"><div style="flex:1;min-width:0"><div class="hwid-hash">${escHtml(h.hwid_hash)}</div><div class="hwid-meta">Alasan: ${escHtml(h.reason||'—')} · ${(h.banned_at||'—').substring(0,19).replace('T',' ')} · Key: ${escHtml((h.license_key||'—').substring(0,24))}</div></div><button class="btn btn-success" style="flex-shrink:0" onclick="unbanHwid('${escHtml(h.hwid_hash)}')">Unban</button></div>`).join('');
+}
+
+async function banTrialOnlyHwids(){
+  if(!confirm('Ban semua HWID yang hanya menggunakan trial dan tidak punya lisensi berbayar?')) return;
+  const btn=document.querySelector('#page-banned .topbar-right .btn-danger');
+  if(btn){btn.disabled=true;btn.textContent='⏳ Memproses...';}
+  const data=await api('POST','/admin/api/banned-hwids/ban-trial-only');
+  if(btn){btn.disabled=false;btn.textContent='🚫 Ban Trial-only HWID';}
+  toast(data.message || (data.success ? 'Selesai' : 'Gagal'), data.success ? 'success' : 'error');
+  if(data.success){loadBannedHwids();refreshStats();}
 }
 async function unbanHwid(hash){
   if(!confirm('Unban HWID ini?'))return;

@@ -149,6 +149,27 @@ def delete_banned_hwid(hwid_hash: str):
     db["banned_hwids"].pop(hwid_hash, None)
     _save_json(db)
 
+TRIAL_DURATION_TYPES = {"trial_6hours", "demo_1min"}
+
+def find_trial_only_hwids() -> dict:
+    hwid_status = {}
+    for lic in get_all_licenses():
+        hwid = lic.get("hwid")
+        if hwid:
+            info = hwid_status.setdefault(hwid, {"has_paid": False, "examples": []})
+            if lic.get("duration_type") not in TRIAL_DURATION_TYPES:
+                info["has_paid"] = True
+            else:
+                info["examples"].append(lic)
+        if lic.get("is_warnet") and lic.get("warnet_active_hwid"):
+            wh = lic.get("warnet_active_hwid")
+            info = hwid_status.setdefault(wh, {"has_paid": False, "examples": []})
+            if lic.get("duration_type") not in TRIAL_DURATION_TYPES:
+                info["has_paid"] = True
+            else:
+                info["examples"].append(lic)
+    return {hwid: info for hwid, info in hwid_status.items() if not info["has_paid"] and info["examples"]}
+
 # ==========================================
 # ALCOHOL BRANDS
 # ==========================================
@@ -751,6 +772,35 @@ def admin_unban_hwid(hwid_hash):
         return jsonify({"success": False, "message": "HWID tidak ditemukan"}), 404
     delete_banned_hwid(hwid_hash)
     return jsonify({"success": True, "message": "HWID berhasil di-unban"})
+
+@app.route('/admin/api/banned-hwids/ban-trial-only', methods=['POST'])
+@requires_auth
+def admin_ban_trial_only_hwids():
+    try:
+        candidates = find_trial_only_hwids()
+        banned = []
+        skipped = []
+        for hwid_hash, info in candidates.items():
+            if get_banned_hwid(hwid_hash):
+                skipped.append(hwid_hash)
+                continue
+            example = info["examples"][0]
+            save_banned_hwid({
+                "hwid_hash": hwid_hash,
+                "reason": "Trial only - no paid license present",
+                "banned_at": now_iso(),
+                "license_key": example.get("license_key", "unknown")
+            })
+            banned.append(hwid_hash)
+        return jsonify({
+            "success": True,
+            "message": f"{len(banned)} HWID trial-only diban.",
+            "banned_count": len(banned),
+            "skipped_count": len(skipped),
+            "banned_hwids": banned
+        })
+    except Exception as e:
+        return jsonify({"success": False, "message": str(e)}), 500
 
 @app.route('/admin/api/cleanup-warnet', methods=['POST'])
 @requires_auth
