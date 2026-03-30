@@ -37,6 +37,7 @@ VALID_SCRIPT_TYPES = {"rapid_click", "macro_full", "macro_v3"}
 # Client aktif validate tiap 30 detik → 5 menit = batas aman jika crash/kill.
 # ==========================================
 WARNET_SESSION_TIMEOUT = int(os.environ.get('WARNET_SESSION_TIMEOUT', 300))  # default 5 menit
+EXPIRING_SOON_DAYS = int(os.environ.get('EXPIRING_SOON_DAYS', 7))
 
 # ==========================================
 # DATABASE LAYER — MongoDB atau JSON fallback
@@ -247,6 +248,19 @@ def parse_dt(iso_str: str) -> datetime:
 def now_iso() -> str:
     return datetime.now(TIMEZONE).isoformat()
 
+def is_expiring_soon(lic: dict, current_time: datetime) -> bool:
+    expires_at = lic.get("expires_at")
+    if not expires_at or lic.get("duration_type") == "lifetime":
+        return False
+    try:
+        exp_dt = parse_dt(expires_at)
+    except Exception:
+        return False
+    if exp_dt <= current_time:
+        return False
+    return (exp_dt - current_time).total_seconds() <= EXPIRING_SOON_DAYS * 86400
+
+
 def log_event(lic: dict, event: str, detail: str = ""):
     if "logs" not in lic:
         lic["logs"] = []
@@ -402,6 +416,7 @@ def admin_stats():
         unbound  = sum(1 for l in licenses if l.get("hwid") is None and l.get("is_active"))
         lifetime = sum(1 for l in licenses if l.get("duration_type") == "lifetime")
         warnet   = sum(1 for l in licenses if l.get("is_warnet") and l.get("is_active") and not l.get("is_banned"))
+        expiring_soon = sum(1 for l in licenses if l.get("is_active") and not l.get("is_banned") and is_expiring_soon(l, now))
         banned_hwids    = len(get_all_banned_hwids())
         activated_today = sum(1 for l in licenses if (l.get("last_used") or "").startswith(today))
         vip_active      = sum(1 for l in licenses if
@@ -416,9 +431,9 @@ def admin_stats():
 
         return jsonify({
             "total": total, "active": active, "expired": expired, "banned": banned,
-            "unbound": unbound, "lifetime": lifetime, "banned_hwids": banned_hwids,
-            "activated_today": activated_today, "warnet": warnet, "vip": vip_active,
-            "warnet_stuck": warnet_stuck
+            "unbound": unbound, "lifetime": lifetime, "expiring_soon": expiring_soon,
+            "banned_hwids": banned_hwids, "activated_today": activated_today,
+            "warnet": warnet, "vip": vip_active, "warnet_stuck": warnet_stuck
         })
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -483,6 +498,7 @@ def admin_list_licenses():
                 if status == 'unbound' and not is_unbound:                     continue
                 if status == 'warnet'  and not (is_warnet and is_active and not is_banned): continue
                 if status == 'vip'     and not (str(license_tier).startswith('vip') and is_active and not is_banned): continue
+                if status == 'expiring' and not (is_active and not is_banned and is_expiring_soon): continue
 
                 if duration != 'all' and duration_type != duration:
                     continue
@@ -505,6 +521,7 @@ def admin_list_licenses():
                     "warnet_session_start":     lic.get("warnet_session_start"),
                     "warnet_last_seen":         lic.get("warnet_last_seen"),
                     "warnet_session_timed_out": warnet_session_timed_out,
+                    "is_expiring_soon":         is_expiring_soon,
                     "time_left":                time_left,
                     "ban_reason":               lic.get("ban_reason", ""),
                     "note":                     lic.get("note", ""),
