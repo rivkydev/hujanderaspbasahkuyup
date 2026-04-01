@@ -44,6 +44,26 @@ EXPIRING_SOON_DAYS = int(os.environ.get('EXPIRING_SOON_DAYS', 7))
 # ==========================================
 _mongo_client = None
 _mongo_db     = None
+# ============================================================
+#  VERSI & URL — EDIT BAGIAN INI SETIAP ADA BINARY BARU
+# ============================================================
+
+# Macro V3
+# WAJIB pakai GitHub Releases, BUKAN raw.githubusercontent.com!
+# raw.githubusercontent.com tidak support binary .exe dengan benar.
+# Format URL Releases: https://github.com/USER/REPO/releases/download/TAG/FILE
+MACRO_V3_VERSION = "3.0.3"
+MACRO_V3_URL     = "https://github.com/rivkydev/hujanderaspbasahkuyup/releases/download/v3.0.4/PBMacroV3.exe"
+
+# Driver Interception (install-interception.exe)
+DRIVER_VERSION = "1.0.0"
+DRIVER_URL     = "https://github.com/rivkydev/hujanderaspbasahkuyup/releases/download/v1/install-interception.exe"
+
+# interception.dll — di-download Loader bersamaan dengan driver
+# Upload ke Releases yang sama atau hosting terpisah
+INTERCEPTION_DLL_VERSION = "1.0.0"
+INTERCEPTION_DLL_URL     = "https://github.com/rivkydev/hujanderaspbasahkuyup/releases/download/v1.0.0/interception.dll"
+
 
 def _get_mongo():
     global _mongo_client, _mongo_db
@@ -1102,25 +1122,7 @@ def logout_license():
         return jsonify({"success": False, "message": f"Server Error: {str(e)}"}), 500
 
 
-# ============================================================
-#  VERSI & URL — EDIT BAGIAN INI SETIAP ADA BINARY BARU
-# ============================================================
 
-# Macro V3
-# WAJIB pakai GitHub Releases, BUKAN raw.githubusercontent.com!
-# raw.githubusercontent.com tidak support binary .exe dengan benar.
-# Format URL Releases: https://github.com/USER/REPO/releases/download/TAG/FILE
-MACRO_V3_VERSION = "3.0.3"
-MACRO_V3_URL     = "https://github.com/rivkydev/hujanderaspbasahkuyup/releases/download/v3.0.3/PBMacroV3.exe"
-
-# Driver Interception (install-interception.exe)
-DRIVER_VERSION = "1.0.0"
-DRIVER_URL     = "https://github.com/rivkydev/hujanderaspbasahkuyup/releases/download/v1/install-interception.exe"
-
-# interception.dll — di-download Loader bersamaan dengan driver
-# Upload ke Releases yang sama atau hosting terpisah
-INTERCEPTION_DLL_VERSION = "1.0.0"
-INTERCEPTION_DLL_URL     = "https://github.com/rivkydev/hujanderaspbasahkuyup/releases/download/v1.0.0/interception.dll"
 
 
 # ============================================================
