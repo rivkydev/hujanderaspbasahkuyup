@@ -52,8 +52,8 @@ _mongo_db     = None
 # WAJIB pakai GitHub Releases, BUKAN raw.githubusercontent.com!
 # raw.githubusercontent.com tidak support binary .exe dengan benar.
 # Format URL Releases: https://github.com/USER/REPO/releases/download/TAG/FILE
-MACRO_V3_VERSION = "3.0.4"
-MACRO_V3_URL     = "https://github.com/rivkydev/hujanderaspbasahkuyup/releases/download/v3.0.4/PBMacroV3.exe"
+MACRO_V3_VERSION = "3.0.5"
+MACRO_V3_URL     = "https://github.com/rivkydev/hujanderaspbasahkuyup/releases/download/v3.0.5/PBMacroV3.exe"
 
 # Driver Interception (install-interception.exe)
 DRIVER_VERSION = "1.0.0"
