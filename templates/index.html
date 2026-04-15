@@ -578,8 +578,13 @@ section.tight{padding:48px 0}
     <!-- Rendered by JS -->
   </div>
 
+  <!-- V3 Pricing -->
   <h3 id="v3-pricing" style="font-family:var(--font-display);font-size:14px;font-weight:700;color:var(--orange);letter-spacing:2px;margin-top:48px;margin-bottom:20px">◆ SCRIPT V3 — PBMACRO V3</h3>
-  <div class="pricing-grid" style="grid-template-columns:repeat(3,1fr);gap:20px;margin-top:0">
+  <div id="v3-pricing-grid" class="pricing-grid" style="grid-template-columns:repeat(3,1fr);gap:20px;margin-top:0">
+    <!-- Rendered by JS for EN/PT, static for ID -->
+  </div>
+  <!-- Static V3 for ID (hidden when EN/PT active) -->
+  <div id="v3-pricing-static" class="pricing-grid" style="grid-template-columns:repeat(3,1fr);gap:20px;margin-top:0">
     <div class="price-card">
       <span class="price-label basic">2 MINGGU</span>
       <div class="price-name">Rp 65.000</div>
@@ -589,7 +594,7 @@ section.tight{padding:48px 0}
         <li><span class="check y">✓</span> Smart Mode + Overlay</li>
         <li><span class="check y">✓</span> HWID Lock</li>
       </ul>
-      <a href="https://wa.me/6285823358559?text=Halo+min%2C+mau+beli+V3+2+Minggu+85K" target="_blank" class="price-btn" style="background:rgba(251,146,60,.12);border:1px solid rgba(251,146,60,.3);color:var(--orange)">💬 ORDER V3 VIA WHATSAPP</a>
+      <a href="https://wa.me/6285823358559?text=Halo+min%2C+mau+beli+V3+2+Minggu+65K" target="_blank" class="price-btn" style="background:rgba(251,146,60,.12);border:1px solid rgba(251,146,60,.3);color:var(--orange)">💬 ORDER V3 VIA WHATSAPP</a>
     </div>
     <div class="price-card featured">
       <div class="featured-ribbon">BEST VALUE</div>
@@ -601,7 +606,7 @@ section.tight{padding:48px 0}
         <li><span class="check y">✓</span> Smart Mode + Overlay</li>
         <li><span class="check y">✓</span> HWID Lock</li>
       </ul>
-      <a href="https://wa.me/6285823358559?text=Halo+min%2C+mau+beli+V3+1+Bulan+125K" target="_blank" class="price-btn" style="background:rgba(251,146,60,.12);border:1px solid rgba(251,146,60,.3);color:var(--orange)">💬 ORDER V3 VIA WHATSAPP</a>
+      <a href="https://wa.me/6285823358559?text=Halo+min%2C+mau+beli+V3+1+Bulan+100K" target="_blank" class="price-btn" style="background:rgba(251,146,60,.12);border:1px solid rgba(251,146,60,.3);color:var(--orange)">💬 ORDER V3 VIA WHATSAPP</a>
     </div>
     <div class="price-card">
       <span class="price-label perm">PERMANEN</span>
@@ -612,7 +617,7 @@ section.tight{padding:48px 0}
         <li><span class="check y">✓</span> Smart Mode + Overlay</li>
         <li><span class="check y">✓</span> HWID Lock</li>
       </ul>
-      <a href="https://wa.me/6285823358559?text=Halo+min%2C+mau+beli+V3+Permanen+375K" target="_blank" class="price-btn" style="background:rgba(251,146,60,.12);border:1px solid rgba(251,146,60,.3);color:var(--orange)">💬 ORDER V3 VIA WHATSAPP</a>
+      <a href="https://wa.me/6285823358559?text=Halo+min%2C+mau+beli+V3+Permanen+275K" target="_blank" class="price-btn" style="background:rgba(251,146,60,.12);border:1px solid rgba(251,146,60,.3);color:var(--orange)">💬 ORDER V3 VIA WHATSAPP</a>
     </div>
   </div>
 </section>
@@ -746,6 +751,7 @@ const PRICING_DATA = {
   id: {
     v1cols: 'repeat(3,1fr)',
     v2cols: 'repeat(4,1fr)',
+    v3static: true, // use static HTML for ID
     v1: [
       {
         label:'TRIAL', labelClass:'basic', name:'2 Minggu', desc:'Cocok untuk coba-coba',
@@ -813,16 +819,21 @@ const PRICING_DATA = {
         btnText:'TIDAK TERSEDIA', waLink:'javascript:void(0)',
         featured:false, ribbon:'👑 VIP', cardClass:'vip', cardStyle:''
       }
-    ]
+    ],
+    v3: [] // empty = use static
   },
+
   // =============================================
-  // EN — UPDATED PRICES FROM IMAGE
+  // EN — UPDATED PRICES
   // V1: 1 Month $4.99 | Permanent $12.99
-  // V2: 1 Month $9.99 (active) | Lifetime $24.99 (DISABLED) | VIP $39.99 (DISABLED)
+  // V2: 1 Month $9.99 (active) | Lifetime $24.99 (active/orderable)
+  //     Lifetime VIP removed from v2 section
+  // V3: 1 Month $12.99 | Permanent $39.99
   // =============================================
   en: {
     v1cols: 'repeat(2,1fr)',
-    v2cols: 'repeat(3,1fr)',
+    v2cols: 'repeat(2,1fr)',
+    v3static: false,
     v1: [
       {
         label:'MONTHLY', labelClass:'hot', name:'1 Month', desc:'Full month of Rapid Click',
@@ -858,30 +869,42 @@ const PRICING_DATA = {
         label:'LIFETIME', labelClass:'perm', name:'Lifetime V2', desc:'Pay once, V2 forever',
         amount:'$24.99', amountColor:'#818cf8', unit:'$24.99 / permanent',
         strikethrough:null, promoBadge:null,
-        features:['<span class="check y">✓</span> Script V2 — All features','<span class="check y">✓</span> Smart Mode + Hotkey','<span class="check y">✓</span> Full Overlay','<span class="check n">✕</span> Script V1','<span class="check n">✕</span> Script V3'],
-        btnStyle:'background:rgba(100,116,139,.12);border:1px solid rgba(100,116,139,.3);color:rgba(100,116,139,.8);cursor:not-allowed;',
-        btnText:'NOT AVAILABLE', waLink:'javascript:void(0)',
+        features:['<span class="check y">✓</span> Script V2 — All features','<span class="check y">✓</span> Smart Mode + Hotkey','<span class="check y">✓</span> Full Overlay','<span class="check y">✓</span> Load / Save Config','<span class="check n">✕</span> Script V1','<span class="check n">✕</span> Script V3'],
+        btnStyle:'background:rgba(99,102,241,.12);border:1px solid rgba(99,102,241,.3);color:#818cf8',
+        btnText:'💬 BUY VIA WHATSAPP', waLink:'https://wa.me/6285823358559?text=Hi+admin%2C+I+want+to+buy+Lifetime+V2+%2424.99',
+        featured:true, ribbon:'BEST VALUE', cardClass:'featured', cardStyle:''
+      }
+    ],
+    v3: [
+      {
+        label:'MONTHLY', labelClass:'hot', labelStyle:'background:rgba(251,146,60,.12);border-color:rgba(251,146,60,.3);color:var(--orange)',
+        name:'1 Month V3', desc:'Full month of All-in-One PB',
+        amount:'$12.99', amountColor:'var(--orange)', unit:'$12.99 / 30 days',
+        strikethrough:null, promoBadge:null,
+        features:['<span class="check y">✓</span> Script V3 — All features','<span class="check y">✓</span> Smart Mode + Overlay','<span class="check y">✓</span> HWID Lock','<span class="check y">✓</span> Per-Weapon Profile'],
+        btnStyle:'background:rgba(251,146,60,.12);border:1px solid rgba(251,146,60,.3);color:var(--orange)',
+        btnText:'💬 ORDER V3 VIA WHATSAPP', waLink:'https://wa.me/6285823358559?text=Hi+admin%2C+I+want+to+buy+V3+1+Month+%2412.99',
         featured:false, ribbon:null, cardClass:'', cardStyle:''
       },
       {
-        label:'ULTIMATE', labelClass:'vip', name:'Lifetime VIP', desc:'V2 now + V3 available now',
-        amount:'$39.99', amountColor:'var(--purple)', unit:'$39.99 / permanent',
+        label:'PERMANENT', labelClass:'perm', name:'Permanent V3', desc:'Pay once, V3 forever',
+        amount:'$39.99', amountColor:'var(--orange)', unit:'$39.99 / permanent',
         strikethrough:null, promoBadge:null,
-        features:['<span class="check vip">✓</span> Script V2 — All features','<span class="check vip">✓</span> Script V3 — Available now','<span class="check vip">✓</span> No need to buy again on updates','<span class="check vip">✓</span> HWID Lock','<span class="check vip">✓</span> Priority admin support','<span class="check n">✕</span> Does not include Script V1'],
-        btnStyle:'background:rgba(100,116,139,.12);border:1px solid rgba(100,116,139,.3);color:rgba(100,116,139,.8);cursor:not-allowed;',
-        btnText:'NOT AVAILABLE', waLink:'javascript:void(0)',
-        featured:false, ribbon:'👑 VIP', cardClass:'vip', cardStyle:''
+        features:['<span class="check y">✓</span> Script V3 — All features','<span class="check y">✓</span> Smart Mode + Overlay','<span class="check y">✓</span> HWID Lock','<span class="check y">✓</span> Per-Weapon Profile','<span class="check y">✓</span> Lifetime access'],
+        btnStyle:'background:rgba(251,146,60,.12);border:1px solid rgba(251,146,60,.3);color:var(--orange)',
+        btnText:'💬 ORDER V3 VIA WHATSAPP', waLink:'https://wa.me/6285823358559?text=Hi+admin%2C+I+want+to+buy+V3+Permanent+%2439.99',
+        featured:true, ribbon:'BEST VALUE', cardClass:'featured', cardStyle:''
       }
     ]
   },
+
   // =============================================
-  // PT — UPDATED PRICES FROM IMAGE
-  // V1: 1 Month $4.99 | Permanent $12.99
-  // V2: 1 Month $9.99 (active) | Lifetime $24.99 (DISABLED) | VIP $39.99 (DISABLED)
+  // PT — UPDATED PRICES (same structure as EN)
   // =============================================
   pt: {
     v1cols: 'repeat(2,1fr)',
-    v2cols: 'repeat(3,1fr)',
+    v2cols: 'repeat(2,1fr)',
+    v3static: false,
     v1: [
       {
         label:'MENSAL', labelClass:'hot', name:'1 Mês', desc:'Um mês completo de Rapid Click',
@@ -917,19 +940,31 @@ const PRICING_DATA = {
         label:'LIFETIME', labelClass:'perm', name:'Lifetime V2', desc:'Pague uma vez, V2 para sempre',
         amount:'$24.99', amountColor:'#818cf8', unit:'$24.99 / permanente',
         strikethrough:null, promoBadge:null,
-        features:['<span class="check y">✓</span> Script V2 — Todos os recursos','<span class="check y">✓</span> Smart Mode + Hotkey','<span class="check y">✓</span> Overlay completo','<span class="check n">✕</span> Script V1','<span class="check n">✕</span> Script V3'],
-        btnStyle:'background:rgba(100,116,139,.12);border:1px solid rgba(100,116,139,.3);color:rgba(100,116,139,.8);cursor:not-allowed;',
-        btnText:'NÃO DISPONÍVEL', waLink:'javascript:void(0)',
+        features:['<span class="check y">✓</span> Script V2 — Todos os recursos','<span class="check y">✓</span> Smart Mode + Hotkey','<span class="check y">✓</span> Overlay completo','<span class="check y">✓</span> Carregar / Salvar Config','<span class="check n">✕</span> Script V1','<span class="check n">✕</span> Script V3'],
+        btnStyle:'background:rgba(99,102,241,.12);border:1px solid rgba(99,102,241,.3);color:#818cf8',
+        btnText:'💬 COMPRAR VIA WHATSAPP', waLink:'https://wa.me/6285823358559?text=Oi+admin%2C+quero+comprar+Lifetime+V2+%2424.99',
+        featured:true, ribbon:'MELHOR VALOR', cardClass:'featured', cardStyle:''
+      }
+    ],
+    v3: [
+      {
+        label:'MENSAL', labelClass:'hot', labelStyle:'background:rgba(251,146,60,.12);border-color:rgba(251,146,60,.3);color:var(--orange)',
+        name:'1 Mês V3', desc:'Um mês completo de All-in-One PB',
+        amount:'$12.99', amountColor:'var(--orange)', unit:'$12.99 / 30 dias',
+        strikethrough:null, promoBadge:null,
+        features:['<span class="check y">✓</span> Script V3 — Todos os recursos','<span class="check y">✓</span> Smart Mode + Overlay','<span class="check y">✓</span> HWID Lock','<span class="check y">✓</span> Perfil por Arma'],
+        btnStyle:'background:rgba(251,146,60,.12);border:1px solid rgba(251,146,60,.3);color:var(--orange)',
+        btnText:'💬 PEDIR V3 VIA WHATSAPP', waLink:'https://wa.me/6285823358559?text=Oi+admin%2C+quero+comprar+V3+1+M%C3%AAs+%2412.99',
         featured:false, ribbon:null, cardClass:'', cardStyle:''
       },
       {
-        label:'ULTIMATE', labelClass:'vip', name:'Lifetime VIP', desc:'V2 agora + V3 já disponível',
-        amount:'$39.99', amountColor:'var(--purple)', unit:'$39.99 / permanente',
+        label:'PERMANENTE', labelClass:'perm', name:'Permanente V3', desc:'Pague uma vez, V3 para sempre',
+        amount:'$39.99', amountColor:'var(--orange)', unit:'$39.99 / permanente',
         strikethrough:null, promoBadge:null,
-        features:['<span class="check vip">✓</span> Script V2 — Todos os recursos','<span class="check vip">✓</span> Script V3 — Já disponível','<span class="check vip">✓</span> Sem necessidade de comprar novamente','<span class="check vip">✓</span> HWID Lock','<span class="check vip">✓</span> Suporte prioritário do admin','<span class="check n">✕</span> Não inclui Script V1'],
-        btnStyle:'background:rgba(100,116,139,.12);border:1px solid rgba(100,116,139,.3);color:rgba(100,116,139,.8);cursor:not-allowed;',
-        btnText:'NÃO DISPONÍVEL', waLink:'javascript:void(0)',
-        featured:false, ribbon:'👑 VIP', cardClass:'vip', cardStyle:''
+        features:['<span class="check y">✓</span> Script V3 — Todos os recursos','<span class="check y">✓</span> Smart Mode + Overlay','<span class="check y">✓</span> HWID Lock','<span class="check y">✓</span> Perfil por Arma','<span class="check y">✓</span> Acesso vitalício'],
+        btnStyle:'background:rgba(251,146,60,.12);border:1px solid rgba(251,146,60,.3);color:var(--orange)',
+        btnText:'💬 PEDIR V3 VIA WHATSAPP', waLink:'https://wa.me/6285823358559?text=Oi+admin%2C+quero+comprar+V3+Permanente+%2439.99',
+        featured:true, ribbon:'MELHOR VALOR', cardClass:'featured', cardStyle:''
       }
     ]
   }
@@ -962,6 +997,8 @@ function renderPricing(lang) {
   const data = PRICING_DATA[lang] || PRICING_DATA.id;
   const v1Grid = document.getElementById('v1-pricing-grid');
   const v2Grid = document.getElementById('v2-pricing-grid');
+  const v3Grid = document.getElementById('v3-pricing-grid');
+  const v3Static = document.getElementById('v3-pricing-static');
   if (!v1Grid || !v2Grid) return;
 
   v1Grid.style.gridTemplateColumns = data.v1cols;
@@ -970,8 +1007,19 @@ function renderPricing(lang) {
   v2Grid.style.gridTemplateColumns = data.v2cols;
   v2Grid.innerHTML = data.v2.map(c => buildPriceCard(c)).join('');
 
+  // V3: toggle between static (ID) and dynamic (EN/PT)
+  if (data.v3static) {
+    v3Grid.style.display = 'none';
+    v3Static.style.display = 'grid';
+  } else {
+    v3Static.style.display = 'none';
+    v3Grid.style.display = 'grid';
+    v3Grid.style.gridTemplateColumns = 'repeat(2,1fr)';
+    v3Grid.innerHTML = data.v3.map(c => buildPriceCard(c)).join('');
+  }
+
   // Re-apply fade-in observer to new cards
-  document.querySelectorAll('#v1-pricing-grid .price-card, #v2-pricing-grid .price-card').forEach(el => {
+  document.querySelectorAll('#v1-pricing-grid .price-card, #v2-pricing-grid .price-card, #v3-pricing-grid .price-card').forEach(el => {
     el.style.cssText += ';opacity:0;transform:translateY(24px);transition:opacity .5s ease,transform .5s ease';
     obs.observe(el);
   });
@@ -1092,7 +1140,7 @@ const TRANSLATIONS = {
     'sec-price-tag': '💰 PRICING & PACKAGES',
     'sec-price-h': 'Choose Your Best Package',
     'sec-price-sub': 'All prices include an active license. Timer starts on first activation — not on purchase.',
-    'price-info': '<strong style="color:var(--orange)">Script V3</strong> is now available. V1/V2 are legacy versions and no longer supported for new purchases.',
+    'price-info': '<strong style="color:var(--orange)">Script V3</strong> is now available. Order via WhatsApp. V1 &amp; V2 plans also available.',
     'vip-title': 'Why Choose Lifetime VIP?', 'vip-sub': 'V3 is available now. Get premium support and future updates with VIP.',
     'warn-title-text': 'ANTIVIRUS FALSE POSITIVE — THIS IS NORMAL',
     'warn-body': 'This script is written in <strong>C++ Native</strong> and communicates directly with system input. Some antivirus software flags it as "suspicious" but it is <strong>not a virus</strong>. Follow these steps to run safely:',
@@ -1111,7 +1159,7 @@ const TRANSLATIONS = {
     'sc2-btn': 'DOWNLOAD SCRIPT V2',
     'sc3-status': 'AVAILABLE — NOW', 'sc3-ver': 'SCRIPT V3', 'sc3-name': 'All-in-One PB',
     'sc3-tag': 'The most advanced version — per-weapon control, full overlay, all modes in one.',
-    'sc3-btn': 'IN DEVELOPMENT',
+    'sc3-btn': 'DOWNLOAD SCRIPT V3',
     'tbl-h0': 'License Type',
     'tbl-r1': 'Trial / Monthly (Standard V1)', 'tbl-r2': 'Trial / Monthly (Standard V2)',
     'tbl-r3': 'Lifetime Standard V1', 'tbl-r4': 'Lifetime Standard V2',
@@ -1153,7 +1201,7 @@ const TRANSLATIONS = {
     'btn-yt': '▶ Ver Todos os Vídeos no YouTube',
     'sec-script-tag': '⚡ TRÊS VERSÕES DE SCRIPT',
     'sec-script-h': 'Escolha o Script Ideal para Você',
-    'sec-script-sub': 'Dois scripts disponíveis para download. Script V3 All-in-One em desenvolvimento.',
+    'sec-script-sub': 'Script V3 já disponível para download. V1/V2 são versões legacy.',
     'tbl-title': 'Tabela de Acesso por Licença',
     'tbl-sub': 'Cada licença está vinculada a um script. Lifetime VIP inclui V2 + V3 agora — não inclui V1.',
     'sec-how-tag': '📖 COMO USAR', 'sec-how-h': 'Configuração em 4 Passos',
@@ -1165,7 +1213,7 @@ const TRANSLATIONS = {
     'sec-price-tag': '💰 PREÇOS & PACOTES',
     'sec-price-h': 'Escolha Seu Melhor Pacote',
     'sec-price-sub': 'Todos os preços incluem licença ativa. O timer começa na primeira ativação — não na compra.',
-    'price-info': '<strong style="color:var(--orange)">Script V3</strong> já está disponível. V1/V2 são versões legacy e não são mais suportadas para compras novas.',
+    'price-info': '<strong style="color:var(--orange)">Script V3</strong> já está disponível. Peça via WhatsApp. Planos V1 e V2 também disponíveis.',
     'vip-title': 'Por Que Escolher o Lifetime VIP?', 'vip-sub': 'V3 já está disponível. Obtenha suporte premium e atualizações futuras com VIP.',
     'warn-title-text': 'FALSO POSITIVO DO ANTIVÍRUS — ISSO É NORMAL',
     'warn-body': 'Este script é escrito em <strong>C++ Nativo</strong> e se comunica diretamente com a entrada do sistema. Alguns antivírus o marcam como "suspeito", mas <strong>não é um vírus</strong>. Siga os passos para executar com segurança:',
@@ -1184,7 +1232,7 @@ const TRANSLATIONS = {
     'sc2-btn': 'BAIXAR SCRIPT V2',
     'sc3-status': 'DISPONÍVEL — AGORA', 'sc3-ver': 'SCRIPT V3', 'sc3-name': 'All-in-One PB',
     'sc3-tag': 'A versão mais avançada — controle por arma, overlay completo, todos os modos em um.',
-    'sc3-btn': 'EM DESENVOLVIMENTO',
+    'sc3-btn': 'BAIXAR SCRIPT V3',
     'tbl-h0': 'Tipo de Licença',
     'tbl-r1': 'Trial / Mensal (Standard V1)', 'tbl-r2': 'Trial / Mensal (Standard V2)',
     'tbl-r3': 'Lifetime Standard V1', 'tbl-r4': 'Lifetime Standard V2',
