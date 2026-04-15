@@ -72,11 +72,18 @@ def _get_mongo():
     try:
         if _mongo_client is None:
             from pymongo import MongoClient
-            _mongo_client = MongoClient(MONGO_URI, serverSelectionTimeoutMS=5000)
-            _mongo_db     = _mongo_client.get_default_database()
+            # Tambahkan timeout agar tidak menabrak batas 10 detik Vercel
+            _mongo_client = MongoClient(
+                MONGO_URI, 
+                serverSelectionTimeoutMS=5000, # Batas tunggu pilih server 5 detik
+                connectTimeoutMS=5000,          # Batas tunggu koneksi awal 5 detik
+                socketTimeoutMS=5000            # Batas tunggu respons data 5 detik
+            )
+            _mongo_db = _mongo_client.get_default_database()
         return _mongo_db["licenses"], _mongo_db["banned_hwids"]
     except Exception as e:
         print(f"[MongoDB] Connection error: {e}")
+        # Jika koneksi gagal, sistem akan otomatis mencoba fallback ke JSON (jika ada)
         return None, None
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
