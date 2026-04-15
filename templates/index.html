@@ -741,7 +741,6 @@ section.tight{padding:48px 0}
 
 /* =====================
    PRICING DATA — PER LANGUAGE
-   *** HARGA DIUPDATE ***
 ===================== */
 const PRICING_DATA = {
   id: {
@@ -816,26 +815,31 @@ const PRICING_DATA = {
       }
     ]
   },
+  // =============================================
+  // EN — UPDATED PRICES FROM IMAGE
+  // V1: 1 Month $4.99 | Permanent $12.99
+  // V2: 1 Month $9.99 (active) | Lifetime $24.99 (DISABLED) | VIP $39.99 (DISABLED)
+  // =============================================
   en: {
     v1cols: 'repeat(2,1fr)',
     v2cols: 'repeat(3,1fr)',
     v1: [
       {
         label:'MONTHLY', labelClass:'hot', name:'1 Month', desc:'Full month of Rapid Click',
-        amount:'$3', amountColor:'var(--cyan)', unit:'$3.00 / 30 days',
+        amount:'$4.99', amountColor:'var(--cyan)', unit:'$4.99 / 30 days',
         strikethrough:null, promoBadge:null,
         features:['<span class="check y">✓</span> Script V1 Rapid Click','<span class="check y">✓</span> Custom Delay','<span class="check y">✓</span> HWID Lock','<span class="check n">✕</span> Smart Mode','<span class="check n">✕</span> Overlay'],
         btnStyle:'background:rgba(34,211,238,.12);border:1px solid rgba(34,211,238,.3);color:var(--cyan)',
-        btnText:'💬 BUY VIA WHATSAPP', waLink:'https://wa.me/6285823358559?text=Hi+admin%2C+I+want+to+buy+V1+1+Month+%243',
+        btnText:'💬 BUY VIA WHATSAPP', waLink:'https://wa.me/6285823358559?text=Hi+admin%2C+I+want+to+buy+V1+1+Month+%244.99',
         featured:false, ribbon:null, cardClass:'', cardStyle:''
       },
       {
         label:'LIFETIME', labelClass:'perm', name:'Lifetime V1', desc:'Pay once, V1 forever',
-        amount:'$8', amountColor:'var(--cyan)', unit:'$8.00 / permanent',
+        amount:'$12.99', amountColor:'var(--cyan)', unit:'$12.99 / permanent',
         strikethrough:null, promoBadge:null,
         features:['<span class="check y">✓</span> Script V1 Rapid Click','<span class="check y">✓</span> Custom Delay','<span class="check y">✓</span> HWID Lock','<span class="check n">✕</span> Smart Mode','<span class="check n">✕</span> Overlay'],
         btnStyle:'background:rgba(34,211,238,.12);border:1px solid rgba(34,211,238,.3);color:var(--cyan)',
-        btnText:'💬 BUY VIA WHATSAPP', waLink:'https://wa.me/6285823358559?text=Hi+admin%2C+I+want+to+buy+Lifetime+V1+%248',
+        btnText:'💬 BUY VIA WHATSAPP', waLink:'https://wa.me/6285823358559?text=Hi+admin%2C+I+want+to+buy+Lifetime+V1+%2412.99',
         featured:true, ribbon:'BEST VALUE', cardClass:'featured', cardStyle:''
       }
     ],
@@ -843,53 +847,58 @@ const PRICING_DATA = {
       {
         label:'MONTHLY', labelClass:'hot', labelStyle:'background:rgba(168,85,247,.12);border-color:rgba(168,85,247,.3);color:var(--purple)',
         name:'1 Month V2', desc:'Full month of Smart Mode',
-        amount:'$5', amountColor:'var(--purple)', unit:'$5.00 / 30 days',
+        amount:'$9.99', amountColor:'var(--purple)', unit:'$9.99 / 30 days',
         strikethrough:null, promoBadge:null,
         features:['<span class="check y">✓</span> Script V2 — All features','<span class="check y">✓</span> Smart Mode + Hotkey','<span class="check y">✓</span> Overlay + Load/Save','<span class="check n">✕</span> Script V1'],
         btnStyle:'background:rgba(168,85,247,.12);border:1px solid rgba(168,85,247,.3);color:var(--purple)',
-        btnText:'💬 BUY VIA WHATSAPP', waLink:'https://wa.me/6285823358559?text=Hi+admin%2C+I+want+to+buy+V2+1+Month+%245',
+        btnText:'💬 BUY VIA WHATSAPP', waLink:'https://wa.me/6285823358559?text=Hi+admin%2C+I+want+to+buy+V2+1+Month+%249.99',
         featured:false, ribbon:null, cardClass:'', cardStyle:''
       },
       {
         label:'LIFETIME', labelClass:'perm', name:'Lifetime V2', desc:'Pay once, V2 forever',
-        amount:'$10', amountColor:'#818cf8', unit:'$10.00 / permanent',
+        amount:'$24.99', amountColor:'#818cf8', unit:'$24.99 / permanent',
         strikethrough:null, promoBadge:null,
         features:['<span class="check y">✓</span> Script V2 — All features','<span class="check y">✓</span> Smart Mode + Hotkey','<span class="check y">✓</span> Full Overlay','<span class="check n">✕</span> Script V1','<span class="check n">✕</span> Script V3'],
-        btnStyle:'background:rgba(168,85,247,.12);border:1px solid rgba(168,85,247,.3);color:var(--purple)',
-        btnText:'💬 BUY VIA WHATSAPP', waLink:'https://wa.me/6285823358559?text=Hi+admin%2C+I+want+to+buy+Lifetime+V2+%2410',
+        btnStyle:'background:rgba(100,116,139,.12);border:1px solid rgba(100,116,139,.3);color:rgba(100,116,139,.8);cursor:not-allowed;',
+        btnText:'NOT AVAILABLE', waLink:'javascript:void(0)',
         featured:false, ribbon:null, cardClass:'', cardStyle:''
       },
       {
         label:'ULTIMATE', labelClass:'vip', name:'Lifetime VIP', desc:'V2 now + V3 available now',
-        amount:'$12', amountColor:'var(--purple)', unit:'$12.00 / permanent',
+        amount:'$39.99', amountColor:'var(--purple)', unit:'$39.99 / permanent',
         strikethrough:null, promoBadge:null,
         features:['<span class="check vip">✓</span> Script V2 — All features','<span class="check vip">✓</span> Script V3 — Available now','<span class="check vip">✓</span> No need to buy again on updates','<span class="check vip">✓</span> HWID Lock','<span class="check vip">✓</span> Priority admin support','<span class="check n">✕</span> Does not include Script V1'],
-        btnStyle:'background:rgba(168,85,247,.2);border:1px solid rgba(168,85,247,.5);color:var(--purple)',
-        btnText:'👑 BUY VIP V2+V3 VIA WA', waLink:'https://wa.me/6285823358559?text=Hi+admin%2C+I+want+to+buy+Lifetime+VIP+V2%2BV3+%2412',
+        btnStyle:'background:rgba(100,116,139,.12);border:1px solid rgba(100,116,139,.3);color:rgba(100,116,139,.8);cursor:not-allowed;',
+        btnText:'NOT AVAILABLE', waLink:'javascript:void(0)',
         featured:false, ribbon:'👑 VIP', cardClass:'vip', cardStyle:''
       }
     ]
   },
+  // =============================================
+  // PT — UPDATED PRICES FROM IMAGE
+  // V1: 1 Month $4.99 | Permanent $12.99
+  // V2: 1 Month $9.99 (active) | Lifetime $24.99 (DISABLED) | VIP $39.99 (DISABLED)
+  // =============================================
   pt: {
     v1cols: 'repeat(2,1fr)',
     v2cols: 'repeat(3,1fr)',
     v1: [
       {
         label:'MENSAL', labelClass:'hot', name:'1 Mês', desc:'Um mês completo de Rapid Click',
-        amount:'$3', amountColor:'var(--cyan)', unit:'$3.00 / 30 dias',
+        amount:'$4.99', amountColor:'var(--cyan)', unit:'$4.99 / 30 dias',
         strikethrough:null, promoBadge:null,
         features:['<span class="check y">✓</span> Script V1 Rapid Click','<span class="check y">✓</span> Delay Personalizado','<span class="check y">✓</span> HWID Lock','<span class="check n">✕</span> Smart Mode','<span class="check n">✕</span> Overlay'],
         btnStyle:'background:rgba(34,211,238,.12);border:1px solid rgba(34,211,238,.3);color:var(--cyan)',
-        btnText:'💬 COMPRAR VIA WHATSAPP', waLink:'https://wa.me/6285823358559?text=Oi+admin%2C+quero+comprar+V1+1+M%C3%AAs+%243',
+        btnText:'💬 COMPRAR VIA WHATSAPP', waLink:'https://wa.me/6285823358559?text=Oi+admin%2C+quero+comprar+V1+1+M%C3%AAs+%244.99',
         featured:false, ribbon:null, cardClass:'', cardStyle:''
       },
       {
         label:'LIFETIME', labelClass:'perm', name:'Lifetime V1', desc:'Pague uma vez, V1 para sempre',
-        amount:'$8', amountColor:'var(--cyan)', unit:'$8.00 / permanente',
+        amount:'$12.99', amountColor:'var(--cyan)', unit:'$12.99 / permanente',
         strikethrough:null, promoBadge:null,
         features:['<span class="check y">✓</span> Script V1 Rapid Click','<span class="check y">✓</span> Delay Personalizado','<span class="check y">✓</span> HWID Lock','<span class="check n">✕</span> Smart Mode','<span class="check n">✕</span> Overlay'],
         btnStyle:'background:rgba(34,211,238,.12);border:1px solid rgba(34,211,238,.3);color:var(--cyan)',
-        btnText:'💬 COMPRAR VIA WHATSAPP', waLink:'https://wa.me/6285823358559?text=Oi+admin%2C+quero+comprar+Lifetime+V1+%248',
+        btnText:'💬 COMPRAR VIA WHATSAPP', waLink:'https://wa.me/6285823358559?text=Oi+admin%2C+quero+comprar+Lifetime+V1+%2412.99',
         featured:true, ribbon:'MELHOR VALOR', cardClass:'featured', cardStyle:''
       }
     ],
@@ -897,29 +906,29 @@ const PRICING_DATA = {
       {
         label:'MENSAL', labelClass:'hot', labelStyle:'background:rgba(168,85,247,.12);border-color:rgba(168,85,247,.3);color:var(--purple)',
         name:'1 Mês V2', desc:'Um mês completo de Smart Mode',
-        amount:'$5', amountColor:'var(--purple)', unit:'$5.00 / 30 dias',
+        amount:'$9.99', amountColor:'var(--purple)', unit:'$9.99 / 30 dias',
         strikethrough:null, promoBadge:null,
         features:['<span class="check y">✓</span> Script V2 — Todos os recursos','<span class="check y">✓</span> Smart Mode + Hotkey','<span class="check y">✓</span> Overlay + Carregar/Salvar','<span class="check n">✕</span> Script V1'],
         btnStyle:'background:rgba(168,85,247,.12);border:1px solid rgba(168,85,247,.3);color:var(--purple)',
-        btnText:'💬 COMPRAR VIA WHATSAPP', waLink:'https://wa.me/6285823358559?text=Oi+admin%2C+quero+comprar+V2+1+M%C3%AAs+%245',
+        btnText:'💬 COMPRAR VIA WHATSAPP', waLink:'https://wa.me/6285823358559?text=Oi+admin%2C+quero+comprar+V2+1+M%C3%AAs+%249.99',
         featured:false, ribbon:null, cardClass:'', cardStyle:''
       },
       {
         label:'LIFETIME', labelClass:'perm', name:'Lifetime V2', desc:'Pague uma vez, V2 para sempre',
-        amount:'$10', amountColor:'#818cf8', unit:'$10.00 / permanente',
+        amount:'$24.99', amountColor:'#818cf8', unit:'$24.99 / permanente',
         strikethrough:null, promoBadge:null,
         features:['<span class="check y">✓</span> Script V2 — Todos os recursos','<span class="check y">✓</span> Smart Mode + Hotkey','<span class="check y">✓</span> Overlay completo','<span class="check n">✕</span> Script V1','<span class="check n">✕</span> Script V3'],
-        btnStyle:'background:rgba(168,85,247,.12);border:1px solid rgba(168,85,247,.3);color:var(--purple)',
-        btnText:'💬 COMPRAR VIA WHATSAPP', waLink:'https://wa.me/6285823358559?text=Oi+admin%2C+quero+comprar+Lifetime+V2+%2410',
+        btnStyle:'background:rgba(100,116,139,.12);border:1px solid rgba(100,116,139,.3);color:rgba(100,116,139,.8);cursor:not-allowed;',
+        btnText:'NÃO DISPONÍVEL', waLink:'javascript:void(0)',
         featured:false, ribbon:null, cardClass:'', cardStyle:''
       },
       {
         label:'ULTIMATE', labelClass:'vip', name:'Lifetime VIP', desc:'V2 agora + V3 já disponível',
-        amount:'$12', amountColor:'var(--purple)', unit:'$12.00 / permanente',
+        amount:'$39.99', amountColor:'var(--purple)', unit:'$39.99 / permanente',
         strikethrough:null, promoBadge:null,
         features:['<span class="check vip">✓</span> Script V2 — Todos os recursos','<span class="check vip">✓</span> Script V3 — Já disponível','<span class="check vip">✓</span> Sem necessidade de comprar novamente','<span class="check vip">✓</span> HWID Lock','<span class="check vip">✓</span> Suporte prioritário do admin','<span class="check n">✕</span> Não inclui Script V1'],
-        btnStyle:'background:rgba(168,85,247,.2);border:1px solid rgba(168,85,247,.5);color:var(--purple)',
-        btnText:'👑 COMPRAR VIP V2+V3 VIA WA', waLink:'https://wa.me/6285823358559?text=Oi+admin%2C+quero+comprar+Lifetime+VIP+V2%2BV3+%2412',
+        btnStyle:'background:rgba(100,116,139,.12);border:1px solid rgba(100,116,139,.3);color:rgba(100,116,139,.8);cursor:not-allowed;',
+        btnText:'NÃO DISPONÍVEL', waLink:'javascript:void(0)',
         featured:false, ribbon:'👑 VIP', cardClass:'vip', cardStyle:''
       }
     ]
