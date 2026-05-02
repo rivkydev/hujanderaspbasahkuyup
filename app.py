@@ -54,7 +54,9 @@ _mongo_db     = None
 # Format URL Releases: https://github.com/USER/REPO/releases/download/TAG/FILE
 MACRO_V3_VERSION = "3.1.36"
 MACRO_V3_URL     = "https://github.com/rivkydev/hujanderaspbasahkuyup/releases/download/v3.1.36/PBMacroV3.exe"
-
+# Macro V3 Warnet Edition (public file, bukan private)
+MACRO_V3_WE_VERSION = "3.2.0"
+MACRO_V3_WE_URL     = "https://github.com/rivkydev/hujanderaspbasahkuyup/releases/download/v3.2.0/PBMacroV3-WE.exe"
 # Driver Interception (install-interception.exe)
 DRIVER_VERSION = "1.0.0"
 DRIVER_URL     = "https://github.com/rivkydev/hujanderaspbasahkuyup/releases/download/v1/install-interception.exe"
@@ -1145,6 +1147,7 @@ def macro_info():
 
         license_key = (data.get('license_key') or '').strip()
         hwid        = (data.get('hwid') or '').strip()
+        edition     = (data.get('edition') or '').strip().lower()  # "warnet" atau ""
 
         if not license_key or not hwid:
             return jsonify({"success": False, "message": "Missing fields"}), 400
@@ -1158,7 +1161,20 @@ def macro_info():
             return jsonify({"success": False, "message": "EXPIRED"}), 403
 
         allowed = get_allowed_scripts(lic)
-        # [FIX] Cek macro_v3 (bukan hanya macro_full) agar konsisten dengan validate
+
+        # Warnet Edition: file publik, tidak butuh cek tier
+        # Private Edition: harus punya akses macro_v3
+        if edition == "warnet":
+            return jsonify({
+                "success":     True,
+                "version":     MACRO_V3_WE_VERSION,
+                "url":         MACRO_V3_WE_URL,
+                "script_type": "macro_v3",
+                "edition":     "warnet",
+                "changelog":   ""
+            }), 200
+
+        # Private Edition — cek tier seperti sebelumnya
         if "macro_v3" not in allowed and lic.get("license_tier") != "vip":
             return jsonify({
                 "success": False,
@@ -1170,12 +1186,12 @@ def macro_info():
             "version":     MACRO_V3_VERSION,
             "url":         MACRO_V3_URL,
             "script_type": "macro_v3",
+            "edition":     "private",
             "changelog":   ""
         }), 200
 
     except Exception as e:
         return jsonify({"success": False, "message": str(e)}), 500
-
 
 # ============================================================
 #  ROUTE: /api/driver-info
