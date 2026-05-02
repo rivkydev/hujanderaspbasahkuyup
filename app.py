@@ -55,8 +55,8 @@ _mongo_db     = None
 MACRO_V3_VERSION = "3.1.36"
 MACRO_V3_URL     = "https://github.com/rivkydev/hujanderaspbasahkuyup/releases/download/v3.1.36/PBMacroV3.exe"
 # Macro V3 Warnet Edition (public file, bukan private)
-MACRO_V3_WE_VERSION = "3.2.0"
-MACRO_V3_WE_URL     = "https://github.com/rivkydev/hujanderaspbasahkuyup/releases/download/v3.2.0/PBMacroV3-WE.exe"
+MACRO_V3_WE_VERSION = "3.2.1"
+MACRO_V3_WE_URL     = "https://github.com/rivkydev/hujanderaspbasahkuyup/releases/download/v3.2.1/PBMacroV3-WE.exe"
 # Driver Interception (install-interception.exe)
 DRIVER_VERSION = "1.0.0"
 DRIVER_URL     = "https://github.com/rivkydev/hujanderaspbasahkuyup/releases/download/v1/install-interception.exe"
