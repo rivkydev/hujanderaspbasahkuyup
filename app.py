@@ -416,7 +416,8 @@ def download_file():
     filename_map = {
         'v1': 'PBMacroV1.exe',
         'v2': 'PBMacroV2.exe',
-        'v3': 'PBMacroV3.exe'
+        'v3': 'PBMacroV3.exe',
+        'v3-we': 'PBMacroV3-WE.exe'
     }
     filename = filename_map.get(script, 'PBMacroV1.exe')
     return send_from_directory(app.config['DOWNLOAD_FOLDER'], filename)
