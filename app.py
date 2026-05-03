@@ -1091,6 +1091,7 @@ def validate_license():
             "message":         "Valid",
             "duration":        lic["duration_type"],
             "expires_at":      expires_at_str if expires_at_str else "Never",
+            "server_time":     current_time.isoformat(),  # ← TAMBAH INI
             "mode":            "warnet" if is_warnet else "normal",
             "license_tier":    lic.get("license_tier", "standard"),
             "allowed_scripts": allowed,
