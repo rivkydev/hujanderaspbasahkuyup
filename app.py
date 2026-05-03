@@ -52,8 +52,8 @@ _mongo_db     = None
 # WAJIB pakai GitHub Releases, BUKAN raw.githubusercontent.com!
 # raw.githubusercontent.com tidak support binary .exe dengan benar.
 # Format URL Releases: https://github.com/USER/REPO/releases/download/TAG/FILE
-MACRO_V3_VERSION = "3.2.33"
-MACRO_V3_URL     = "https://github.com/rivkydev/hujanderaspbasahkuyup/releases/download/v3.2.33/PBMacroV3.exe"
+MACRO_V3_VERSION = "3.2.34"
+MACRO_V3_URL     = "https://github.com/rivkydev/hujanderaspbasahkuyup/releases/download/v3.2.34/PBMacroV3.exe"
 # Macro V3 Warnet Edition (public file, bukan private)
 MACRO_V3_WE_VERSION = "3.2.33-WE"
 MACRO_V3_WE_URL     = "https://github.com/rivkydev/hujanderaspbasahkuyup/releases/download/v3.2.33-WE/PBMacroV3-WE.exe"
